@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChocoTejas - Deliciosos Chocolates Artesanales</title>
+    
+    <!-- Bootstrap 5.3.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="bi bi-heart-fill text-danger me-2"></i>
+                ChocoTejas
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">
+                            <i class="bi bi-house me-1"></i>Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="productos.html">
+                            <i class="bi bi-box-seam me-1"></i>Productos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contacto.html">
+                            <i class="bi bi-envelope me-1"></i>Contacto
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin/login.html">
+                            <i class="bi bi-person-gear me-1"></i>Admin
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center hero-content">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4">
+                        Bienvenidos a <span class="text-warning">ChocoTejas</span>
+                    </h1>
+                    <p class="lead mb-4">
+                        Descubre el sabor auténtico de nuestros chocolates artesanales, 
+                        rellenos con los mejores manjares y sabores únicos del Perú.
+                    </p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="productos.html" class="btn btn-primary btn-lg">
+                            <i class="bi bi-box-seam me-2"></i>
+                            Ver Productos
+                        </a>
+                        <a href="#productos-destacados" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-arrow-down me-2"></i>
+                            Descubrir Más
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <img src="https://via.placeholder.com/500x400/8B4513/FFFFFF?text=ChocoTejas+Artesanales" 
+                         alt="ChocoTejas Artesanales" 
+                         class="img-fluid rounded-3 shadow-lg">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="display-5 fw-bold mb-4">Nuestra Historia</h2>
+                    <p class="lead text-muted mb-5">
+                        ChocoTejas nació del amor por los sabores tradicionales peruanos y la pasión 
+                        por crear chocolates únicos. Cada pieza es elaborada artesanalmente con 
+                        ingredientes de la más alta calidad, combinando técnicas tradicionales 
+                        con innovación para ofrecerte una experiencia gastronómica inolvidable.
+                    </p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4 text-center">
+                    <div class="bg-light rounded-3 p-4 h-100">
+                        <i class="bi bi-heart-fill text-danger fs-1 mb-3"></i>
+                        <h4 class="fw-bold">Hecho con Amor</h4>
+                        <p class="text-muted">
+                            Cada chocolate es elaborado con dedicación y cariño, 
+                            siguiendo recetas familiares transmitidas por generaciones.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="bg-light rounded-3 p-4 h-100">
+                        <i class="bi bi-award-fill text-warning fs-1 mb-3"></i>
+                        <h4 class="fw-bold">Calidad Premium</h4>
+                        <p class="text-muted">
+                            Utilizamos solo los mejores ingredientes peruanos, 
+                            garantizando sabores auténticos y calidad excepcional.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="bg-light rounded-3 p-4 h-100">
+                        <i class="bi bi-people-fill text-success fs-1 mb-3"></i>
+                        <h4 class="fw-bold">Tradición Familiar</h4>
+                        <p class="text-muted">
+                            Un emprendimiento familiar que busca compartir 
+                            la riqueza gastronómica peruana con el mundo.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section id="productos-destacados" class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center mb-5">
+                    <h2 class="display-5 fw-bold">Productos Destacados</h2>
+                    <p class="lead text-muted">Descubre nuestros sabores más populares</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <!-- Product 1 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card product-card h-100">
+                        <img src="https://via.placeholder.com/300x250/8B4513/FFFFFF?text=ChocoTeja+Clasica" 
+                             class="card-img-top" alt="ChocoTeja Clásica">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title fw-bold">ChocoTeja Clásica</h5>
+                            <p class="card-text text-muted flex-grow-1">
+                                Delicioso chocolate relleno con manjar blanco tradicional, 
+                                cubierto con chocolate de leche premium.
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="price-tag">S/ 15.00</span>
+                                <div class="btn-group">
+                                    <button class="btn btn-outline-primary btn-sm" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#productModal1">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-whatsapp btn-sm" 
+                                            data-product="ChocoTeja Clásica">
+                                        <i class="bi bi-whatsapp"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card product-card h-100">
+                        <img src="https://via.placeholder.com/300x250/D2691E/FFFFFF?text=ChocoTeja+Lucuma" 
+                             class="card-img-top" alt="ChocoTeja de Lúcuma">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title fw-bold">ChocoTeja de Lúcuma</h5>
+                            <p class="card-text text-muted flex-grow-1">
+                                Exquisito chocolate relleno con crema de lúcuma, 
+                                fruta peruana de sabor único y delicioso.
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="price-tag">S/ 18.00</span>
+                                <div class="btn-group">
+                                    <button class="btn btn-outline-primary btn-sm" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#productModal2">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-whatsapp btn-sm" 
+                                            data-product="ChocoTeja de Lúcuma">
+                                        <i class="bi bi-whatsapp"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card product-card h-100">
+                        <img src="https://via.placeholder.com/300x250/2C1810/FFFFFF?text=ChocoTeja+Cafe" 
+                             class="card-img-top" alt="ChocoTeja de Café">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title fw-bold">ChocoTeja de Café</h5>
+                            <p class="card-text text-muted flex-grow-1">
+                                Intenso chocolate relleno con crema de café peruano, 
+                                ideal para los amantes del café.
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="price-tag">S/ 20.00</span>
+                                <div class="btn-group">
+                                    <button class="btn btn-outline-primary btn-sm" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#productModal3">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-whatsapp btn-sm" 
+                                            data-product="ChocoTeja de Café">
+                                        <i class="bi bi-whatsapp"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-12 text-center">
+                    <a href="productos.html" class="btn btn-primary btn-lg">
+                        <i class="bi bi-box-seam me-2"></i>
+                        Ver Todos los Productos
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-5 bg-primary text-white">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h3 class="fw-bold mb-3">¿Listo para probar nuestros chocolates?</h3>
+                    <p class="lead mb-0">
+                        Contáctanos por WhatsApp y realiza tu pedido. 
+                        ¡Entregas a domicilio disponibles!
+                    </p>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <a href="https://wa.me/51999888777" class="btn btn-whatsapp btn-lg" target="_blank">
+                        <i class="bi bi-whatsapp me-2"></i>
+                        Contactar por WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Modals -->
+    <!-- Modal 1 - ChocoTeja Clásica -->
+    <div class="modal fade" id="productModal1" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">
+                        <i class="bi bi-heart-fill me-2"></i>
+                        ChocoTeja Clásica
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="https://via.placeholder.com/400x300/8B4513/FFFFFF?text=ChocoTeja+Clasica" 
+                                 class="img-fluid rounded" alt="ChocoTeja Clásica">
+                        </div>
+                        <div class="col-md-6">
+                            <h4 class="fw-bold mb-3">ChocoTeja Clásica</h4>
+                            <p class="text-muted mb-3">
+                                Nuestro producto estrella, elaborado con chocolate de leche premium 
+                                y relleno con el más delicioso manjar blanco tradicional. 
+                                Una combinación perfecta que conquista todos los paladares.
+                            </p>
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Chocolate de leche premium</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Relleno de manjar blanco</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Elaboración artesanal</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Sin conservantes artificiales</li>
+                            </ul>
+                            <div class="d-flex align-items-center justify-content-between mt-4">
+                                <span class="h3 mb-0 price-tag">S/ 15.00</span>
+                                <button class="btn btn-whatsapp" data-product="ChocoTeja Clásica">
+                                    <i class="bi bi-whatsapp me-2"></i>
+                                    Pedir por WhatsApp
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2 - ChocoTeja de Lúcuma -->
+    <div class="modal fade" id="productModal2" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">
+                        <i class="bi bi-star-fill me-2"></i>
+                        ChocoTeja de Lúcuma
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="https://via.placeholder.com/400x300/D2691E/FFFFFF?text=ChocoTeja+Lucuma" 
+                                 class="img-fluid rounded" alt="ChocoTeja de Lúcuma">
+                        </div>
+                        <div class="col-md-6">
+                            <h4 class="fw-bold mb-3">ChocoTeja de Lúcuma</h4>
+                            <p class="text-muted mb-3">
+                                Una experiencia única con el sabor exótico de la lúcuma peruana. 
+                                Este chocolate combina la cremosidad del chocolate con el sabor 
+                                distintivo y dulce de esta fruta ancestral.
+                            </p>
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Crema de lúcuma natural</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Fruta 100% peruana</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Sabor único y exótico</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Rico en vitaminas</li>
+                            </ul>
+                            <div class="d-flex align-items-center justify-content-between mt-4">
+                                <span class="h3 mb-0 price-tag">S/ 18.00</span>
+                                <button class="btn btn-whatsapp" data-product="ChocoTeja de Lúcuma">
+                                    <i class="bi bi-whatsapp me-2"></i>
+                                    Pedir por WhatsApp
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3 - ChocoTeja de Café -->
+    <div class="modal fade" id="productModal3" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">
+                        <i class="bi bi-cup-hot-fill me-2"></i>
+                        ChocoTeja de Café
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="https://via.placeholder.com/400x300/2C1810/FFFFFF?text=ChocoTeja+Cafe" 
+                                 class="img-fluid rounded" alt="ChocoTeja de Café">
+                        </div>
+                        <div class="col-md-6">
+                            <h4 class="fw-bold mb-3">ChocoTeja de Café</h4>
+                            <p class="text-muted mb-3">
+                                Para los verdaderos amantes del café. Elaborado con granos de café 
+                                peruano de alta calidad, este chocolate ofrece un sabor intenso 
+                                y aromático que despierta todos los sentidos.
+                            </p>
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Café peruano premium</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Sabor intenso y aromático</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Perfecto con café</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Energizante natural</li>
+                            </ul>
+                            <div class="d-flex align-items-center justify-content-between mt-4">
+                                <span class="h3 mb-0 price-tag">S/ 20.00</span>
+                                <button class="btn btn-whatsapp" data-product="ChocoTeja de Café">
+                                    <i class="bi bi-whatsapp me-2"></i>
+                                    Pedir por WhatsApp
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="fw-bold">
+                        <i class="bi bi-heart-fill text-danger me-2"></i>
+                        ChocoTejas
+                    </h5>
+                    <p class="mb-2">Deliciosos chocolates artesanales rellenos con manjar y otros sabores únicos.</p>
+                    <p class="mb-0">
+                        <i class="bi bi-geo-alt me-2"></i>
+                        Lima, Perú
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="fw-bold mb-3">Síguenos</h6>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light fs-4">
+                            <i class="bi bi-facebook"></i>
+                        </a>
+                        <a href="#" class="text-light fs-4">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+                        <a href="#" class="text-light fs-4">
+                            <i class="bi bi-whatsapp"></i>
+                        </a>
+                        <a href="#" class="text-light fs-4">
+                            <i class="bi bi-tiktok"></i>
+                        </a>
+                    </div>
+                    <div class="mt-3">
+                        <p class="mb-1">
+                            <i class="bi bi-telephone me-2"></i>
+                            +51 999 888 777
+                        </p>
+                        <p class="mb-0">
+                            <i class="bi bi-envelope me-2"></i>
+                            info@chocotejas.com
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-3">
+            <div class="text-center">
+                <small>&copy; 2024 ChocoTejas. Todos los derechos reservados.</small>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification Toast Container -->
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+        <div id="notificationToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                <strong class="me-auto">Notificación</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body" id="toastMessage">
+                Acción realizada con éxito
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5.3.3 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../static/js/main.js"></script>
+</body>
+</html>
