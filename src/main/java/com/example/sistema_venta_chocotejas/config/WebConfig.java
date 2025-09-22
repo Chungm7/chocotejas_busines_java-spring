@@ -1,10 +1,10 @@
-package com.example.acceso.config;
+package com.example.sistema_venta_chocotejas.config;
 
-import org.springframework.lang.NonNull;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 // @Configuration: Indica que esta clase es una fuente de configuración para la aplicación.
@@ -64,7 +64,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(@NonNull CorsRegistry registry) {
         // Configuración CORS para APIs
         registry.addMapping("/usuarios/api/**")
-                .allowedOrigins("http://localhost:8080")
+                .allowedOrigins("http://localhost:8083")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true); // Permite el envío de cookies (importante para sesiones).
