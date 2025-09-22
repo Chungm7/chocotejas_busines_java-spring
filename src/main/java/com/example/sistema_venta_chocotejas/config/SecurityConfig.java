@@ -1,4 +1,4 @@
-package com.example.acceso.config;
+package com.example.sistema_venta_chocotejas.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
