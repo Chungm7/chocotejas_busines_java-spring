@@ -1,4 +1,4 @@
-package com.example.sistema_venta_chocotejas.model.login;
+package com.example.sistema_venta_chocotejas.model;
 
 public class usuarios {
 }
