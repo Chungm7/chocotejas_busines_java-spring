@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  db_mysql:
+    container_name: db_mysql_container
+    image: mysql:8.0
+    #restart: always
+    ports:
+      - "${MYSQL_PORT}:${MYSQL_PORT}"   # puerto host:puerto contenedor
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data_chocotejas:/var/lib/mysql
+
+  sistema-chocotejas:
+    container_name: sistema-chocotejas_container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sistema-chocotejas-image
+    #restart: always
+    ports:
+      - "${SISTEMA_CHOCOTEJAS_PORT}:${SERVER_PORT}"
+    environment:
+      SERVER_PORT: ${SERVER_PORT}
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+      SPRING_JPA_SHOW_SQL: ${SPRING_JPA_SHOW_SQL}
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: ${SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT}
+    depends_on:
+      - db_mysql
+
+volumes:
+  mysql_data_chocotejas:
