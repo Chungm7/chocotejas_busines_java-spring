@@ -1,10 +1,10 @@
-package com.example.acceso.config;
+package com.example.sistema_venta_chocotejas.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.stereotype.Component;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 // @Component: Marca esta clase como un componente de Spring. Esto permite que Spring
