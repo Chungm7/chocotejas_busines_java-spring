@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,7 +34,7 @@
 
     <div class="login-card">
         <h2 class="text-center mb-4" style="font-family: var(--font-headings); color: var(--color-dark-chocolate);">Acceso de Gestión</h2>
-        <form id="login-form">
+        <form id="login-form" th:action="@{/login}" method="post">
             <div class="mb-3">
                 <label for="username" class="form-label">Usuario</label>
                 <input type="text" class="form-control" id="username" value="admin" required>

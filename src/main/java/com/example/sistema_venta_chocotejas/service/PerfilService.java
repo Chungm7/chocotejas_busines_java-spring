@@ -1,7 +1,7 @@
-package com.example.acceso.service;
+package com.example.sistema_venta_chocotejas.service;
 
-import com.example.acceso.model.Perfil;
-import com.example.acceso.model.Opcion;
+import com.example.sistema_venta_chocotejas.model.Opcion;
+import com.example.sistema_venta_chocotejas.model.Perfil;
 
 import java.util.List;
 import java.util.Optional;

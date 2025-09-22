@@ -1,7 +1,7 @@
-package com.example.acceso.controller;
+package com.example.sistema_venta_chocotejas.controller;
 
-import com.example.acceso.model.Perfil;
-import com.example.acceso.service.PerfilService;
+import com.example.sistema_venta_chocotejas.model.Perfil;
+import com.example.sistema_venta_chocotejas.service.PerfilService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

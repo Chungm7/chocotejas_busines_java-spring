@@ -1,6 +1,6 @@
-package com.example.acceso.repository;
+package com.example.sistema_venta_chocotejas.repository;
 
-import com.example.acceso.model.Perfil;
+import com.example.sistema_venta_chocotejas.model.Perfil;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

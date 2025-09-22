@@ -1,16 +1,16 @@
-package com.example.acceso.controller;
+package com.example.sistema_venta_chocotejas.controller;
 
-import com.example.acceso.model.Usuario;
-import com.example.acceso.service.PerfilService;
-import com.example.acceso.service.UsuarioService;
-import org.springframework.stereotype.Controller;
+import com.example.sistema_venta_chocotejas.model.Usuario;
+import com.example.sistema_venta_chocotejas.service.PerfilService;
+import com.example.sistema_venta_chocotejas.service.UsuarioService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.HttpStatus;
 
-import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

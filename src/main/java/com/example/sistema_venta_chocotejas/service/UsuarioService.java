@@ -1,7 +1,7 @@
-package com.example.acceso.service;
+package com.example.sistema_venta_chocotejas.service;
 
-import com.example.acceso.model.Usuario;
-import com.example.acceso.repository.UsuarioRepository;
+import com.example.sistema_venta_chocotejas.model.Usuario;
+import com.example.sistema_venta_chocotejas.repository.UsuarioRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

@@ -1,8 +1,8 @@
 // Define el paquete al que pertenece la clase.
-package com.example.acceso.controller;
+package com.example.sistema_venta_chocotejas.controller;
 
 // Importaciones de clases necesarias de otros paquetes.
-import com.example.acceso.service.UsuarioService;
+import com.example.sistema_venta_chocotejas.service.UsuarioService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
