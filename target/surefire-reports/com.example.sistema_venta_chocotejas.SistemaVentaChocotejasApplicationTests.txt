@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.example.sistema_venta_chocotejas.SistemaVentaChocotejasApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.295 s -- in com.example.sistema_venta_chocotejas.SistemaVentaChocotejasApplicationTests
