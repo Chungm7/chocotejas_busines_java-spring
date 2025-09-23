@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{gestion/layout}">
+<head>
+    <title>Gestión de Categorías</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Gestión de Categorías de Productos</h2>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#category-modal" id="add-category-btn">
+            <i class="bi bi-plus-circle"></i> Crear Nueva Categoría
+        </button>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Nombre de la Categoría</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody id="categories-table-body">
+            <!-- Las filas de categorías se cargarán aquí -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal para Crear/Editar Categoría -->
+    <div class="modal fade" id="category-modal" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="categoryModalLabel">Crear Categoría</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="category-form">
+                        <input type="hidden" id="category-id">
+                        <div class="mb-3">
+                            <label for="category-name" class="form-label">Nombre de la Categoría</label>
+                            <input type="text" class="form-control" id="category-name" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="category-form" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
