@@ -33,7 +33,7 @@ public class LoginController {
             return "redirect:/";
         }
         // Si no ha iniciado sesión, muestra la página de login.
-        return "login";
+        return "gestion/login";
     }
 
     // Maneja las peticiones POST a /login, que se envían desde el formulario.
