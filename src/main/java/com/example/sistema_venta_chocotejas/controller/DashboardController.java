@@ -38,6 +38,6 @@ public class DashboardController {
         // 3. Devuelve el nombre de la vista (el archivo HTML) que se debe renderizar.
         // Spring Boot buscará un archivo llamado "indexclient.html" en la carpeta
         // 'src/main/resources/templates'.
-        return "index";
+        return "dashboard";
     }
 }
