@@ -1,13 +1,12 @@
 services:
   db_mysql_chocotejas:
-    container_name: db_mysql_chocotejas
+    container_name: db_mysql_container
     image: mysql:8.0
-    #restart: always
     ports:
-      - "${MYSQL_PORT}:${MYSQL_PORT}"   # puerto host:puerto contenedor
+      - "${MYSQL_PORT}:3306"   # host:contenedor
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_SERVICE_NAME}
       MYSQL_ALLOW_EMPTY_PASSWORD: no
     volumes:
       - mysql_data_chocotejas:/var/lib/mysql
@@ -18,7 +17,6 @@ services:
       context: .
       dockerfile: Dockerfile
     image: sistema-chocotejas-image
-    #restart: always
     ports:
       - "${SISTEMA_CHOCOTEJAS_PORT}:${SISTEMA_CHOCOTEJAS_PORT}"
     environment:
