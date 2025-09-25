@@ -14,82 +14,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Estilos personalizados -->
+    <!-- Main CSS oficial -->
     <link th:href="@{/css/main.css}" rel="stylesheet">
 
     <style>
-        /* Adaptación visual para Gestión de Usuarios */
-
-        body {
-            background-color: var(--color-cream);
-            font-family: var(--font-body);
-            color: var(--color-dark-chocolate);
-        }
-
-        h1, h2, h3, h4, h5, h6 {
-            font-family: var(--font-headings);
-            color: var(--color-milk-chocolate);
-        }
-
-        .main-content {
-            transition: margin-left .3s ease-in-out;
-        }
-
-        .card {
-            background-color: var(--color-cream);
-            border: none;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
-            color: var(--color-dark-chocolate);
-        }
-
-        .card-title {
-            color: var(--color-milk-chocolate);
-            font-weight: 600;
-        }
-
-        .btn-primary {
-            background-color: var(--color-milk-chocolate);
-            border-color: var(--color-milk-chocolate);
-            font-weight: bold;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--color-dark-chocolate);
-            border-color: var(--color-dark-chocolate);
-        }
-
-        .btn-secondary {
-            background-color: var(--color-accent);
-            border-color: var(--color-accent);
-            color: var(--color-dark-chocolate);
-            font-weight: bold;
-        }
-
-        .btn-secondary:hover {
-            background-color: #e0a800;
-            border-color: #e0a800;
-            color: var(--color-dark-chocolate);
-        }
-
-        a {
-            color: var(--color-milk-chocolate);
-        }
-
-        a:hover {
-            color: var(--color-dark-chocolate);
-        }
-
-        /* DataTables: encabezados y filas */
+        /* Ajustes específicos de Gestión de Usuarios */
         table.dataTable thead th {
             background-color: var(--color-milk-chocolate);
             color: var(--color-cream);
             font-weight: 600;
-        }
-
-        table.dataTable tbody tr {
-            background-color: var(--color-cream);
-            color: var(--color-dark-chocolate);
         }
 
         table.dataTable tbody tr:hover {
@@ -97,7 +30,6 @@
             color: var(--color-dark-chocolate);
         }
 
-        /* Modales */
         .modal-header {
             background-color: var(--color-milk-chocolate);
             color: var(--color-cream);
@@ -107,10 +39,20 @@
             background-color: var(--color-cream);
         }
 
-        /* Sidebar overlay */
-        .sidebar-overlay {
-            background-color: rgba(0,0,0,0.5);
+        .action-btn {
+            background: none;
+            border: none;
+            padding: 0.3rem;
+            border-radius: 50%;
+            line-height: 1;
+            transition: background-color 0.2s;
         }
+        .action-btn:hover { background-color: #e9ecef; }
+        .action-btn-edit { color: #0d6efd; }
+        .action-btn-delete { color: #dc3545; }
+        .action-btn-status-activate { color: #198754; }
+        .action-btn-status-deactivate { color: #ffc107; }
+        .action-btn svg { width: 18px; height: 18px; }
     </style>
 </head>
 <body>
@@ -125,7 +67,11 @@
         <header class="p-3 mb-3 border-bottom shadow-sm bg-cream">
             <div class="d-flex align-items-center">
                 <button id="open-sidebar" class="btn btn-light d-md-none me-3 p-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                         class="bi bi-list" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                              d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+                    </svg>
                 </button>
                 <h1 class="h3 mb-0 fw-bold">Gestión de Usuarios</h1>
                 <button id="btnNuevoRegistro" class="btn btn-primary ms-auto">

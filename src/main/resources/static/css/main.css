@@ -1,29 +1,96 @@
-/* Estilos Globales y Paleta de Colores */
+/*
+ * Hoja de estilos principal para la aplicación Acceso.
+ * Archivo: src/main/resources/static/css/main.css
+ */
 
 :root {
-    --color-dark-chocolate: #3E2723;
-    --color-milk-chocolate: #5D4037;
-    --color-caramel: #A1887F;
+    --color-milk-chocolate: #351804;
+    --color-dark-chocolate: #8c5f4f;
     --color-cream: #FFF8E1;
-    --color-accent: #FFC107; /* Un toque dorado */
-    --font-headings: 'Playfair Display', serif;
-    --font-body: 'Roboto', sans-serif;
+    --color-accent: #dd8844;
 }
 
 body {
-    font-family: var(--font-body);
+    background-color: #f8f9fa;
+    font-family: 'Inter', sans-serif;
+}
+
+/* ==============================
+   Sidebar
+   ============================== */
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 48px 0 0;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+    transition: transform .3s ease-in-out;
+    width: 250px;
+    background-color: var(--color-milk-chocolate);
+    color: var(--color-cream);
+}
+
+@media (max-width: 767.98px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+    .sidebar.active {
+        transform: translateX(0);
+    }
+    .sidebar-overlay.active {
+        display: block;
+    }
+}
+
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 99;
+    display: none;
+    cursor: pointer;
+}
+
+.sidebar-overlay.active {
+    display: block;
+}
+
+/* ==============================
+   Main Content
+   ============================== */
+.main-content {
+    transition: margin-left .3s ease-in-out;
+}
+
+@media (min-width: 768px) {
+    .main-content {
+        margin-left: 250px;
+    }
+}
+
+/* ==============================
+   Cards
+   ============================== */
+.card {
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    border: none;
     background-color: var(--color-cream);
     color: var(--color-dark-chocolate);
 }
 
-h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-headings);
-    color: var(--color-milk-chocolate);
-}
-
+/* ==============================
+   Botones
+   ============================== */
 .btn-primary {
     background-color: var(--color-milk-chocolate);
     border-color: var(--color-milk-chocolate);
+    color: var(--color-cream);
     font-weight: bold;
 }
 
@@ -45,10 +112,26 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--color-dark-chocolate);
 }
 
-a {
-    color: var(--color-milk-chocolate);
+/* ==============================
+   Toasts y Loading
+   ============================== */
+.toast-container {
+    z-index: 1080;
 }
 
-a:hover {
-    color: var(--color-dark-chocolate);
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
 }
+.bg-accent { background-color: var(--color-accent) !important; }
+.text-dark-chocolate { color: var(--color-dark-chocolate) !important; }
+.hover-accent:hover { background-color: var(--color-accent); color: var(--color-dark-chocolate); }
+.text-cream { color: var(--color-cream) !important; }

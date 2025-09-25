@@ -15,119 +15,15 @@
 
     <!-- CSS principal -->
     <link rel="stylesheet" th:href="@{/css/main.css}">
-
-    <style>
-        /* Estilos de dashboard adaptados a main.css */
-        body {
-            font-family: var(--font-body);
-            background-color: var(--color-cream);
-            color: var(--color-dark-chocolate);
-        }
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            z-index: 100;
-            padding: 48px 0 0;
-            width: 250px;
-            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-            transition: transform .3s ease-in-out;
-            background-color: var(--color-milk-chocolate);
-            color: var(--color-cream);
-        }
-
-        @media (max-width: 767.98px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-            .sidebar.active {
-                transform: translateX(0);
-            }
-            .sidebar-overlay.active {
-                display: block;
-            }
-        }
-
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 99;
-            display: none;
-            cursor: pointer;
-        }
-
-        .main-content {
-            transition: margin-left .3s ease-in-out;
-        }
-
-        @media (min-width: 768px) {
-            .main-content {
-                margin-left: 250px;
-            }
-        }
-
-        header {
-            background-color: var(--color-cream);
-        }
-
-        .card {
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
-            border: none;
-            background-color: var(--color-cream);
-            color: var(--color-dark-chocolate);
-        }
-
-        .card a {
-            font-weight: 500;
-            color: var(--color-milk-chocolate);
-            text-decoration: none;
-        }
-
-        .card a:hover {
-            color: var(--color-dark-chocolate);
-        }
-
-        .card-icon {
-            font-size: 3rem;
-            opacity: 0.3;
-            color: var(--color-milk-chocolate);
-        }
-
-        .card.text-white.bg-primary {
-            background-color: var(--color-milk-chocolate) !important;
-            color: var(--color-cream) !important;
-        }
-
-        .card.text-white.bg-success {
-            background-color: var(--color-accent) !important;
-            color: var(--color-dark-chocolate) !important;
-        }
-
-        .card.text-white.bg-warning {
-            background-color: #FFC107 !important; /* Mantener dorado */
-            color: var(--color-dark-chocolate) !important;
-        }
-
-        .btn-light {
-            background-color: var(--color-cream);
-            border: 1px solid var(--color-milk-chocolate);
-        }
-    </style>
 </head>
 <body>
 <div class="d-flex">
     <!-- Sidebar dinámico -->
     <div th:replace="~{sidebar :: sidebar(activeUri='/')}"></div>
 
+    <!-- Contenido principal -->
     <div id="main-content" class="main-content w-100">
-        <header class="p-3 mb-3 border-bottom shadow-sm">
+        <header class="p-3 mb-3 border-bottom shadow-sm bg-cream">
             <div class="d-flex align-items-center">
                 <button id="open-sidebar" class="btn btn-light d-md-none me-3 p-1">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
@@ -144,14 +40,14 @@
             <div class="row g-4">
                 <!-- Total de Usuarios -->
                 <div class="col-sm-6 col-lg-4">
-                    <div class="card text-white bg-primary shadow-sm h-100">
+                    <div class="card card-primary shadow-sm h-100">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div>
                                     <h5 class="card-title fw-semibold">Total de Usuarios</h5>
                                     <h2 class="display-4 fw-bold" th:text="${totalUsuarios}">0</h2>
                                 </div>
-                                <div class="card-icon text-white">
+                                <div class="card-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
                                          class="bi bi-people-fill" viewBox="0 0 16 16">
                                         <path
@@ -168,14 +64,14 @@
 
                 <!-- Nuevo Usuario -->
                 <div class="col-sm-6 col-lg-4">
-                    <div class="card text-white bg-success shadow-sm h-100">
+                    <div class="card card-success shadow-sm h-100">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div>
                                     <h5 class="card-title fw-semibold">Nuevo Usuario</h5>
                                     <p class="card-text opacity-75">Añadir un nuevo registro.</p>
                                 </div>
-                                <div class="card-icon text-white">
+                                <div class="card-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
                                          class="bi bi-person-plus-fill" viewBox="0 0 16 16">
                                         <path
@@ -194,14 +90,14 @@
 
                 <!-- Reportes -->
                 <div class="col-sm-6 col-lg-4">
-                    <div class="card text-white bg-warning shadow-sm h-100">
+                    <div class="card card-warning shadow-sm h-100">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div>
                                     <h5 class="card-title fw-semibold">Reportes</h5>
                                     <p class="card-text text-black-50">Visualizar y exportar datos.</p>
                                 </div>
-                                <div class="card-icon text-white">
+                                <div class="card-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
                                          class="bi bi-bar-chart-fill" viewBox="0 0 16 16">
                                         <path
