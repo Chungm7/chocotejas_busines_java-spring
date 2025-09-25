@@ -20,7 +20,7 @@ public class Categoria {
 
     @NotBlank(message = "La descripción es obligatoria")
     @Size(min = 7, max = 100, message = "La descripción debe tener entre 7 y 100 caracteres")
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     private String descripcion = "Sin descripción";
 
     @Column(nullable = false)
