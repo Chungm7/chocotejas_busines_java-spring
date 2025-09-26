@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Main CSS oficial -->
-    <link th:href="@{/css/main.css}" rel="stylesheet">
+    <link th:href="@{/css/gestion-main.css}" rel="stylesheet">
 
     <style>
         /* Ajustes específicos de Gestión de Usuarios */
@@ -59,7 +59,7 @@
 
 <div class="d-flex">
     <!-- Sidebar -->
-    <div th:replace="~{sidebar :: sidebar(activeUri='/usuarios/listar')}"></div>
+    <div th:replace="~{gestion-sidebar :: sidebar(activeUri='/usuarios/listar')}"></div>
 
     <!-- Main content -->
     <main id="main-content" class="main-content w-100">
@@ -160,8 +160,8 @@
 <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script th:src="@{/js/usuarios.js}"></script>
-<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/gestion-usuarios.js}"></script>
+<script th:src="@{/js/gestion-main.js}"></script>
 
 </body>
 </html>
