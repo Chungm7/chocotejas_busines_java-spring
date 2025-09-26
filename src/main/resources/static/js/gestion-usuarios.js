@@ -1,6 +1,6 @@
 /**
  * Script para la gestión de usuarios con Bootstrap 5
- * Archivo: src/main/resources/static/js/usuarios.js
+ * Archivo: src/main/resources/static/js/gestion-usuarios.js
  */
 
 $(document).ready(function() {

@@ -18,13 +18,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Estilos oficiales -->
-    <link th:href="@{/css/main.css}" rel="stylesheet">
+    <link th:href="@{/css/gestion-main.css}" rel="stylesheet">
 </head>
 <body>
 
 <div class="d-flex">
     <!-- Sidebar (Thymeleaf) -->
-    <div th:replace="~{sidebar :: sidebar(activeUri='/perfiles/listar')}"></div>
+    <div th:replace="~{gestion-sidebar :: sidebar(activeUri='/perfiles/listar')}"></div>
 
     <!-- Main content -->
     <main id="main-content" class="main-content w-100">
@@ -131,8 +131,8 @@
 <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script th:src="@{/js/perfiles.js}"></script>
-<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/gestion-perfiles.js}"></script>
+<script th:src="@{/js/gestion-main.js}"></script>
 
 </body>
 </html>

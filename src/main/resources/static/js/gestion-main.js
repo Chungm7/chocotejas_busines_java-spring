@@ -1,6 +1,6 @@
 /**
  * Script principal con lógica común para toda la aplicación.
- * Archivo: src/main/resources/static/js/main.js
+ * Archivo: src/main/resources/static/js/gestion-main.js
  */
 
 $(document).ready(function() {

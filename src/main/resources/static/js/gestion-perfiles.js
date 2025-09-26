@@ -1,6 +1,6 @@
 /**
  * Script para la gestión de perfiles y permisos
- * Archivo: src/main/resources/static/js/perfiles.js
+ * Archivo: src/main/resources/static/js/gestion-perfiles.js
  */
 
 $(document).ready(function() {
@@ -345,7 +345,7 @@ $(document).ready(function() {
         $('.invalid-feedback').text('');
     }
 
-    // Funciones de UI (notificaciones, loading) - Reutilizar o copiar de usuarios.js
+    // Funciones de UI (notificaciones, loading) - Reutilizar o copiar de gestion-usuarios.js
     function showNotification(message, type = 'success') {
         const toastClass = type === 'success' ? 'text-bg-success' : 'text-bg-danger';
         const notification = $(`<div class="toast align-items-center ${toastClass} border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">${message}</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>`);
