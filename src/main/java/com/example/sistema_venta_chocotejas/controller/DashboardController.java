@@ -2,7 +2,7 @@
 package com.example.sistema_venta_chocotejas.controller;
 
 // Importaciones de clases necesarias de otros paquetes.
-import com.example.sistema_venta_chocotejas.service.UsuarioService;
+import com.example.sistema_venta_chocotejas.service.Impl.UsuarioService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

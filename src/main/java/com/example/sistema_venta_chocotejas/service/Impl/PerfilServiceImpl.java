@@ -1,9 +1,10 @@
-package com.example.sistema_venta_chocotejas.service;
+package com.example.sistema_venta_chocotejas.service.Impl;
 
 import com.example.sistema_venta_chocotejas.model.Opcion;
 import com.example.sistema_venta_chocotejas.model.Perfil;
 import com.example.sistema_venta_chocotejas.repository.OpcionRepository;
 import com.example.sistema_venta_chocotejas.repository.PerfilRepository;
+import com.example.sistema_venta_chocotejas.service.PerfilService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

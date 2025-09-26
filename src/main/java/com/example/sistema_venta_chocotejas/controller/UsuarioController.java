@@ -2,7 +2,7 @@ package com.example.sistema_venta_chocotejas.controller;
 
 import com.example.sistema_venta_chocotejas.model.Usuario;
 import com.example.sistema_venta_chocotejas.service.PerfilService;
-import com.example.sistema_venta_chocotejas.service.UsuarioService;
+import com.example.sistema_venta_chocotejas.service.Impl.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

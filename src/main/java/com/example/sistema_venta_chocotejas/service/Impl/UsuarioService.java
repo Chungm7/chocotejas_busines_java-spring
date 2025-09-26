@@ -1,4 +1,4 @@
-package com.example.sistema_venta_chocotejas.service;
+package com.example.sistema_venta_chocotejas.service.Impl;
 
 import com.example.sistema_venta_chocotejas.model.Usuario;
 import com.example.sistema_venta_chocotejas.repository.UsuarioRepository;

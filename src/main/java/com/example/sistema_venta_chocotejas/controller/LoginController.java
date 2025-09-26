@@ -2,7 +2,7 @@ package com.example.sistema_venta_chocotejas.controller;
 
 import com.example.sistema_venta_chocotejas.model.Opcion;
 import com.example.sistema_venta_chocotejas.model.Usuario;
-import com.example.sistema_venta_chocotejas.service.UsuarioService;
+import com.example.sistema_venta_chocotejas.service.Impl.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
