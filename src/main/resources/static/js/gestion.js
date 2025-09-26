@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const usuarioLogueado = JSON.parse(sessionStorage.getItem('usuarioLogueado'));
     const currentPage = window.location.pathname;
 
-    if (!usuarioLogueado && !currentPage.endsWith('login.html')) {
-        window.location.href = 'login.html';
+    if (!usuarioLogueado && !currentPage.endsWith('gestion-login.html')) {
+        window.location.href = 'gestion-login.html';
         return;
     }
 
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         logoutBtn.addEventListener('click', (e) => {
             e.preventDefault();
             sessionStorage.removeItem('usuarioLogueado');
-            window.location.href = 'login.html';
+            window.location.href = 'gestion-login.html';
         });
     }
 
