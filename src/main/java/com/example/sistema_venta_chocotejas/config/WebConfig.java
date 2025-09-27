@@ -1,5 +1,6 @@
 package com.example.sistema_venta_chocotejas.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -14,6 +15,9 @@ public class WebConfig implements WebMvcConfigurer {
     // Inyección de dependencia del interceptor de sesión. Spring nos proporciona la
     // instancia.
     private final SessionInterceptor sessionInterceptor;
+
+    @Value("${file.upload-dir}")
+    private String uploadDir;
 
     // Constructor para la inyección de dependencias.
     public WebConfig(SessionInterceptor sessionInterceptor) {
@@ -41,6 +45,10 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/images/**")
                 .addResourceLocations("classpath:/static/images/")
                 .setCachePeriod(0);
+
+        // 👇 NUEVO: mapeo para imágenes subidas dinámicamente
+        registry.addResourceHandler("/images/**")
+                .addResourceLocations("file:" + uploadDir);
     }
 
     // Este método se usa para registrar interceptores.

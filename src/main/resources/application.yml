@@ -22,3 +22,6 @@ spring:
       hibernate:
         dialect: ${SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT:org.hibernate.dialect.MySQLDialect}
     open-in-view: true
+
+file:
+  upload-dir: ${UPLOAD_DIR:./imagenes/}
