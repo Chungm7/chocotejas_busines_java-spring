@@ -10,4 +10,8 @@ import java.util.List;
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
 
     List<Producto> findByEstadoNot(Integer estado);
+
+    List<Producto> findByCategoria_IdAndCategoria_Estado(Long idCategoria, Integer estado);
+
+    List<Producto> findByEstado(Integer estado);
 }

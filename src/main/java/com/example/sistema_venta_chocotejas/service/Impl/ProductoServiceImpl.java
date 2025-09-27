@@ -4,21 +4,30 @@ import com.example.sistema_venta_chocotejas.model.Producto;
 import com.example.sistema_venta_chocotejas.repository.CategoriaRepository;
 import com.example.sistema_venta_chocotejas.repository.ProductoRepository;
 import com.example.sistema_venta_chocotejas.service.ProductoService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ProductoServiceImpl implements ProductoService {
 
-    private final ProductoRepository productoRepository;
-    private final CategoriaRepository categoriaRepository;
+    @Value("${file.upload-dir}")
+    private String uploadDir;
 
-    public ProductoServiceImpl(ProductoRepository productoRepository, CategoriaRepository categoriaRepository) {
+    private final ProductoRepository productoRepository;
+
+
+    public ProductoServiceImpl(ProductoRepository productoRepository) {
         this.productoRepository = productoRepository;
-        this.categoriaRepository = categoriaRepository;
     }
     @Override
     @Transactional(readOnly = true)
@@ -27,14 +36,49 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
+    public List<Producto> listarProductosActivos0() {
+        return productoRepository.findByEstado(0);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<Producto> listarTodoslosProductos() {
         return productoRepository.findAll();
     }
 
+    private String guardarImagen(MultipartFile imagenFile) throws IOException {
+
+        String nombreUnico = UUID.randomUUID().toString() + "_" + imagenFile.getOriginalFilename();
+        Path rutaImagen = Paths.get(uploadDir + nombreUnico);
+
+        Files.createDirectories(rutaImagen.getParent());
+        Files.write(rutaImagen, imagenFile.getBytes());
+        return nombreUnico;
+    }
+    private void eliminarImagen(String nombreImagen) {
+        if (nombreImagen != null && !nombreImagen.isEmpty()) {
+            return;
+        }
+        try {
+            Path rutaImagen = Paths.get(uploadDir+ nombreImagen);
+            Files.deleteIfExists(rutaImagen);
+        } catch (IOException e) {
+            System.err.println("Error al eliminar el foto: " + nombreImagen + " - " + e.getMessage());
+        }
+    }
     @Override
     @Transactional(readOnly = true)
-    public Producto guardarProducto(Producto producto) {
+    public Producto guardarProducto(Producto producto , MultipartFile imagenFile) throws IOException {
+        if (imagenFile != null && !imagenFile.isEmpty()) {
+            // Si se está actualizando y ya existe una foto, se elimina la anterior
+            if (producto.getId() != null && producto.getImagen() != null) {
+                eliminarImagen(producto.getImagen());
+            }
+            String nombreFoto = guardarImagen(imagenFile);
+            producto.setImagen(nombreFoto);
+            // Aquí deberías guardar la imagen en el sistema de archivos o en un servicio de almacenamiento
+            // Por simplicidad, este ejemplo no incluye esa lógica
+        }
         return productoRepository.save(producto);
     }
 
@@ -63,8 +107,17 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     @Transactional
-    public List<Producto> listarProductosporCategoria() {
-        return productoRepository.findAll();
+    public List<Producto> listarProductosporCategoria(Long idCategoria)  {
+        return productoRepository.findByCategoria_IdAndCategoria_Estado(idCategoria, 0);
+    }
+
+    @Override
+    @Transactional
+    public Producto actualizarStockProducto(Long idProducto, int cantidad) {
+        Producto producto = productoRepository.findById(idProducto)
+                .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado con id: " + idProducto));
+        producto.setStock(cantidad);
+        return productoRepository.save(producto);
     }
 
     @Override

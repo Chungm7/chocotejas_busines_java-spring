@@ -11,7 +11,7 @@ public class Producto {
 
     @Id()
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @NotBlank(message = "El nombre es obligatorio")
     @Size(min = 4, max = 100, message = "El nombre debe tener entre 4 y 100 caracteres")
@@ -46,7 +46,7 @@ public class Producto {
     public Producto() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

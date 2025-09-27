@@ -36,7 +36,7 @@ public class CategoriaController {
 
     @GetMapping("/api/{id}")
     @ResponseBody
-    public ResponseEntity<?> obtenerCategoria(Long id) {
+    public ResponseEntity<?> obtenerCategoria(@PathVariable Long id) {
         return categoriaService.obtenerCategoriaPorId(id)
                 .map(categoria -> {
                     Map<String, Object> response = new HashMap<>();
@@ -74,7 +74,6 @@ public class CategoriaController {
     @ResponseBody
     public ResponseEntity<?> cambiarEstadoCategoria(@PathVariable Long id) {
         Map<String, Object> response = new HashMap<>();
-
         try {
             return categoriaService.cambiarEstadoCategoria(id)
                     .map(categoria -> {
@@ -85,7 +84,7 @@ public class CategoriaController {
                     }).orElseGet(() -> {
                         response.put("success", false);
                         response.put("message", "Categoría no encontrada");
-                        return ResponseEntity.status(404).body(response);
+                        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
                     });
         } catch (Exception e) {
             response.put("success", false);
@@ -110,7 +109,7 @@ public class CategoriaController {
 
            try {
             // Buena práctica: verificar si el usuario existe antes de intentar eliminarlo.
-            if (!categoriaService.obtenerCategoriaPorId(id).isPresent()) {
+            if (categoriaService.obtenerCategoriaPorId(id).isEmpty()) {
                 response.put("success", false);
                 response.put("message", "Usuario no encontrado");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
