@@ -1,10 +1,8 @@
 package com.example.sistema_venta_chocotejas.controller;
 
 import com.example.sistema_venta_chocotejas.model.Producto;
-import com.example.sistema_venta_chocotejas.service.CategoriaService;
 import com.example.sistema_venta_chocotejas.service.Impl.CategoriaIServicempl;
 import com.example.sistema_venta_chocotejas.service.Impl.ProductoServiceImpl;
-import com.example.sistema_venta_chocotejas.service.ProductoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,7 +19,7 @@ public class ProductoController {
     private final ProductoServiceImpl productoService;
     private final CategoriaIServicempl categoriaService;
 
-    public ProductoController(ProductoServiceImpl productoService , CategoriaIServicempl categoriaService) {
+    public ProductoController(ProductoServiceImpl productoService, CategoriaIServicempl categoriaService) {
         this.categoriaService = categoriaService;
         this.productoService = productoService;
     }
@@ -65,11 +63,11 @@ public class ProductoController {
     @ResponseBody
     public ResponseEntity<Producto> guardarProducto(
             @RequestParam("nombre") String nombre,
-            @RequestParam("descripcion")String descripcion,
-            @RequestParam("precio")Double precio,
-            @RequestParam ("stock")Integer stock,
+            @RequestParam("descripcion") String descripcion,
+            @RequestParam("precio") Double precio,
+            @RequestParam("stock") Integer stock,
             @RequestParam("categoria") Long categoriaId,
-            @RequestParam(value = "imagenFile", required = false)MultipartFile imagenFile) {
+            @RequestParam(value = "imagenFile", required = false) MultipartFile imagenFile) {
 
         try {
             Producto nuevoProducto = new Producto();
@@ -176,6 +174,27 @@ public class ProductoController {
         } catch (Exception e) {
             response.put("success", false);
             response.put("message", "Error al actualizar el stock del producto: " + e.getMessage());
+            return ResponseEntity.internalServerError().body(response);
+        }
+    }
+
+    @PostMapping("/api/eliminar/{id}")
+    @ResponseBody
+    public ResponseEntity<?> eliminarProducto(@PathVariable Long id) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            if (productoService.obtenerProductoPorId(id).isEmpty()) {
+                response.put("success", true);
+                response.put("message", "Producto no encontrado");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+                productoService.eliminarProducto(id);
+                response.put("success", true);
+                response.put("message", "Producto eliminado con éxito");
+                return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Producto no encontrado");
             return ResponseEntity.internalServerError().body(response);
         }
     }
