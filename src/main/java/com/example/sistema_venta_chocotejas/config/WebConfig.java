@@ -47,7 +47,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .setCachePeriod(0);
 
         // 👇 NUEVO: mapeo para imágenes subidas dinámicamente
-        registry.addResourceHandler("/images/**")
+        registry.addResourceHandler("/imagenes/**")
                 .addResourceLocations("file:" + uploadDir);
     }
 

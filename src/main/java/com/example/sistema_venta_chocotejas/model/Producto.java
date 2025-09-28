@@ -2,8 +2,9 @@ package com.example.sistema_venta_chocotejas.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "productos")
@@ -20,16 +21,16 @@ public class Producto {
 
     @Size(min = 10, max = 150, message = "La descripción debe tener entre 10 y 150 caracteres")
     @Column(length = 150)
-    @ColumnDefault("'Sin descripción'")
-    private String descripcion;
+    private String descripcion = "Sin descripción";
 
-    @NotBlank(message = "El precio es obligatorio")
+    @NotNull(message = "El precio es obligatorio")
+    @Positive(message = "El precio debe ser mayor a 0")
     @Column(nullable = false)
-    private double precio;
+    private Double precio;
 
+    // CAMBIO: Quitar @Positive y usar @Min(0) para permitir stock 0
     @Column()
-    @ColumnDefault("0")
-    private int stock;
+    private Integer stock = 0; // Valor por defecto 0
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name= "id_categoria")
@@ -40,75 +41,37 @@ public class Producto {
     private String imagen;
 
     @Column(nullable = false)
-    @ColumnDefault("1")
-    private Integer estado; // 1: Activo, 0: Inactivo, 2: Eliminado
+    private Integer estado = 1;
 
     public Producto() {
     }
 
-    public Long getId() {
-        return id;
+    // Getters y setters...
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+
+    public Double getPrecio() { return precio; }
+    public void setPrecio(Double precio) { this.precio = precio; }
+
+    public Integer getStock() { return stock; }
+    public void setStock(Integer stock) {
+        this.stock = stock != null ? stock : 0; // Asegurar que nunca sea null
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+    public Categoria getCategoria() { return categoria; }
+    public void setCategoria(Categoria categoria) { this.categoria = categoria; }
 
-    public String getNombre() {
-        return nombre;
-    }
+    public String getImagen() { return imagen; }
+    public void setImagen(String imagen) { this.imagen = imagen; }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public double getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(double precio) {
-        this.precio = precio;
-    }
-
-    public int getStock() {
-        return stock;
-    }
-
-    public void setStock(int stock) {
-        this.stock = stock;
-    }
-
-    public Categoria getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
-
-    public String getImagen() {
-        return imagen;
-    }
-
-    public void setImagen(String imagen) {
-        this.imagen = imagen;
-    }
-
-    public Integer getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Integer estado) {
-        this.estado = estado;
-    }
+    public Integer getEstado() { return estado; }
+    public void setEstado(Integer estado) { this.estado = estado; }
 
     @Override
     public String toString() {
@@ -118,7 +81,7 @@ public class Producto {
                 ", descripcion='" + descripcion + '\'' +
                 ", precio=" + precio +
                 ", stock=" + stock +
-                ", categoria=" + categoria +
+                ", categoria=" + (categoria != null ? categoria.getNombre() : "null") +
                 ", imagen='" + imagen + '\'' +
                 ", estado=" + estado +
                 '}';

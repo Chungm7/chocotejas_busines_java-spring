@@ -46,17 +46,21 @@ public class ProductoServiceImpl implements ProductoService {
         return productoRepository.findAll();
     }
 
-    private String guardarImagen(MultipartFile imagenFile) throws IOException {
-
+    private String guardarImagen(MultipartFile imagenFile) throws IOException {        // Genera un nombre de archivo único para evitar colisiones
         String nombreUnico = UUID.randomUUID().toString() + "_" + imagenFile.getOriginalFilename();
-        Path rutaImagen = Paths.get(uploadDir + nombreUnico);
+        Path rutaCompleta = Paths.get(uploadDir + nombreUnico);
 
-        Files.createDirectories(rutaImagen.getParent());
-        Files.write(rutaImagen, imagenFile.getBytes());
+        // Crea el directorio si no existe
+        Files.createDirectories(rutaCompleta.getParent());
+
+        // Escribe el archivo en el disco
+        Files.write(rutaCompleta, imagenFile.getBytes());
         return nombreUnico;
     }
+
+
     private void eliminarImagen(String nombreImagen) {
-        if (nombreImagen != null && !nombreImagen.isEmpty()) {
+        if (nombreImagen == null || nombreImagen.isEmpty()) {
             return;
         }
         try {
@@ -67,7 +71,7 @@ public class ProductoServiceImpl implements ProductoService {
         }
     }
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public Producto guardarProducto(Producto producto , MultipartFile imagenFile) throws IOException {
         if (imagenFile != null && !imagenFile.isEmpty()) {
             // Si se está actualizando y ya existe una foto, se elimina la anterior
@@ -108,7 +112,7 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     @Transactional
     public List<Producto> listarProductosporCategoria(Long idCategoria)  {
-        return productoRepository.findByCategoria_IdAndCategoria_Estado(idCategoria, 0);
+        return productoRepository.findByCategoria_IdAndCategoria_Estado(idCategoria, 1);
     }
 
     @Override

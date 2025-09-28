@@ -61,32 +61,74 @@ public class ProductoController {
 
     @PostMapping("/api/guardar")
     @ResponseBody
-    public ResponseEntity<Producto> guardarProducto(
+    public ResponseEntity<?> guardarProducto(
             @RequestParam("nombre") String nombre,
             @RequestParam("descripcion") String descripcion,
             @RequestParam("precio") Double precio,
-            @RequestParam("stock") Integer stock,
+            @RequestParam(value = "stock", required = false) Integer stock,
             @RequestParam("categoria") Long categoriaId,
-            @RequestParam(value = "imagenFile", required = false) MultipartFile imagenFile) {
+            @RequestParam("imagenFile") MultipartFile imagenFile) {
 
         try {
+            // Validaciones
+            if (nombre == null || nombre.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body(createErrorResponse("El nombre es obligatorio"));
+            }
+            if (precio == null || precio <= 0) {
+                return ResponseEntity.badRequest().body(createErrorResponse("El precio debe ser mayor a 0"));
+            }
+            if (categoriaId == null) {
+                return ResponseEntity.badRequest().body(createErrorResponse("La categoría es obligatoria"));
+            }
+            if (imagenFile == null || imagenFile.isEmpty()) {
+                return ResponseEntity.badRequest().body(createErrorResponse("La imagen es obligatoria"));
+            }
+
+            // Validar stock (puede ser 0 o positivo)
+            if (stock != null && stock < 0) {
+                return ResponseEntity.badRequest().body(createErrorResponse("El stock no puede ser negativo"));
+            }
+
             Producto nuevoProducto = new Producto();
-            nuevoProducto.setNombre(nombre);
-            nuevoProducto.setDescripcion(descripcion);
+            nuevoProducto.setNombre(nombre.trim());
+            nuevoProducto.setDescripcion(descripcion != null ? descripcion.trim() : "Sin descripción");
             nuevoProducto.setPrecio(precio);
-            nuevoProducto.setStock(stock);
-            // Aquí deberías establecer la categoría usando el ID proporcionado
-            // Por simplicidad, este ejemplo no incluye esa lógica
+            nuevoProducto.setStock(stock != null ? stock : 0); // Permitir 0
+
+            var categoriaOpt = categoriaService.obtenerCategoriaPorId(categoriaId);
+            if (categoriaOpt.isEmpty()) {
+                return ResponseEntity.badRequest().body(createErrorResponse("Categoría no encontrada"));
+            }
+            nuevoProducto.setCategoria(categoriaOpt.get());
+
             Producto productoGuardado = productoService.guardarProducto(nuevoProducto, imagenFile);
-            return new ResponseEntity<>(productoGuardado, HttpStatus.CREATED);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "Producto creado con éxito");
+            response.put("data", productoGuardado);
+            return ResponseEntity.ok(response);
+
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            e.printStackTrace();
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("success", false);
+            errorResponse.put("message", "Error interno del servidor: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 
-    @PutMapping("/api/actualizar/{id}")
+    // Método auxiliar para respuestas de error
+    private Map<String, Object> createErrorResponse(String message) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", false);
+        response.put("message", message);
+        return response;
+    }
+
+    @PostMapping("/api/actualizar/{id}")
     @ResponseBody
-    public ResponseEntity<Producto> actualizarProducto(
+    public ResponseEntity<?> actualizarProducto(
             @PathVariable Long id,
             @RequestParam(value = "nombre", required = false) String nombre,
             @RequestParam(value = "descripcion", required = false) String descripcion,
@@ -99,31 +141,63 @@ public class ProductoController {
             Producto producto = productoService.obtenerProductoPorId(id)
                     .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
-            // Actualizar solo los campos que no sean nulos o vacíos
-            if (nombre != null && !nombre.isBlank()) {
-                producto.setNombre(nombre);
+            boolean hasChanges = false;
+
+            // Validar stock si se proporciona
+            if (stock != null && stock < 0) {
+                return ResponseEntity.badRequest().body(createErrorResponse("El stock no puede ser negativo"));
             }
-            if (descripcion != null && !descripcion.isBlank()) {
-                producto.setDescripcion(descripcion);
+
+            // Actualizar campos...
+            if (nombre != null && !nombre.trim().isEmpty()) {
+                producto.setNombre(nombre.trim());
+                hasChanges = true;
             }
-            if (precio != null) {
+
+            if (descripcion != null) {
+                producto.setDescripcion(descripcion.trim());
+                hasChanges = true;
+            }
+
+            if (precio != null && precio > 0) {
                 producto.setPrecio(precio);
+                hasChanges = true;
             }
+
             if (stock != null) {
-                producto.setStock(stock);
+                producto.setStock(stock); // Permite 0
+                hasChanges = true;
             }
+
             if (categoriaId != null) {
-                producto.setCategoria(
-                        categoriaService.obtenerCategoriaPorId(categoriaId)
-                                .orElseThrow(() -> new RuntimeException("Categoría no encontrada"))
-                );
+                var categoriaOpt = categoriaService.obtenerCategoriaPorId(categoriaId);
+                if (categoriaOpt.isEmpty()) {
+                    return ResponseEntity.badRequest().body(createErrorResponse("Categoría no encontrada"));
+                }
+                producto.setCategoria(categoriaOpt.get());
+                hasChanges = true;
+            }
+
+            if (imagenFile != null && !imagenFile.isEmpty()) {
+                hasChanges = true;
+            }
+
+            if (!hasChanges) {
+                return ResponseEntity.badRequest().body(createErrorResponse("No se realizaron cambios"));
             }
 
             Producto productoActualizado = productoService.guardarProducto(producto, imagenFile);
-            return ResponseEntity.ok(productoActualizado);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "Producto actualizado con éxito");
+            response.put("data", productoActualizado);
+            return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(createErrorResponse("Error al actualizar: " + e.getMessage()));
         }
     }
 
@@ -152,7 +226,7 @@ public class ProductoController {
         }
     }
 
-    @GetMapping("/api/listar-productos-categoria")
+    @GetMapping("/api/listar-productos-categoria/{id}")
     @ResponseBody
     public ResponseEntity<?> listarProductosCategoria(@PathVariable Long id) {
         Map<String, Object> response = new HashMap<>();
@@ -184,17 +258,17 @@ public class ProductoController {
         Map<String, Object> response = new HashMap<>();
         try {
             if (productoService.obtenerProductoPorId(id).isEmpty()) {
-                response.put("success", true);
+                response.put("success", false);
                 response.put("message", "Producto no encontrado");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
-                productoService.eliminarProducto(id);
-                response.put("success", true);
-                response.put("message", "Producto eliminado con éxito");
-                return ResponseEntity.ok(response);
+            productoService.eliminarProducto(id);
+            response.put("success", true);
+            response.put("message", "Producto eliminado con éxito");
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "Producto no encontrado");
+            response.put("message", "Error: " + e.getMessage());
             return ResponseEntity.internalServerError().body(response);
         }
     }

@@ -29,6 +29,8 @@ services:
       SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: ${SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT}
     depends_on:
       - db_mysql_chocotejas
+    volumes:
+      - ./imagenes:/app/imagenes
 
   phpmyadmin:
     container_name: phpmyadmin_container
