@@ -53,8 +53,9 @@ public class ProductoController {
                     productoData.put("precio", producto.getPrecio());
                     productoData.put("stock", producto.getStock());
                     productoData.put("estado", producto.getEstado());
-                    productoData.put("categoria", producto.getCategoria().getNombre());
-                    productoData.put("imagen", producto.getImagen()); // Agregar esta línea
+                    productoData.put("categoria", producto.getCategoria().getId()); // Cambiar a ID
+                    productoData.put("categoriaNombre", producto.getCategoria().getNombre()); // Agregar nombre también
+                    productoData.put("imagen", producto.getImagen());
 
                     response.put("data", productoData);
                     return ResponseEntity.ok(response);
@@ -76,8 +77,8 @@ public class ProductoController {
             if (nombre == null || nombre.trim().isEmpty()) {
                 return ResponseEntity.badRequest().body(createErrorResponse("El nombre es obligatorio"));
             }
-            if (precio == null || precio <= 0) {
-                return ResponseEntity.badRequest().body(createErrorResponse("El precio debe ser mayor a 0"));
+            if (precio == null || precio < 0) { // Cambiar de <= 0 a < 0 para permitir 0
+                return ResponseEntity.badRequest().body(createErrorResponse("El precio debe ser mayor o igual a 0"));
             }
             if (categoriaId == null) {
                 return ResponseEntity.badRequest().body(createErrorResponse("La categoría es obligatoria"));

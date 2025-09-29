@@ -25,8 +25,9 @@ $(document).ready(function () {
             { data: "id" },
             {
                 data: "imagen",
-                render: function (imagen) {
-                    return `<img src="../../../../../imagenes/${imagen}" alt="Imagen producto" class="img-thumbnail" style="max-height: 50px;">`;
+                render: function (imagen, type, row) {
+                    // Usar ruta correcta para las imágenes
+                    return `<img src="../../../../../imagenes/${imagen}" alt="Imagen producto" class="img-thumbnail" style="max-height: 50px; max-width: 50px;" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yNSAzMEMyOC44NjYgMzAgMzIgMjYuODY2IDMyIDIzQzMyIDE5LjEzNCAyOC44NjYgMTYgMjUgMTZDMjEuMTM0IDE2IDE4IDE5LjEzNCAxOCAyM0MxOCAyNi44NjYgMjEuMTM0IDMwIDI1IDMwWiIgZmlsbD0iIzlDOEU5RiIvPgo8cGF0aCBkPSJNMTguNzUgMzRDMTcuNTAzIDM0IDE2LjM3NSAzNC42MDMgMTUuNjU2IDM1LjU5M0MxNi4zNzUgMzYuNTgzIDE3LjUwMyAzNy4xODggMTguNzUgMzcuMTg4SDMxLjI1QzMyLjQ5NyAzNy4xODggMzMuNjI1IDM2LjU4MyAzNC4zNDQgMzUuNTkzQzMzLjYyNSAzNC42MDMgMzIuNDk3IDM0IDMxLjI1IDM0SDE4Ljc1WiIgZmlsbD0iIzlDOEU5RiIvPgo8L3N2Zz4K'">`;
                 }
             },
             { data: "nombre" },
@@ -51,10 +52,18 @@ $(document).ready(function () {
                 data: null,
                 render: function (data) {
                     return `
-                        <button class="btn btn-sm btn-warning btn-editar" data-id="${data.id}">Editar</button>
-                        <button class="btn btn-sm btn-info btn-estado" data-id="${data.id}">${data.estado === 1 ? "Desactivar" : "Activar"}</button>
-                        <button class="btn btn-sm btn-success btn-stock" data-id="${data.id}" data-stock="${data.stock}">Stock</button>
-                        <button class="btn btn-sm btn-danger btn-eliminar" data-id="${data.id}">Eliminar</button>
+                        <button class="btn btn-sm btn-warning btn-editar" data-id="${data.id}" title="Editar">
+                            <i class="bi bi-pencil"></i> Editar
+                        </button>
+                        <button class="btn btn-sm btn-info btn-estado" data-id="${data.id}" title="${data.estado === 1 ? 'Desactivar' : 'Activar'}">
+                            <i class="bi bi-power"></i> ${data.estado === 1 ? "Desactivar" : "Activar"}
+                        </button>
+                        <button class="btn btn-sm btn-success btn-stock" data-id="${data.id}" data-stock="${data.stock}" title="Actualizar Stock">
+                            <i class="bi bi-box"></i> Stock
+                        </button>
+                        <button class="btn btn-sm btn-danger btn-eliminar" data-id="${data.id}" title="Eliminar">
+                            <i class="bi bi-trash"></i> Eliminar
+                        </button>
                     `;
                 }
             }
@@ -81,6 +90,8 @@ $(document).ready(function () {
     $("#btnNuevoProducto").click(function () {
         formProducto[0].reset();
         $("#idProducto").val("");
+        $("#precio").val("0");
+        $("#stock").val("0");
         $("#imagenPreviewContainer").hide();
         $("#productoModalLabel").text("Nuevo Producto");
         $("#imagenFile").prop("required", true);
@@ -95,57 +106,49 @@ $(document).ready(function () {
         const id = $("#idProducto").val();
         const isEdit = !!id;
 
-        // Solo agregar campos que han sido modificados o son requeridos
-        if (isEdit) {
-            formData.append("id", id);
-        }
-
-        // Campos obligatorios para nuevo producto
-        if (!isEdit || $("#nombre").val().trim() !== ($("#nombre").data('original') || '')) {
+        // Para nuevo producto, todos los campos son requeridos
+        if (!isEdit) {
             formData.append("nombre", $("#nombre").val().trim());
-        }
-
-        if (!isEdit || $("#precio").val() !== ($("#precio").data('original') || '0')) {
-            formData.append("precio", $("#precio").val());
-        }
-
-        if (!isEdit || $("#categoria").val() !== ($("#categoria").data('original') || '')) {
+            formData.append("precio", $("#precio").val() || "0");
             formData.append("categoria", $("#categoria").val());
-        }
+            formData.append("descripcion", $("#descripcion").val().trim() || "Sin descripción");
+            formData.append("stock", $("#stock").val() || "0");
 
-        // Campos opcionales para edición
-        const descripcion = $("#descripcion").val().trim();
-        if (!isEdit || descripcion !== ($("#descripcion").data('original') || '')) {
-            formData.append("descripcion", descripcion || "Sin descripción");
-        }
-
-        const stock = $("#stock").val();
-        if (!isEdit || stock !== ($("#stock").data('original') || '0')) {
-            formData.append("stock", stock);
-        }
-
-        // Imagen - solo si se seleccionó una nueva
-        const imagenFile = $("#imagenFile")[0].files[0];
-        if (imagenFile) {
+            const imagenFile = $("#imagenFile")[0].files[0];
+            if (!imagenFile) {
+                mostrarNotificacion("La imagen es obligatoria para nuevos productos", "danger");
+                return;
+            }
             formData.append("imagenFile", imagenFile);
-        } else if (!isEdit) {
-            // Para nuevo producto, la imagen es obligatoria
-            mostrarNotificacion("La imagen es obligatoria para nuevos productos", "danger");
-            return;
-        }
+        } else {
+            // Para edición, solo campos modificados
+            if ($("#nombre").val().trim() !== ($("#nombre").data('original') || '')) {
+                formData.append("nombre", $("#nombre").val().trim());
+            }
+            if ($("#precio").val() !== ($("#precio").data('original') || '0')) {
+                formData.append("precio", $("#precio").val());
+            }
+            if ($("#categoria").val() !== ($("#categoria").data('original') || '')) {
+                formData.append("categoria", $("#categoria").val());
+            }
+            if ($("#descripcion").val().trim() !== ($("#descripcion").data('original') || '')) {
+                formData.append("descripcion", $("#descripcion").val().trim() || "Sin descripción");
+            }
+            if ($("#stock").val() !== ($("#stock").data('original') || '0')) {
+                formData.append("stock", $("#stock").val());
+            }
 
-        // Validar que al menos hay un cambio en edición
-        if (isEdit && formData.entries().next().done) {
-            mostrarNotificacion("No se realizaron cambios", "warning");
-            return;
+            const imagenFile = $("#imagenFile")[0].files[0];
+            if (imagenFile) {
+                formData.append("imagenFile", imagenFile);
+            }
         }
 
         const url = isEdit ? `/productos/api/actualizar/${id}` : "/productos/api/guardar";
-        const method = "POST";
 
         $.ajax({
             url: url,
-            type: method,
+            type: "POST",
             data: formData,
             processData: false,
             contentType: false,
@@ -178,10 +181,10 @@ $(document).ready(function () {
 
                 // Guardar valores originales para comparación
                 $("#nombre").data('original', producto.nombre);
-                $("#precio").data('original', producto.precio);
+                $("#precio").data('original', producto.precio.toString());
                 $("#descripcion").data('original', producto.descripcion);
-                $("#stock").data('original', producto.stock);
-                $("#categoria").data('original', producto.categoria);
+                $("#stock").data('original', producto.stock.toString());
+                $("#categoria").data('original', producto.categoria.toString()); // Usar ID de categoría
 
                 // Llenar formulario
                 $("#idProducto").val(producto.id);
@@ -189,12 +192,14 @@ $(document).ready(function () {
                 $("#precio").val(producto.precio);
                 $("#descripcion").val(producto.descripcion);
                 $("#stock").val(producto.stock);
-                $("#categoria").val(producto.categoria);
+                $("#categoria").val(producto.categoria); // Usar ID para seleccionar
 
                 // Mostrar imagen actual
                 if (producto.imagen) {
                     $("#imagenPreview").attr("src", `../../../../../imagenes/${producto.imagen}`);
                     $("#imagenPreviewContainer").show();
+                } else {
+                    $("#imagenPreviewContainer").hide();
                 }
 
                 $("#productoModalLabel").text("Editar Producto");
@@ -203,6 +208,8 @@ $(document).ready(function () {
             } else {
                 mostrarNotificacion("Producto no encontrado", "danger");
             }
+        }).fail(function() {
+            mostrarNotificacion("Error al cargar el producto", "danger");
         });
     });
 
@@ -254,7 +261,8 @@ $(document).ready(function () {
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Sí, eliminar",
-            cancelButtonText: "Cancelar"
+            cancelButtonText: "Cancelar",
+            confirmButtonColor: "#d33"
         }).then((result) => {
             if (result.isConfirmed) {
                 $.post(`/productos/api/eliminar/${id}`, function (res) {
@@ -285,6 +293,8 @@ function cargarCategorias() {
                 }
             });
         }
+    }).fail(function() {
+        mostrarNotificacion("Error al cargar las categorías", "danger");
     });
 }
 
@@ -296,5 +306,9 @@ function mostrarNotificacion(mensaje, tipo) {
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>`;
     $("#notification-container").append(alert);
-    setTimeout(() => $(".alert").alert("close"), 4000);
+
+    // Auto-cerrar después de 4 segundos
+    setTimeout(() => {
+        $(".alert").alert("close");
+    }, 4000);
 }

@@ -1,10 +1,7 @@
 package com.example.sistema_venta_chocotejas.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "productos")
@@ -24,13 +21,13 @@ public class Producto {
     private String descripcion = "Sin descripción";
 
     @NotNull(message = "El precio es obligatorio")
-    @Positive(message = "El precio debe ser mayor a 0")
+    @PositiveOrZero(message = "El precio debe ser mayor o igual a 0") // Cambiar de @Positive a @PositiveOrZero
     @Column(nullable = false)
     private Double precio;
 
-    // CAMBIO: Quitar @Positive y usar @Min(0) para permitir stock 0
+    @PositiveOrZero(message = "El stock debe ser mayor o igual a 0") // Agregar validación
     @Column()
-    private Integer stock = 0; // Valor por defecto 0
+    private Integer stock = 0;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name= "id_categoria")
