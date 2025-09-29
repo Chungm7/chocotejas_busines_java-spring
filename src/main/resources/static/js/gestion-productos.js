@@ -1,11 +1,18 @@
 let tablaProductos;
 let productoModal;
+let stockModal;
 let formProducto;
-let productoActual = null;
+let formStock;
+let categorias = [];
 
 $(document).ready(function () {
     productoModal = new bootstrap.Modal(document.getElementById("productoModal"));
+    stockModal = new bootstrap.Modal(document.getElementById("stockModal"));
     formProducto = $("#formProducto");
+    formStock = $("#formStock");
+
+    // Cargar categorías al iniciar
+    cargarCategorias();
 
     // Inicializar DataTable
     tablaProductos = $("#tablaProductos").DataTable({
@@ -18,38 +25,20 @@ $(document).ready(function () {
             { data: "id" },
             {
                 data: "imagen",
-                render: function (imagen, type, row) {
-                    if (!imagen) return '<span class="text-muted">Sin imagen</span>';
-                    return `<img src="/imagenes/${imagen}" alt="${row.nombre}" style="width: 50px; height: 50px; object-fit: cover;" class="rounded">`;
+                render: function (imagen) {
+                    return `<img src="../../../../../imagenes/${imagen}" alt="Imagen producto" class="img-thumbnail" style="max-height: 50px;">`;
                 }
             },
             { data: "nombre" },
-            {
-                data: "descripcion",
-                render: function (descripcion) {
-                    return descripcion && descripcion.length > 50 ?
-                        descripcion.substring(0, 50) + '...' :
-                        (descripcion || 'Sin descripción');
-                }
-            },
+            { data: "descripcion" },
             {
                 data: "precio",
                 render: function (precio) {
-                    return `S/ ${parseFloat(precio || 0).toFixed(2)}`;
+                    return `S/ ${parseFloat(precio).toFixed(2)}`;
                 }
             },
-            {
-                data: "stock",
-                render: function (stock) {
-                    return stock || 0;
-                }
-            },
-            {
-                data: "categoria",
-                render: function (categoria) {
-                    return categoria ? categoria.nombre : 'Sin categoría';
-                }
-            },
+            { data: "stock" },
+            { data: "categoria.nombre" },
             {
                 data: "estado",
                 render: function (estado) {
@@ -61,345 +50,251 @@ $(document).ready(function () {
             {
                 data: null,
                 render: function (data) {
-                    if (data.estado === 2) return '<span class="text-muted">Eliminado</span>';
-
                     return `
-                        <button class="btn btn-sm btn-warning btn-editar" data-id="${data.id}" title="Editar">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn btn-sm btn-info btn-estado" data-id="${data.id}" title="${data.estado === 1 ? 'Desactivar' : 'Activar'}">
-                            ${data.estado === 1 ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>'}
-                        </button>
-                        <button class="btn btn-sm btn-danger btn-eliminar" data-id="${data.id}" title="Eliminar">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                        <button class="btn btn-sm btn-warning btn-editar" data-id="${data.id}">Editar</button>
+                        <button class="btn btn-sm btn-info btn-estado" data-id="${data.id}">${data.estado === 1 ? "Desactivar" : "Activar"}</button>
+                        <button class="btn btn-sm btn-success btn-stock" data-id="${data.id}" data-stock="${data.stock}">Stock</button>
+                        <button class="btn btn-sm btn-danger btn-eliminar" data-id="${data.id}">Eliminar</button>
                     `;
                 }
             }
         ],
-        language: { url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json" }
+        language: {
+            url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
+        }
     });
 
-    // Cargar categorías al iniciar
-    cargarCategorias();
+    // Vista previa de imagen
+    $("#imagenFile").change(function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                $("#imagenPreview").attr("src", e.target.result);
+                $("#imagenPreviewContainer").show();
+            }
+            reader.readAsDataURL(file);
+        }
+    });
 
     // Botón nuevo producto
     $("#btnNuevoProducto").click(function () {
-        resetForm();
+        formProducto[0].reset();
+        $("#idProducto").val("");
+        $("#imagenPreviewContainer").hide();
         $("#productoModalLabel").text("Nuevo Producto");
         $("#imagenFile").prop("required", true);
         productoModal.show();
     });
 
-    // Guardar/Actualizar producto - CORREGIDO
-    formProducto.on("submit", function (e) {
+    // Guardar producto
+    formProducto.submit(function (e) {
         e.preventDefault();
 
-        const idProducto = $("#idProducto").val();
-        const isEdit = !!idProducto;
-
-        // Validación diferente para nuevo vs editar
-        if (!isEdit) {
-            // Para NUEVO producto: validar campos obligatorios
-            if (!formProducto[0].checkValidity()) {
-                formProducto.addClass('was-validated');
-                mostrarNotificacion("❌ Complete los campos requeridos", "warning");
-                return;
-            }
-        }
-
         const formData = new FormData();
-        const btnSubmit = $(this).find('button[type="submit"]');
-        const originalText = btnSubmit.html();
+        const id = $("#idProducto").val();
+        const isEdit = !!id;
 
-        // Mostrar loading
-        btnSubmit.prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span> Procesando...');
+        // Solo agregar campos que han sido modificados o son requeridos
+        if (isEdit) {
+            formData.append("id", id);
+        }
 
-        // Para NUEVO producto: enviar todos los campos
-        if (!isEdit) {
+        // Campos obligatorios para nuevo producto
+        if (!isEdit || $("#nombre").val().trim() !== ($("#nombre").data('original') || '')) {
             formData.append("nombre", $("#nombre").val().trim());
-            formData.append("descripcion", $("#descripcion").val().trim());
+        }
+
+        if (!isEdit || $("#precio").val() !== ($("#precio").data('original') || '0')) {
             formData.append("precio", $("#precio").val());
-            formData.append("stock", $("#stock").val() || "0"); // Stock puede ser 0
+        }
+
+        if (!isEdit || $("#categoria").val() !== ($("#categoria").data('original') || '')) {
             formData.append("categoria", $("#categoria").val());
-            formData.append("imagenFile", $("#imagenFile")[0].files[0]);
-        }
-        // Para EDITAR producto: enviar solo campos modificados
-        else {
-            let hasChanges = false;
-
-            // Comparar cada campo con los valores originales
-            const nombre = $("#nombre").val().trim();
-            if (nombre !== productoActual.nombre) {
-                formData.append("nombre", nombre);
-                hasChanges = true;
-            }
-
-            const descripcion = $("#descripcion").val().trim();
-            if (descripcion !== (productoActual.descripcion || "")) {
-                formData.append("descripcion", descripcion);
-                hasChanges = true;
-            }
-
-            const precio = parseFloat($("#precio").val());
-            if (precio !== parseFloat(productoActual.precio)) {
-                formData.append("precio", precio.toString());
-                hasChanges = true;
-            }
-
-            const stock = parseInt($("#stock").val()) || 0;
-            if (stock !== parseInt(productoActual.stock || 0)) {
-                formData.append("stock", stock.toString());
-                hasChanges = true;
-            }
-
-            const categoria = $("#categoria").val();
-            if (categoria && productoActual.categoria &&
-                categoria !== productoActual.categoria.id.toString()) {
-                formData.append("categoria", categoria);
-                hasChanges = true;
-            }
-
-            const imagenFile = $("#imagenFile")[0].files[0];
-            if (imagenFile) {
-                formData.append("imagenFile", imagenFile);
-                hasChanges = true;
-            }
-
-            // Si no hay cambios, no enviar
-            if (!hasChanges) {
-                mostrarNotificacion("ℹ️ No se realizaron cambios", "info");
-                btnSubmit.prop('disabled', false).html(originalText);
-                return;
-            }
         }
 
-        const url = isEdit ? `/productos/api/actualizar/${idProducto}` : "/productos/api/guardar";
+        // Campos opcionales para edición
+        const descripcion = $("#descripcion").val().trim();
+        if (!isEdit || descripcion !== ($("#descripcion").data('original') || '')) {
+            formData.append("descripcion", descripcion || "Sin descripción");
+        }
+
+        const stock = $("#stock").val();
+        if (!isEdit || stock !== ($("#stock").data('original') || '0')) {
+            formData.append("stock", stock);
+        }
+
+        // Imagen - solo si se seleccionó una nueva
+        const imagenFile = $("#imagenFile")[0].files[0];
+        if (imagenFile) {
+            formData.append("imagenFile", imagenFile);
+        } else if (!isEdit) {
+            // Para nuevo producto, la imagen es obligatoria
+            mostrarNotificacion("La imagen es obligatoria para nuevos productos", "danger");
+            return;
+        }
+
+        // Validar que al menos hay un cambio en edición
+        if (isEdit && formData.entries().next().done) {
+            mostrarNotificacion("No se realizaron cambios", "warning");
+            return;
+        }
+
+        const url = isEdit ? `/productos/api/actualizar/${id}` : "/productos/api/guardar";
+        const method = "POST";
 
         $.ajax({
             url: url,
-            type: "POST",
+            type: method,
             data: formData,
             processData: false,
             contentType: false,
-            success: function (response) {
-                if (response.success) {
-                    mostrarNotificacion("✅ " + response.message, "success");
+            success: function (res) {
+                if (res.success) {
+                    mostrarNotificacion(res.message, "success");
                     productoModal.hide();
                     tablaProductos.ajax.reload();
-                    resetForm();
                 } else {
-                    mostrarNotificacion("❌ " + response.message, "danger");
+                    mostrarNotificacion(res.message, "danger");
                 }
             },
             error: function (xhr) {
-                let errorMsg = "Error al procesar la solicitud";
+                let errorMsg = "Error al guardar el producto";
                 try {
                     const response = JSON.parse(xhr.responseText);
                     errorMsg = response.message || errorMsg;
-                } catch (e) {
-                    errorMsg = xhr.statusText || errorMsg;
-                }
-                mostrarNotificacion("❌ " + errorMsg, "danger");
-            },
-            complete: function() {
-                btnSubmit.prop('disabled', false).html(originalText);
+                } catch (e) {}
+                mostrarNotificacion(errorMsg, "danger");
             }
         });
     });
 
-    // Editar producto - MEJORADO
-    $(document).on("click", ".btn-editar", function () {
+    // Editar producto
+    $("#tablaProductos").on("click", ".btn-editar", function () {
         const id = $(this).data("id");
-        const btn = $(this);
-        const originalHtml = btn.html();
+        $.get(`/productos/api/${id}`, function (res) {
+            if (res.success) {
+                const producto = res.data;
 
-        btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span>');
+                // Guardar valores originales para comparación
+                $("#nombre").data('original', producto.nombre);
+                $("#precio").data('original', producto.precio);
+                $("#descripcion").data('original', producto.descripcion);
+                $("#stock").data('original', producto.stock);
+                $("#categoria").data('original', producto.categoria);
 
-        $.get(`/productos/api/${id}`)
-            .done(function (response) {
-                if (response.success && response.data) {
-                    productoActual = response.data;
-                    populateForm(productoActual);
-                    $("#productoModalLabel").text("Editar Producto");
-                    $("#imagenFile").prop("required", false); // Imagen opcional en edición
-                    productoModal.show();
-                } else {
-                    mostrarNotificacion("❌ No se pudo cargar el producto", "danger");
+                // Llenar formulario
+                $("#idProducto").val(producto.id);
+                $("#nombre").val(producto.nombre);
+                $("#precio").val(producto.precio);
+                $("#descripcion").val(producto.descripcion);
+                $("#stock").val(producto.stock);
+                $("#categoria").val(producto.categoria);
+
+                // Mostrar imagen actual
+                if (producto.imagen) {
+                    $("#imagenPreview").attr("src", `../../../../../imagenes/${producto.imagen}`);
+                    $("#imagenPreviewContainer").show();
                 }
-            })
-            .fail(function(xhr) {
-                mostrarNotificacion("❌ Error al cargar el producto", "danger");
-            })
-            .always(function() {
-                btn.prop('disabled', false).html(originalHtml);
-            });
+
+                $("#productoModalLabel").text("Editar Producto");
+                $("#imagenFile").prop("required", false);
+                productoModal.show();
+            } else {
+                mostrarNotificacion("Producto no encontrado", "danger");
+            }
+        });
     });
 
     // Cambiar estado
-    $(document).on("click", ".btn-estado", function () {
+    $("#tablaProductos").on("click", ".btn-estado", function () {
         const id = $(this).data("id");
-
-        Swal.fire({
-            title: '¿Cambiar estado?',
-            text: 'El producto cambiará entre activo e inactivo',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, cambiar',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.post(`/productos/api/cambiar-estado/${id}`)
-                    .done(function (response) {
-                        if (response.success) {
-                            mostrarNotificacion("✅ " + response.message, "success");
-                            tablaProductos.ajax.reload();
-                        } else {
-                            mostrarNotificacion("❌ " + response.message, "danger");
-                        }
-                    })
-                    .fail(function() {
-                        mostrarNotificacion("❌ Error al cambiar estado", "danger");
-                    });
+        $.post(`/productos/api/cambiar-estado/${id}`, function (res) {
+            if (res.success) {
+                mostrarNotificacion(res.message, "info");
+                tablaProductos.ajax.reload();
+            } else {
+                mostrarNotificacion(res.message, "danger");
             }
         });
     });
 
-    // Eliminar producto
-    $(document).on("click", ".btn-eliminar", function () {
+    // Actualizar stock
+    $("#tablaProductos").on("click", ".btn-stock", function () {
         const id = $(this).data("id");
+        const currentStock = $(this).data("stock");
 
+        $("#idProductoStock").val(id);
+        $("#cantidad").val(currentStock);
+        stockModal.show();
+    });
+
+    formStock.submit(function (e) {
+        e.preventDefault();
+        const id = $("#idProductoStock").val();
+        const cantidad = $("#cantidad").val();
+
+        $.post(`/productos/api/actualizar-stock/${id}`, { cantidad: cantidad }, function (res) {
+            if (res.success) {
+                mostrarNotificacion(res.message, "success");
+                stockModal.hide();
+                tablaProductos.ajax.reload();
+            } else {
+                mostrarNotificacion(res.message, "danger");
+            }
+        });
+    });
+
+    // Eliminar
+    $("#tablaProductos").on("click", ".btn-eliminar", function () {
+        const id = $(this).data("id");
         Swal.fire({
             title: "¿Eliminar producto?",
-            text: "Esta acción no se puede deshacer",
+            text: "Esta acción no se puede deshacer.",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Sí, eliminar",
             cancelButtonText: "Cancelar"
         }).then((result) => {
             if (result.isConfirmed) {
-                $.post(`/productos/api/eliminar/${id}`)
-                    .done(function (response) {
-                        if (response.success) {
-                            mostrarNotificacion("✅ " + response.message, "success");
-                            tablaProductos.ajax.reload();
-                        } else {
-                            mostrarNotificacion("❌ " + response.message, "danger");
-                        }
-                    })
-                    .fail(function() {
-                        mostrarNotificacion("❌ Error al eliminar", "danger");
-                    });
+                $.post(`/productos/api/eliminar/${id}`, function (res) {
+                    if (res.success) {
+                        mostrarNotificacion(res.message, "success");
+                        tablaProductos.ajax.reload();
+                    } else {
+                        mostrarNotificacion(res.message, "danger");
+                    }
+                });
             }
         });
-    });
-
-    // Vista previa de imagen
-    $("#imagenFile").on("change", function() {
-        const file = this.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                $("#imagenPreview").attr("src", e.target.result).show();
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    // Al cerrar el modal, resetear
-    $("#productoModal").on("hidden.bs.modal", function () {
-        resetForm();
     });
 });
 
-function resetForm() {
-    formProducto[0].reset();
-    $("#idProducto").val("");
-    $("#imagenPreview").hide();
-    formProducto.removeClass('was-validated');
-    productoActual = null;
-    // Establecer stock por defecto a 0
-    $("#stock").val(0);
-}
-
-function populateForm(producto) {
-    resetForm();
-    productoActual = producto;
-
-    $("#idProducto").val(producto.id);
-    $("#nombre").val(producto.nombre || "");
-    $("#descripcion").val(producto.descripcion || "");
-    $("#precio").val(producto.precio || "");
-    $("#stock").val(producto.stock || 0); // Aceptar stock 0
-
-    // Cargar categorías y seleccionar la del producto
-    cargarCategoriasParaEdicion(producto.categoria);
-
-    // Mostrar imagen actual
-    if (producto.imagen) {
-        $("#imagenPreview")
-            .attr("src", `/imagenes/${producto.imagen}`)
-            .show();
-    }
-}
-
+// Función para cargar categorías
 function cargarCategorias() {
-    $.get("/categorias/api/listar")
-        .done(function (response) {
-            if (response.success) {
-                const select = $("#categoria");
-                let options = '<option value="" disabled>Seleccione una categoría</option>';
+    $.get("/categorias/api/listar", function (res) {
+        if (res.success) {
+            categorias = res.data;
+            const select = $("#categoria");
+            select.empty();
+            select.append('<option value="">Seleccione una categoría</option>');
 
-                response.data.forEach(categoria => {
-                    if (categoria.estado === 1) {
-                        options += `<option value="${categoria.id}">${categoria.nombre}</option>`;
-                    }
-                });
-
-                select.html(options);
-            }
-        })
-        .fail(function() {
-            console.error("Error cargando categorías");
-        });
-}
-
-function cargarCategoriasParaEdicion(categoriaProducto) {
-    $.get("/categorias/api/listar")
-        .done(function (response) {
-            if (response.success) {
-                const select = $("#categoria");
-                let options = '<option value="" disabled>Seleccione una categoría</option>';
-
-                response.data.forEach(categoria => {
-                    if (categoria.estado === 1) {
-                        const selected = (categoriaProducto && categoria.id === categoriaProducto.id) ?
-                            'selected' : '';
-                        options += `<option value="${categoria.id}" ${selected}>${categoria.nombre}</option>`;
-                    }
-                });
-
-                select.html(options);
-
-                // Asegurar que la categoría esté seleccionada
-                if (categoriaProducto) {
-                    setTimeout(() => {
-                        $("#categoria").val(categoriaProducto.id);
-                    }, 100);
+            categorias.forEach(categoria => {
+                if (categoria.estado === 1) {
+                    select.append(`<option value="${categoria.id}">${categoria.nombre}</option>`);
                 }
-            }
-        })
-        .fail(function() {
-            console.error("Error cargando categorías");
-        });
+            });
+        }
+    });
 }
 
+// Función de notificación
 function mostrarNotificacion(mensaje, tipo) {
     const alert = `
         <div class="alert alert-${tipo} alert-dismissible fade show" role="alert">
             ${mensaje}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>`;
-    $("#notification-container").html(alert);
-    setTimeout(() => $(".alert").alert("close"), 5000);
+    $("#notification-container").append(alert);
+    setTimeout(() => $(".alert").alert("close"), 4000);
 }

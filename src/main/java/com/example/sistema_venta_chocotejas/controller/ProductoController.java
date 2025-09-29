@@ -51,8 +51,10 @@ public class ProductoController {
                     productoData.put("nombre", producto.getNombre());
                     productoData.put("descripcion", producto.getDescripcion());
                     productoData.put("precio", producto.getPrecio());
+                    productoData.put("stock", producto.getStock());
                     productoData.put("estado", producto.getEstado());
                     productoData.put("categoria", producto.getCategoria().getNombre());
+                    productoData.put("imagen", producto.getImagen()); // Agregar esta línea
 
                     response.put("data", productoData);
                     return ResponseEntity.ok(response);
