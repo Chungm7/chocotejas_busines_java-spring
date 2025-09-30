@@ -124,8 +124,9 @@ public class ProductoServiceImpl implements ProductoService {
         return productoRepository.save(producto);
     }
 
+    // ProductoServiceImpl.java
     @Override
-    @Transactional(readOnly = true)
+    @Transactional  // <- QUITAR readOnly = true
     public void eliminarProducto(Long id) {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("El id del producto no puede ser nulo");
