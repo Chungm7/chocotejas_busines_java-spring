@@ -20,4 +20,10 @@ public interface CategoriaService {
     List<Producto> listarProductosporCategoria();
 
     void eliminarCategoria(Long id);
+
+    Long contarCategoriasActivas();
+
+    Long contarCategoriasInactivas();
+
+    Long contarCategorias();
 }

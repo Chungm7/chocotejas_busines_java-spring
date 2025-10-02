@@ -24,6 +24,24 @@ public class CategoriaIServicempl implements CategoriaService {
 
 
     @Override
+    @Transactional
+    public Long contarCategoriasActivas() {
+        return categoriaRepository.countByEstado(1);
+    }
+
+    @Override
+    @Transactional
+    public Long contarCategoriasInactivas() {
+        return categoriaRepository.countByEstado(0);
+    }
+
+    @Override
+    @Transactional
+    public Long contarCategorias() {
+        return categoriaRepository.countByEstadoNot(2);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<Categoria> listarCategoriasActivas() {
         return categoriaRepository.findByEstadoNot(2);

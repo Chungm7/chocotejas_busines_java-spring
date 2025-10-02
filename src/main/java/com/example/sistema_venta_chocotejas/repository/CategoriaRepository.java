@@ -10,4 +10,8 @@ import java.util.List;
 public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
 
     List<Categoria> findByEstadoNot(Integer estado);
+
+    Long countByEstado(Integer estado);
+
+    Long countByEstadoNot(Integer estado);
 }

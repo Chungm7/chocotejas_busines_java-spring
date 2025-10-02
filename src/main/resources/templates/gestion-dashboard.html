@@ -42,62 +42,82 @@
             <div class="row g-4">
                 <!-- Total de Usuarios -->
                 <div class="col-sm-6 col-lg-4">
-                    <div class="card card-primary shadow-sm h-100">
+                    <div class="card dashboard-card card-success shadow-sm h-100">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <h5 class="card-title fw-semibold">Total de Usuarios</h5>
-                                    <h2 class="display-4 fw-bold" th:text="${totalUsuarios}">0</h2>
+                                <div class="stats-container">
+                                    <h5 class="card-title fw-semibold">Total de Usuario</h5>
+                                    <h2 class="main-stat fw-bold" th:text="${totalUsuarios}">0</h2>
+                                    <div class="sub-stats">
+                                        <div class="sub-stat">
+                                            <span class="sub-stat-value" th:text="${totalUsuariosActivos}">0</span>
+                                            <span class="sub-stat-label">Activas</span>
+                                        </div>
+                                        <div class="sub-stat">
+                                            <span class="sub-stat-value" th:text="${totalUsuariosInactivos}">0</span>
+                                            <span class="sub-stat-label">Inactivas</span>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="card-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
-                                         class="bi bi-people-fill" viewBox="0 0 16 16">
-                                        <path
-                                                d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+                                         class="bi bi-tags-fill" viewBox="0 0 16 16">
+                                        <path d="M2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586V2zm3.5 4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+                                        <path d="M1.293 7.793A1 1 0 0 1 1 7.086V2a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l.043-.043-7.457-7.457z"/>
                                     </svg>
                                 </div>
                             </div>
-                            <a th:href="@{/usuarios/listar}" class="d-block mt-3 opacity-75">
+                            <a th:href="@{/usuarios/listar}" class="dashboard-link d-block mt-3">
                                 Ver detalles &rarr;
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Nuevo Usuario -->
+                <!-- Total de Categorias -->
                 <div class="col-sm-6 col-lg-4">
-                    <div class="card card-success shadow-sm h-100">
+                    <div class="card dashboard-card card-success shadow-sm h-100">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <h5 class="card-title fw-semibold">Nuevo Usuario</h5>
-                                    <p class="card-text opacity-75">Añadir un nuevo registro.</p>
+                                <div class="stats-container">
+                                    <h5 class="card-title fw-semibold">Total de Categorias</h5>
+                                    <h2 class="main-stat fw-bold" th:text="${totalCategorias}">0</h2>
+                                    <div class="sub-stats">
+                                        <div class="sub-stat">
+                                            <span class="sub-stat-value" th:text="${totalCategoriasActivas}">0</span>
+                                            <span class="sub-stat-label">Activas</span>
+                                        </div>
+                                        <div class="sub-stat">
+                                            <span class="sub-stat-value" th:text="${totalCategoriasInactivas}">0</span>
+                                            <span class="sub-stat-label">Inactivas</span>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="card-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
-                                         class="bi bi-person-plus-fill" viewBox="0 0 16 16">
-                                        <path
-                                                d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
-                                        <path fill-rule="evenodd"
-                                              d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13.5z"/>
+                                         class="bi bi-tags-fill" viewBox="0 0 16 16">
+                                        <path d="M2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586V2zm3.5 4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+                                        <path d="M1.293 7.793A1 1 0 0 1 1 7.086V2a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l.043-.043-7.457-7.457z"/>
                                     </svg>
                                 </div>
                             </div>
-                            <a th:href="@{/usuarios/listar}" class="d-block mt-3 opacity-75">
-                                Ir al formulario &rarr;
+                            <a th:href="@{/categorias/listar}" class="dashboard-link d-block mt-3">
+                                Ver detalles &rarr;
                             </a>
                         </div>
                     </div>
                 </div>
 
+
+
                 <!-- Reportes -->
                 <div class="col-sm-6 col-lg-4">
-                    <div class="card card-warning shadow-sm h-100">
+                    <div class="card dashboard-card card-warning shadow-sm h-100">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div>
                                     <h5 class="card-title fw-semibold">Reportes</h5>
-                                    <p class="card-text text-black-50">Visualizar y exportar datos.</p>
+                                    <p class="card-text opacity-75 mb-0">Visualizar y exportar datos.</p>
                                 </div>
                                 <div class="card-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
@@ -107,7 +127,7 @@
                                     </svg>
                                 </div>
                             </div>
-                            <a href="#" class="text-black-50 d-block mt-3 opacity-75">
+                            <a href="#" class="dashboard-link d-block mt-3">
                                 Próximamente...
                             </a>
                         </div>

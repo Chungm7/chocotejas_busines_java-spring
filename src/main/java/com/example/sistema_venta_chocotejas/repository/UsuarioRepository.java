@@ -24,4 +24,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     List<Usuario> findAllByEstadoNot(Integer estado);
 
     long countByEstadoNot(Integer estado);
+
+    long countByEstado(Integer estado);
 }

@@ -104,6 +104,14 @@ public class UsuarioService {
         // Contamos solo los usuarios que no están eliminados lógicamente
         return usuarioRepository.countByEstadoNot(2);
     }
+    @Transactional
+    public long contarUsuariosActivos() {
+        return usuarioRepository.countByEstado(1);
+    }
+    @Transactional
+    public long contarUsuariosInactivos() {
+        return usuarioRepository.countByEstado(0);
+    }
 
     @Transactional(readOnly = true)
     public Optional<Usuario> obtenerUsuarioPorId(Long id) {
