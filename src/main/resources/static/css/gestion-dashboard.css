@@ -1,0 +1,68 @@
+/*
+ * Estilos específicos para el Dashboard
+ */
+
+.dashboard-card {
+    border-radius: 15px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    position: relative;
+}
+
+.dashboard-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-accent), var(--color-gold));
+}
+
+.dashboard-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.card-primary {
+    background: linear-gradient(135deg, var(--color-milk-chocolate) 0%, var(--color-dark-chocolate) 100%);
+    color: var(--color-cream);
+}
+
+.card-success {
+    background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%);
+    color: white;
+}
+
+.card-warning {
+    background: linear-gradient(135deg, #FFA000 0%, #FFC107 100%);
+    color: var(--color-dark-chocolate);
+}
+
+.card-icon {
+    font-size: 2.5rem;
+    opacity: 0.8;
+    transition: transform 0.3s ease;
+}
+
+.dashboard-card:hover .card-icon {
+    transform: scale(1.2) rotate(5deg);
+}
+
+.display-4 {
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.dashboard-link {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid transparent;
+}
+
+.dashboard-link:hover {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+    padding-left: 5px;
+}

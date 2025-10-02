@@ -1,0 +1,83 @@
+/*
+ * Estilos comunes para todas las tablas DataTables
+ */
+
+.table {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table thead th {
+    background: linear-gradient(135deg, var(--color-milk-chocolate) 0%, var(--color-medium-brown) 100%);
+    color: var(--color-cream);
+    border: none;
+    padding: 15px 12px;
+    font-weight: 600;
+}
+
+.table tbody tr {
+    transition: background-color 0.3s ease;
+}
+
+.table tbody tr:hover {
+    background-color: var(--color-caramel);
+}
+
+.table tbody td {
+    padding: 12px;
+    border-color: #e0e0e0;
+    vertical-align: middle;
+}
+
+/* DataTables Personalización */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    border-radius: 8px !important;
+    margin: 0 3px;
+    transition: all 0.3s ease;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: linear-gradient(135deg, var(--color-milk-chocolate) 0%, var(--color-medium-brown) 100%) !important;
+    color: var(--color-cream) !important;
+    border: none;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-gold) 100%) !important;
+    color: var(--color-milk-chocolate) !important;
+    border: none;
+}
+
+.dataTables_wrapper .dataTables_length select,
+.dataTables_wrapper .dataTables_filter input {
+    border-radius: 8px;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+}
+
+/* Badges para estados */
+.badge {
+    border-radius: 20px;
+    padding: 6px 12px;
+    font-weight: 500;
+}
+
+.badge.bg-success {
+    background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+}
+
+.badge.bg-secondary {
+    background: linear-gradient(135deg, #757575 0%, #9E9E9E 100%) !important;
+}
+
+.badge.bg-warning {
+    background: linear-gradient(135deg, #FFA000 0%, #FFC107 100%) !important;
+}
+
+.badge.bg-danger {
+    background: linear-gradient(135deg, #D32F2F 0%, #F44336 100%) !important;
+}
+
+.badge.bg-info {
+    background: linear-gradient(135deg, #0288D1 0%, #03A9F4 100%) !important;
+}

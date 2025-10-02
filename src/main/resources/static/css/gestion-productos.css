@@ -1,0 +1,93 @@
+/*
+ * Estilos específicos para Gestión de Productos
+ */
+
+.productos-table thead th {
+    background: linear-gradient(135deg, var(--color-milk-chocolate) 0%, var(--color-medium-brown) 100%);
+    color: var(--color-cream);
+    font-weight: 600;
+    border: none;
+    padding: 15px 12px;
+}
+
+.productos-table tbody tr {
+    transition: background-color 0.3s ease;
+}
+
+.productos-table tbody tr:hover {
+    background-color: var(--color-caramel);
+}
+
+.productos-img-thumbnail {
+    border-radius: 8px;
+    border: 2px solid var(--color-caramel);
+    transition: all 0.3s ease;
+    max-height: 50px;
+    max-width: 50px;
+    object-fit: cover;
+}
+
+.productos-img-thumbnail:hover {
+    transform: scale(1.1);
+    border-color: var(--color-accent);
+}
+
+.productos-modal .modal-header {
+    background: linear-gradient(135deg, var(--color-milk-chocolate) 0%, var(--color-medium-brown) 100%);
+    color: var(--color-cream);
+    border-bottom: none;
+}
+
+.productos-preview-container {
+    border: 2px dashed var(--color-caramel);
+    border-radius: 10px;
+    padding: 15px;
+    background-color: #fafafa;
+    transition: all 0.3s ease;
+}
+
+.productos-preview-container:hover {
+    border-color: var(--color-accent);
+    background-color: var(--color-cream);
+}
+
+.productos-preview-img {
+    max-height: 150px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.productos-form .form-control,
+.productos-form .form-select {
+    border-radius: 8px;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+}
+
+.productos-form .form-control:focus,
+.productos-form .form-select:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 0.25rem rgba(255, 152, 0, 0.25);
+}
+
+.productos-stock-badge {
+    font-size: 0.9rem;
+    padding: 4px 8px;
+    border-radius: 20px;
+}
+
+.productos-stock-low {
+    background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%);
+    color: white;
+}
+
+.productos-stock-medium {
+    background: linear-gradient(135deg, #ffc107 0%, #f39c12 100%);
+    color: var(--color-dark-chocolate);
+}
+
+.productos-stock-high {
+    background: linear-gradient(135deg, #28a745 0%, #2ecc71 100%);
+    color: white;
+}
