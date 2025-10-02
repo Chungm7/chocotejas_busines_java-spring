@@ -29,6 +29,22 @@ public class ProductoServiceImpl implements ProductoService {
     public ProductoServiceImpl(ProductoRepository productoRepository) {
         this.productoRepository = productoRepository;
     }
+
+    @Override
+    public Long contarProductosActivos() {
+        return productoRepository.countByEstado(1);
+    }
+
+    @Override
+    public Long contarProductosInactivos() {
+        return productoRepository.countByEstado(0);
+    }
+
+    @Override
+    public Long contarProductos() {
+        return productoRepository.countByEstadoNot(2);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public List<Producto> listarProductosActivos() {

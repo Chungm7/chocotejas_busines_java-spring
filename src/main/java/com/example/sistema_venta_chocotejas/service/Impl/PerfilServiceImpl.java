@@ -23,9 +23,24 @@ public class PerfilServiceImpl implements PerfilService {
     }
 
     @Override
+    public Long contarPerfilesActivos() {
+        return perfilRepository.countByEstado(1);
+    }
+
+    @Override
+    public Long contarPerfilesInactivos() {
+        return perfilRepository.countByEstado(0);
+    }
+
+    @Override
+    public Long contarPerfiles() {
+        return perfilRepository.countByEstadoNot(2);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<Perfil> listarPerfilesActivos() {
-        return perfilRepository.findByEstadoTrue();
+        return perfilRepository.findByEstadoNot(2);
     }
 
     @Override
@@ -49,8 +64,15 @@ public class PerfilServiceImpl implements PerfilService {
     @Override
     @Transactional
     public Optional<Perfil> cambiarEstadoPerfil(Long id) {
-        return perfilRepository.findById(id).map(perfil -> {
-            perfil.setEstado(!perfil.isEstado());
+        if (id == null || id <= 0) {
+            return Optional.empty();
+        }
+        return obtenerPerfilPorId(id).map(perfil -> {
+            if (perfil.getEstado() == 1) {
+                perfil.setEstado(0); // Cambiar a inactivo
+            } else if (perfil.getEstado() == 0) {
+                perfil.setEstado(1); // Cambiar a activo
+            }
             return perfilRepository.save(perfil);
         });
     }
@@ -64,6 +86,11 @@ public class PerfilServiceImpl implements PerfilService {
     @Override
     @Transactional
     public void eliminarPerfil(Long id) {
-        perfilRepository.deleteById(id);
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("El id del perfil no existe");
+        }
+        Perfil perfil = obtenerPerfilPorId(id).orElseThrow(() -> new IllegalArgumentException("Perfil no encontrado"));
+        perfil.setEstado(2); // Marcar como eliminado
+        perfilRepository.save(perfil);
     }
 }

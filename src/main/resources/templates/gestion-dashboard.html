@@ -74,6 +74,77 @@
                     </div>
                 </div>
 
+
+                <!-- Total de Perfiles -->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="card dashboard-card card-success shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="stats-container">
+                                    <h5 class="card-title fw-semibold">Total de Perfiles</h5>
+                                    <h2 class="main-stat fw-bold" th:text="${totalPerfiles}">0</h2>
+                                    <div class="sub-stats">
+                                        <div class="sub-stat">
+                                            <span class="sub-stat-value" th:text="${totalPerfilesActivos}">0</span>
+                                            <span class="sub-stat-label">Activas</span>
+                                        </div>
+                                        <div class="sub-stat">
+                                            <span class="sub-stat-value" th:text="${totalPerfilesInactivos}">0</span>
+                                            <span class="sub-stat-label">Inactivas</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
+                                         class="bi bi-tags-fill" viewBox="0 0 16 16">
+                                        <path d="M2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586V2zm3.5 4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+                                        <path d="M1.293 7.793A1 1 0 0 1 1 7.086V2a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l.043-.043-7.457-7.457z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <a th:href="@{/perfiles/listar}" class="dashboard-link d-block mt-3">
+                                Ver detalles &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Total de Productos -->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="card dashboard-card card-success shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="stats-container">
+                                    <h5 class="card-title fw-semibold">Total de Productos</h5>
+                                    <h2 class="main-stat fw-bold" th:text="${totalProductos}">0</h2>
+                                    <div class="sub-stats">
+                                        <div class="sub-stat">
+                                            <span class="sub-stat-value" th:text="${totalProductosActivos}">0</span>
+                                            <span class="sub-stat-label">Activas</span>
+                                        </div>
+                                        <div class="sub-stat">
+                                            <span class="sub-stat-value" th:text="${totalProductosInactivos}">0</span>
+                                            <span class="sub-stat-label">Inactivas</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
+                                         class="bi bi-tags-fill" viewBox="0 0 16 16">
+                                        <path d="M2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586V2zm3.5 4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+                                        <path d="M1.293 7.793A1 1 0 0 1 1 7.086V2a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l.043-.043-7.457-7.457z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <a th:href="@{/productos/listar}" class="dashboard-link d-block mt-3">
+                                Ver detalles &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Total de Categorias -->
                 <div class="col-sm-6 col-lg-4">
                     <div class="card dashboard-card card-success shadow-sm h-100">
@@ -107,9 +178,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
                 <!-- Reportes -->
                 <div class="col-sm-6 col-lg-4">
                     <div class="card dashboard-card card-warning shadow-sm h-100">
@@ -137,7 +205,7 @@
 
             <div class="card shadow-sm mt-4 rounded-lg">
                 <div class="card-body">
-                    <h2 class="card-title h4 fw-bold">¡Bienvenido a la aplicación Acceso!</h2>
+                    <h2 class="card-title h4 fw-bold">¡Bienvenido a la aplicación Chocoteja-Shop-Admin!</h2>
                     <p class="card-text text-muted">Usa el menú de la izquierda o las tarjetas de acceso rápido para navegar por el sistema.</p>
                 </div>
             </div>

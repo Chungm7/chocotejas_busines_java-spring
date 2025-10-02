@@ -20,4 +20,10 @@ public interface PerfilService {
     List<Opcion> listarTodasLasOpciones();
 
     void eliminarPerfil(Long id);
+
+    Long contarPerfilesActivos();
+
+    Long contarPerfilesInactivos();
+
+    Long contarPerfiles();
 }

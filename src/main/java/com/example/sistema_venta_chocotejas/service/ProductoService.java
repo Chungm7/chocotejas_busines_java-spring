@@ -26,4 +26,10 @@ public interface ProductoService {
     Producto actualizarStockProducto(Long idProducto, int cantidad);
 
     void eliminarProducto(Long id);
+
+    Long contarProductosActivos();
+
+    Long contarProductosInactivos();
+
+    Long contarProductos();
 }

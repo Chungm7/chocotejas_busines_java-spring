@@ -21,7 +21,7 @@ public class Perfil {
     private String descripcion;
 
     @Column(nullable = false)
-    private boolean estado = true; // true: Activo, false: Inactivo
+    private Integer estado = 1; // 1: activo, 0: inactivo 2: eliminado
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "perfil_opcion", joinColumns = @JoinColumn(name = "id_perfil"), inverseJoinColumns = @JoinColumn(name = "id_opcion"))
@@ -59,11 +59,11 @@ public class Perfil {
         this.descripcion = descripcion;
     }
 
-    public boolean isEstado() {
+    public Integer getEstado() {
         return estado;
     }
 
-    public void setEstado(boolean estado) {
+    public void setEstado(Integer estado) {
         this.estado = estado;
     }
 

@@ -31,7 +31,7 @@ public class PerfilController {
     public ResponseEntity<?> listarPerfilesApi() {
         Map<String, Object> response = new HashMap<>();
         response.put("success", true);
-        response.put("data", perfilService.listarTodosLosPerfiles());
+        response.put("data", perfilService.listarPerfilesActivos());
         return ResponseEntity.ok(response);
     }
 
@@ -47,7 +47,7 @@ public class PerfilController {
                     perfilData.put("id", perfil.getId());
                     perfilData.put("nombre", perfil.getNombre());
                     perfilData.put("descripcion", perfil.getDescripcion());
-                    perfilData.put("estado", perfil.isEstado());
+                    perfilData.put("estado", perfil.getEstado());
                     perfilData.put("opciones",
                             perfil.getOpciones().stream().map(op -> op.getId()).collect(Collectors.toSet()));
 
