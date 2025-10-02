@@ -22,6 +22,7 @@
                 <a th:href="@{${opcion.ruta}}"
                    class="nav-link text-cream rounded mb-1"
                    th:classappend="${opcion.ruta == activeUri} ? ' active bg-accent text-dark-chocolate' : ''">
+                    <i th:class="${opcion.icono}"></i>
                     <span th:text="${opcion.nombre}"></span>
                 </a>
             </li>

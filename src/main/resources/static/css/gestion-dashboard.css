@@ -1,3 +1,12 @@
+/* Variables de colores para las tarjetas - CENTRALIZADAS */
+:root {
+    --card-usuarios-color: linear-gradient(135deg, #6a4e3b 0%, #553521 100%);
+    --card-perfiles-color: linear-gradient(135deg, #cc8b61 0%, #774821 100%);
+    --card-productos-color: linear-gradient(135deg, #6a4e3b 0%, #553521 100%);
+    --card-categorias-color: linear-gradient(135deg, #cc8b61 0%, #774821 100%);
+    --card-reportes-color: linear-gradient(135deg, #6a4e3b 0%, #553521 100%);
+}
+
 /* Estilos mejorados para las tarjetas del Dashboard */
 .dashboard-card {
     border-radius: 16px;
@@ -6,6 +15,7 @@
     position: relative;
     border: none;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+    color: white;
 }
 
 .dashboard-card::before {
@@ -24,14 +34,39 @@
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
-.card-primary {
-    background: linear-gradient(135deg, var(--color-milk-chocolate) 0%, var(--color-dark-chocolate) 100%);
-    color: var(--color-cream);
+/* Clases específicas para cada tarjeta - USANDO LAS VARIABLES CENTRALIZADAS */
+.card-usuarios {
+    background: var(--card-usuarios-color);
     position: relative;
     overflow: hidden;
 }
 
-.card-primary::after {
+.card-perfiles {
+    background: var(--card-perfiles-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-productos {
+    background: var(--card-productos-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-categorias {
+    background: var(--card-categorias-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-reportes {
+    background: var(--card-reportes-color);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efecto hover común para todas las tarjetas */
+.dashboard-card::after {
     content: '';
     position: absolute;
     top: -50%;
@@ -43,53 +78,7 @@
     transition: all 0.5s ease;
 }
 
-.card-primary:hover::after {
-    transform: rotate(45deg) scale(1.2);
-}
-
-.card-success {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color: white;
-    position: relative;
-    overflow: hidden;
-}
-
-.card-success::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
-    transform: rotate(30deg);
-    transition: all 0.5s ease;
-}
-
-.card-success:hover::after {
-    transform: rotate(45deg) scale(1.2);
-}
-
-.card-warning {
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-    color: white;
-    position: relative;
-    overflow: hidden;
-}
-
-.card-warning::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
-    transform: rotate(30deg);
-    transition: all 0.5s ease;
-}
-
-.card-warning:hover::after {
+.dashboard-card:hover::after {
     transform: rotate(45deg) scale(1.2);
 }
 
