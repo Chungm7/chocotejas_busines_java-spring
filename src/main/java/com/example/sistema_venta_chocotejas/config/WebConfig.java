@@ -57,7 +57,14 @@ public class WebConfig implements WebMvcConfigurer {
         // Registra nuestro SessionInterceptor.
         registry.addInterceptor(sessionInterceptor)
                 .addPathPatterns("/**") // Le dice al interceptor que se aplique a TODAS las rutas.
-                .excludePathPatterns("/login", "/logout", "/css/**", "/js/**", "/images/**", "/error", "/favicon.ico"); // Excluye
+                .excludePathPatterns("/login",
+                        "/logout",
+                        "/client/**",
+                        "/css/**",
+                        "/js/**",
+                        "/images/**",
+                        "/error",
+                        "/favicon.ico"); // Excluye
                                                                                                                         // rutas
         // públicas que
         // no necesitan

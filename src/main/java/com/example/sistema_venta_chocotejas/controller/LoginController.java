@@ -26,7 +26,7 @@ public class LoginController {
         if (session.getAttribute("usuarioLogueado") != null) {
             return "redirect:/";
         }
-        return "gestion-login";
+        return "gestion/gestion-login";
     }
 
     @PostMapping("/login")

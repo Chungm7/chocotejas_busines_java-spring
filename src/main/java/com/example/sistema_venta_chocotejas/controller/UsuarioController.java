@@ -38,7 +38,7 @@ public class UsuarioController {
         List<Usuario> usuarios = usuarioService.listarUsuarios();
         model.addAttribute("usuarios", usuarios);
         model.addAttribute("formUsuario", new Usuario());
-        return "gestion-usuarios";
+        return "gestion/gestion-usuarios";
     }
 
     // GET /usuarios/api/listar: Endpoint de la API que devuelve la lista de

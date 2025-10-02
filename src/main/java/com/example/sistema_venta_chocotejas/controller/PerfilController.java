@@ -23,7 +23,7 @@ public class PerfilController {
 
     @GetMapping("/listar")
     public String mostrarPaginaPerfiles() {
-        return "gestion-perfiles"; // Devuelve el nombre de la vista (perfiles.html)
+        return "gestion/gestion-perfiles"; // Devuelve el nombre de la vista (perfiles.html)
     }
 
     @GetMapping("/api/listar")

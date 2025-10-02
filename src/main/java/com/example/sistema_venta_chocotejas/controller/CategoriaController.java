@@ -22,7 +22,7 @@ public class CategoriaController {
 
     @GetMapping("/listar")
     public String mostrarPaginaCategorias() {
-        return "gestion-categorias"; // Devuelve el nombre de la vista (categorias.html)
+        return "gestion/gestion-categorias"; // Devuelve el nombre de la vista (categorias.html)
     }
 
     @GetMapping("/api/listar")
