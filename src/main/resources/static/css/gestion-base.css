@@ -128,6 +128,63 @@ body {
 }
 
 /* ==============================
+   Estilos base para botones de acción
+   ============================== */
+.action-btn {
+    background: none;
+    border: none;
+    padding: 0.25rem;
+    border-radius: 50%;
+    line-height: 1;
+    transition: all 0.3s ease;
+    margin: 0 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.action-btn:hover {
+    background-color: #e9ecef;
+    transform: scale(1.1);
+}
+
+.action-btn-edit {
+    color: var(--color-milk-chocolate);
+}
+
+.action-btn-delete {
+    color: #dc3545;
+}
+
+.action-btn-permissions {
+    color: #0d6efd;
+}
+
+.action-btn-stock {
+    color: #198754;
+}
+
+.action-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Switch compacto para tablas */
+.table .form-switch .form-check-input {
+    width: 2.5em;
+    height: 1.4em;
+    margin-left: -0.5em;
+    cursor: pointer;
+}
+
+.table .form-switch .form-check-input:checked {
+    background-color: var(--color-milk-chocolate);
+    border-color: var(--color-milk-chocolate);
+}
+
+/* ==============================
    Responsive Global
    ============================== */
 @media (max-width: 768px) {

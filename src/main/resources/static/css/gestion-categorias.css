@@ -1,5 +1,5 @@
 /*
- * Estyles específicos para Gestión de Categorías
+ * Estilos específicos para Gestión de Categorías
  */
 
 .categorias-table thead th {
@@ -7,7 +7,7 @@
     color: var(--color-cream);
     font-weight: 600;
     border: none;
-    padding: 15px 12px;
+    padding: 12px 10px;
 }
 
 .categorias-table tbody tr {
@@ -22,23 +22,25 @@
     background: linear-gradient(135deg, var(--color-milk-chocolate) 0%, var(--color-medium-brown) 100%);
     color: var(--color-cream);
     border-bottom: none;
+    padding: 15px;
 }
 
 .categorias-modal .modal-footer {
     background-color: var(--color-cream);
     border-top: 1px solid var(--color-caramel);
+    padding: 12px 15px;
 }
 
 .categorias-form .form-control {
-    border-radius: 8px;
-    padding: 10px 15px;
+    border-radius: 6px;
+    padding: 8px 12px;
     border: 1px solid #ddd;
     transition: all 0.3s ease;
 }
 
 .categorias-form .form-control:focus {
     border-color: var(--color-accent);
-    box-shadow: 0 0 0 0.25rem rgba(255, 152, 0, 0.25);
+    box-shadow: 0 0 0 0.2rem rgba(255, 152, 0, 0.25);
 }
 
 .categorias-form textarea {

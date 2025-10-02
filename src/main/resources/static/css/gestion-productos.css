@@ -7,7 +7,7 @@
     color: var(--color-cream);
     font-weight: 600;
     border: none;
-    padding: 15px 12px;
+    padding: 12px 10px;
 }
 
 .productos-table tbody tr {
@@ -19,7 +19,7 @@
 }
 
 .productos-img-thumbnail {
-    border-radius: 8px;
+    border-radius: 6px;
     border: 2px solid var(--color-caramel);
     transition: all 0.3s ease;
     max-height: 50px;
@@ -36,12 +36,13 @@
     background: linear-gradient(135deg, var(--color-milk-chocolate) 0%, var(--color-medium-brown) 100%);
     color: var(--color-cream);
     border-bottom: none;
+    padding: 15px;
 }
 
 .productos-preview-container {
     border: 2px dashed var(--color-caramel);
-    border-radius: 10px;
-    padding: 15px;
+    border-radius: 8px;
+    padding: 12px;
     background-color: #fafafa;
     transition: all 0.3s ease;
 }
@@ -53,14 +54,14 @@
 
 .productos-preview-img {
     max-height: 150px;
-    border-radius: 8px;
+    border-radius: 6px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .productos-form .form-control,
 .productos-form .form-select {
-    border-radius: 8px;
-    padding: 10px 15px;
+    border-radius: 6px;
+    padding: 8px 12px;
     border: 1px solid #ddd;
     transition: all 0.3s ease;
 }
@@ -68,7 +69,7 @@
 .productos-form .form-control:focus,
 .productos-form .form-select:focus {
     border-color: var(--color-accent);
-    box-shadow: 0 0 0 0.25rem rgba(255, 152, 0, 0.25);
+    box-shadow: 0 0 0 0.2rem rgba(255, 152, 0, 0.25);
 }
 
 .productos-stock-badge {

@@ -11,7 +11,7 @@
     background: linear-gradient(135deg, var(--color-milk-chocolate) 0%, var(--color-medium-brown) 100%);
     color: var(--color-cream);
     border: none;
-    padding: 15px 12px;
+    padding: 12px 10px;
     font-weight: 600;
 }
 
@@ -24,15 +24,15 @@
 }
 
 .table tbody td {
-    padding: 12px;
+    padding: 10px;
     border-color: #e0e0e0;
     vertical-align: middle;
 }
 
 /* DataTables Personalización */
 .dataTables_wrapper .dataTables_paginate .paginate_button {
-    border-radius: 8px !important;
-    margin: 0 3px;
+    border-radius: 6px !important;
+    margin: 0 2px;
     transition: all 0.3s ease;
 }
 
@@ -50,16 +50,17 @@
 
 .dataTables_wrapper .dataTables_length select,
 .dataTables_wrapper .dataTables_filter input {
-    border-radius: 8px;
-    padding: 6px 10px;
+    border-radius: 6px;
+    padding: 5px 8px;
     border: 1px solid #ddd;
 }
 
 /* Badges para estados */
 .badge {
     border-radius: 20px;
-    padding: 6px 12px;
+    padding: 5px 10px;
     font-weight: 500;
+    font-size: 0.8rem;
 }
 
 .badge.bg-success {

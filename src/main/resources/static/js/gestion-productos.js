@@ -26,7 +26,6 @@ $(document).ready(function () {
             {
                 data: "imagen",
                 render: function (imagen, type, row) {
-                    // Usar ruta correcta para las imágenes
                     return `<img src="../../../../../imagenes/${imagen}" alt="Imagen producto" class="img-thumbnail" style="max-height: 50px; max-width: 50px;" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yNSAzMEMyOC44NjYgMzAgMzIgMjYuODY2IDMyIDIzQzMyIDE5LjEzNCAyOC44NjYgMTYgMjUgMTZDMjEuMTM0IDE2IDE4IDE5LjEzNCAxOCAyM0MxOCAyNi44NjYgMjEuMTM0IDMwIDI1IDMwWiIgZmlsbD0iIzlDOEU5RiIvPgo8cGF0aCBkPSJNMTguNzUgMzRDMTcuNTAzIDM0IDE2LjM3NSAzNC42MDMgMTUuNjU2IDM1LjU5M0MxNi4zNzUgMzYuNTgzIDE3LjUwMyAzNy4xODggMTguNzUgMzcuMTg4SDMxLjI1QzMyLjQ5NyAzNy4xODggMzMuNjI1IDM2LjU4MyAzNC4zNDQgMzUuNTkzQzMzLjYyNSAzNC42MDMgMzIuNDk3IDM0IDMxLjI1IDM0SDE4Ljc1WiIgZmlsbD0iIzlDOEU5RiIvPgo8L3N2Zz4K'">`;
                 }
             },
@@ -52,18 +51,29 @@ $(document).ready(function () {
                 data: null,
                 render: function (data) {
                     return `
-                        <button class="btn btn-sm btn-warning btn-editar" data-id="${data.id}" title="Editar">
-                            <i class="bi bi-pencil"></i> Editar
-                        </button>
-                        <button class="btn btn-sm btn-info btn-estado" data-id="${data.id}" title="${data.estado === 1 ? 'Desactivar' : 'Activar'}">
-                            <i class="bi bi-power"></i> ${data.estado === 1 ? "Desactivar" : "Activar"}
-                        </button>
-                        <button class="btn btn-sm btn-success btn-stock" data-id="${data.id}" data-stock="${data.stock}" title="Actualizar Stock">
-                            <i class="bi bi-box"></i> Stock
-                        </button>
-                        <button class="btn btn-sm btn-danger btn-eliminar" data-id="${data.id}" title="Eliminar">
-                            <i class="bi bi-trash"></i> Eliminar
-                        </button>
+                        <div class="d-flex gap-1 justify-content-center">
+                            <button data-id="${data.id}" class="action-btn action-btn-edit btn-editar" title="Editar">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                                </svg>
+                            </button>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input btn-estado" type="checkbox" role="switch" 
+                                       data-id="${data.id}" ${data.estado === 1 ? 'checked' : ''}
+                                       title="${data.estado === 1 ? 'Desactivar' : 'Activar'}">
+                            </div>
+                            <button data-id="${data.id}" class="action-btn action-btn-stock btn-stock" title="Stock" data-stock="${data.stock}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box" viewBox="0 0 16 16">
+                                    <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5 8 5.961 14.154 3.5 8.186 1.113zM15 4.239l-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"/>
+                                </svg>
+                            </button>
+                            <button data-id="${data.id}" class="action-btn action-btn-delete btn-eliminar" title="Eliminar">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                    <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+                                </svg>
+                            </button>
+                        </div>
                     `;
                 }
             }
@@ -184,7 +194,7 @@ $(document).ready(function () {
                 $("#precio").data('original', producto.precio.toString());
                 $("#descripcion").data('original', producto.descripcion);
                 $("#stock").data('original', producto.stock.toString());
-                $("#categoria").data('original', producto.categoria.toString()); // Usar ID de categoría
+                $("#categoria").data('original', producto.categoria.toString());
 
                 // Llenar formulario
                 $("#idProducto").val(producto.id);
@@ -192,7 +202,7 @@ $(document).ready(function () {
                 $("#precio").val(producto.precio);
                 $("#descripcion").val(producto.descripcion);
                 $("#stock").val(producto.stock);
-                $("#categoria").val(producto.categoria); // Usar ID para seleccionar
+                $("#categoria").val(producto.categoria);
 
                 // Mostrar imagen actual
                 if (producto.imagen) {
@@ -214,7 +224,7 @@ $(document).ready(function () {
     });
 
     // Cambiar estado
-    $("#tablaProductos").on("click", ".btn-estado", function () {
+    $("#tablaProductos").on("change", ".btn-estado", function () {
         const id = $(this).data("id");
         $.post(`/productos/api/cambiar-estado/${id}`, function (res) {
             if (res.success) {
