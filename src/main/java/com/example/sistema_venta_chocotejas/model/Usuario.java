@@ -23,7 +23,6 @@ public class Usuario{
     @Column(nullable = false, unique = true, length = 50)
     private String usuario;
 
-    @Size(min = 6, message = "La clave debe tener al menos 6 caracteres")
     @Column(nullable = false)
     private String clave;
 

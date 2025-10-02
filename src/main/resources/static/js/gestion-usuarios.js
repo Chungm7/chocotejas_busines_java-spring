@@ -173,9 +173,9 @@ $(document).ready(function() {
             return;
         }
 
-        // Si es edición y la clave está vacía, eliminar la propiedad clave
+        // Si es edición y la clave está vacía, eliminar la propiedad clave del objeto
         if (isEditing && (!formData.clave || formData.clave.trim() === "")) {
-            delete formData.clave; // No enviar clave vacía
+            delete formData.clave; // No enviar clave vacía en edición
         }
 
         showLoading(true);
@@ -351,10 +351,12 @@ $(document).ready(function() {
         $('#correo').val(usuario.correo);
         $('#id_perfil').val(usuario.perfil ? usuario.perfil.id : '');
 
+        // Configurar campo de clave para edición
         $('#clave')
             .val('')
-            .removeAttr('required')   // eliminas el required por si quedó
-            .attr('placeholder', 'Dejar en blanco para no cambiar');
+            .removeAttr('required')
+            .attr('placeholder', 'Dejar en blanco para conservar la contraseña actual')
+            .attr('title', 'Dejar vacío para mantener la contraseña actual');
 
         showModal();
     }
@@ -416,24 +418,23 @@ $(document).ready(function() {
             hasErrors = true;
         }
 
-        // Validación de clave
+        // Validación de clave - DIFERENCIAR ENTRE CREAR Y EDITAR
         if (!isEditing) {
             // Crear usuario → obligatorio
             if (!formData.clave) {
-                showFieldError('clave', 'La contraseña es obligatoria');
+                showFieldError('clave', 'La contraseña es obligatoria para nuevos usuarios');
                 hasErrors = true;
             } else if (formData.clave.length < 6) {
                 showFieldError('clave', 'La contraseña debe tener al menos 6 caracteres');
                 hasErrors = true;
             }
         } else {
-            // Editar usuario → opcional
+            // Editar usuario → opcional, pero si se ingresa debe cumplir con longitud mínima
             if (formData.clave && formData.clave.length < 6) {
                 showFieldError('clave', 'La contraseña debe tener al menos 6 caracteres');
                 hasErrors = true;
             }
         }
-
 
         // Validación de correo
         if (!formData.correo) {
