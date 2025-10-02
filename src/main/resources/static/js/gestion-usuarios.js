@@ -174,8 +174,8 @@ $(document).ready(function() {
         }
 
         // Si es edición y la clave está vacía, eliminar la propiedad clave
-        if (isEditing && (!formData.clave || formData.clave === '')) {
-            delete formData.clave;
+        if (isEditing && (!formData.clave || formData.clave.trim() === "")) {
+            delete formData.clave; // No enviar clave vacía
         }
 
         showLoading(true);
@@ -350,7 +350,11 @@ $(document).ready(function() {
         $('#usuario').val(usuario.usuario);
         $('#correo').val(usuario.correo);
         $('#id_perfil').val(usuario.perfil ? usuario.perfil.id : '');
-        $('#clave').val('').prop('required', false).attr('placeholder', 'Dejar en blanco para no cambiar');
+
+        $('#clave')
+            .val('')
+            .removeAttr('required')   // eliminas el required por si quedó
+            .attr('placeholder', 'Dejar en blanco para no cambiar');
 
         showModal();
     }
@@ -412,27 +416,36 @@ $(document).ready(function() {
             hasErrors = true;
         }
 
-        // Validación de contraseña
-        if (!isEditing && !formData.clave) {
-            showFieldError('clave', 'La contraseña es obligatoria');
-            hasErrors = true;
-        } else if (formData.clave && formData.clave.length < 6) {
-            showFieldError('clave', 'La contraseña debe tener al menos 6 caracteres');
-            hasErrors = true;
+        // Validación de clave
+        if (!isEditing) {
+            // Crear usuario → obligatorio
+            if (!formData.clave) {
+                showFieldError('clave', 'La contraseña es obligatoria');
+                hasErrors = true;
+            } else if (formData.clave.length < 6) {
+                showFieldError('clave', 'La contraseña debe tener al menos 6 caracteres');
+                hasErrors = true;
+            }
+        } else {
+            // Editar usuario → opcional
+            if (formData.clave && formData.clave.length < 6) {
+                showFieldError('clave', 'La contraseña debe tener al menos 6 caracteres');
+                hasErrors = true;
+            }
         }
+
 
         // Validación de correo
         if (!formData.correo) {
             showFieldError('correo', 'El correo es obligatorio');
             hasErrors = true;
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.correo)) {
-            showFieldError('correo', 'El formato del correo no es válido');
+            showFieldError('correo', 'El correo no es válido');
             hasErrors = true;
         }
 
         return !hasErrors;
     }
-
     /**
      * Muestra error en un campo específico
      */

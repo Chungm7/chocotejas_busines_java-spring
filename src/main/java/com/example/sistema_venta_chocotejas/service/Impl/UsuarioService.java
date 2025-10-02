@@ -16,7 +16,6 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    // Constructor corregido para inyectar BCryptPasswordEncoder
     public UsuarioService(UsuarioRepository usuarioRepository, BCryptPasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
@@ -24,7 +23,6 @@ public class UsuarioService {
 
     @Transactional(readOnly = true)
     public List<Usuario> listarUsuarios() {
-        // Excluimos a los usuarios con estado 2 (eliminados lógicamente)
         return usuarioRepository.findAllByEstadoNot(2);
     }
 
@@ -49,10 +47,10 @@ public class UsuarioService {
                 throw new IllegalArgumentException("El perfil es obligatorio");
             }
 
-            // Normalizar datos
+            // Normalizar datos - MANTENER CASE-SENSITIVE para usuario
             usuario.setNombre(usuario.getNombre().trim());
-            usuario.setUsuario(usuario.getUsuario().trim().toLowerCase());
-            usuario.setCorreo(usuario.getCorreo().trim().toLowerCase());
+            usuario.setUsuario(usuario.getUsuario().trim()); // Eliminado .toLowerCase()
+            usuario.setCorreo(usuario.getCorreo().trim().toLowerCase()); // Correo sí en minúsculas
 
             // Manejo de contraseñas
             if (usuario.getId() != null) {
@@ -101,13 +99,14 @@ public class UsuarioService {
 
     @Transactional(readOnly = true)
     public long contarUsuarios() {
-        // Contamos solo los usuarios que no están eliminados lógicamente
         return usuarioRepository.countByEstadoNot(2);
     }
+
     @Transactional
     public long contarUsuariosActivos() {
         return usuarioRepository.countByEstado(1);
     }
+
     @Transactional
     public long contarUsuariosInactivos() {
         return usuarioRepository.countByEstado(0);
@@ -123,7 +122,8 @@ public class UsuarioService {
 
     @Transactional(readOnly = true)
     public Optional<Usuario> findByUsuario(String usuario) {
-        return usuarioRepository.findByUsuario(usuario.trim().toLowerCase());
+        // Eliminado .toLowerCase() para mantener case-sensitive
+        return usuarioRepository.findByUsuario(usuario.trim());
     }
 
     @Transactional
@@ -132,11 +132,10 @@ public class UsuarioService {
             throw new IllegalArgumentException("ID de usuario inválido");
         }
 
-        // Borrado lógico: cambiamos el estado a 2
         Usuario usuario = obtenerUsuarioPorId(id)
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 
-        usuario.setEstado(2); // 2 significa "eliminado"
+        usuario.setEstado(2);
         usuarioRepository.save(usuario);
     }
 
@@ -147,13 +146,11 @@ public class UsuarioService {
         }
 
         return obtenerUsuarioPorId(id).map(usuario -> {
-            // Solo alterna entre 0 (inactivo) y 1 (activo)
             if (usuario.getEstado() == 1) {
-                usuario.setEstado(0); // Desactivar
+                usuario.setEstado(0);
             } else if (usuario.getEstado() == 0) {
-                usuario.setEstado(1); // Activar
+                usuario.setEstado(1);
             }
-            // No se hace nada si el estado es 2 (eliminado)
             return usuarioRepository.save(usuario);
         });
     }
@@ -166,8 +163,8 @@ public class UsuarioService {
         if (nombreUsuario == null || nombreUsuario.trim().isEmpty()) {
             return false;
         }
-        // Utiliza el método eficiente del repositorio
-        return usuarioRepository.existsByUsuario(nombreUsuario.trim().toLowerCase());
+        // Eliminado .toLowerCase() para mantener case-sensitive
+        return usuarioRepository.existsByUsuario(nombreUsuario.trim());
     }
 
     /**
@@ -178,7 +175,6 @@ public class UsuarioService {
         if (correo == null || correo.trim().isEmpty()) {
             return false;
         }
-        // Utiliza el método eficiente del repositorio
         return usuarioRepository.existsByCorreo(correo.trim().toLowerCase());
     }
 
