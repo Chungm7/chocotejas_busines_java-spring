@@ -21,7 +21,7 @@ $(document).ready(function() {
     };
 
     // Inicializar DataTable
-    initializeDataTable(); 
+    initializeDataTable();
 
     // Inicializar Modal de Bootstrap
     usuarioModal = new bootstrap.Modal(document.getElementById('usuarioModal'));
@@ -110,8 +110,6 @@ $(document).ready(function() {
         // Botón nuevo registro
         $('#btnNuevoRegistro').on('click', openModalForNew);
 
-        // No es necesario un listener para cerrar el modal, Bootstrap lo maneja con data-bs-dismiss
-
         // Submit form
         $('#formUsuario').on('submit', function(e) {
             e.preventDefault();
@@ -129,7 +127,6 @@ $(document).ready(function() {
      */
     function loadUsuarios() {
         // DataTables se encarga de la carga y el indicador de "processing"
-        // Simplemente recargamos los datos desde la fuente AJAX
         dataTable.ajax.reload();
     }
 
@@ -150,8 +147,9 @@ $(document).ready(function() {
                     showNotification('Error al cargar perfiles', 'error');
                 }
             }).catch(error => {
-                console.error('Error cargando perfiles:', error);
-            });
+            console.error('Error cargando perfiles:', error);
+            showNotification('Error al cargar la lista de perfiles', 'error');
+        });
     }
 
     /**
@@ -167,7 +165,7 @@ $(document).ready(function() {
             clave: $('#clave').val(),
             correo: $('#correo').val().trim(),
             perfil: {
-                id: $('#id_perfil').val()
+                id: $('#id_perfil').val() ? parseInt($('#id_perfil').val()) : null
             }
         };
 
@@ -176,8 +174,8 @@ $(document).ready(function() {
             return;
         }
 
-        // Si es edición y la clave está vacía, no enviarla
-        if (isEditing && !formData.clave) {
+        // Si es edición y la clave está vacía, eliminar la propiedad clave
+        if (isEditing && (!formData.clave || formData.clave === '')) {
             delete formData.clave;
         }
 
@@ -190,30 +188,39 @@ $(document).ready(function() {
             },
             body: JSON.stringify(formData)
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                hideModal();
-                showNotification(data.message, 'success');
-                loadUsuarios(); // Recargar la tabla
-            } else {
-                if (data.errors) {
-                    // Mostrar errores de validación del servidor
-                    Object.keys(data.errors).forEach(field => {
-                        showFieldError(field, data.errors[field]);
-                    });
-                } else {
-                    showNotification(data.message, 'error');
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showNotification('Error de conexión al guardar usuario', 'error');
-        })
-        .finally(() => {
-            showLoading(false);
-        });
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    hideModal();
+                    showNotification(data.message, 'success');
+                    loadUsuarios(); // Recargar la tabla
+                } else {
+                    if (data.errors) {
+                        // Mostrar errores de validación del servidor
+                        Object.keys(data.errors).forEach(field => {
+                            showFieldError(field, data.errors[field]);
+                        });
+                        // Mostrar también mensaje general
+                        if (data.message) {
+                            showNotification(data.message, 'error');
+                        }
+                    } else {
+                        showNotification(data.message || 'Error desconocido', 'error');
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Error de conexión al guardar usuario: ' + error.message, 'error');
+            })
+            .finally(() => {
+                showLoading(false);
+            });
     }
 
     /**
@@ -260,22 +267,22 @@ $(document).ready(function() {
         fetch(ENDPOINTS.toggleStatus(id), {
             method: 'POST'
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                showNotification(data.message, 'success');
-                loadUsuarios(); // Recargar la tabla
-            } else {
-                showNotification('Error: ' + data.message, 'error');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showNotification('Error de conexión al cambiar estado', 'error');
-        })
-        .finally(() => {
-            showLoading(false);
-        });
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification(data.message, 'success');
+                    loadUsuarios(); // Recargar la tabla
+                } else {
+                    showNotification('Error: ' + data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Error de conexión al cambiar estado', 'error');
+            })
+            .finally(() => {
+                showLoading(false);
+            });
     }
 
     /**
@@ -302,22 +309,22 @@ $(document).ready(function() {
                 fetch(ENDPOINTS.delete(id), {
                     method: 'DELETE'
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showNotification(data.message, 'success');
-                        loadUsuarios(); // Recargar la tabla
-                    } else {
-                        showNotification('Error: ' + data.message, 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showNotification('Error de conexión al eliminar usuario', 'error');
-                })
-                .finally(() => {
-                    showLoading(false);
-                });
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showNotification(data.message, 'success');
+                            loadUsuarios(); // Recargar la tabla
+                        } else {
+                            showNotification('Error: ' + data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showNotification('Error de conexión al eliminar usuario', 'error');
+                    })
+                    .finally(() => {
+                        showLoading(false);
+                    });
             }
         });
     }
@@ -372,6 +379,7 @@ $(document).ready(function() {
     function clearForm() {
         $('#formUsuario')[0].reset();
         $('#formUsuario .form-control').removeClass('is-invalid');
+        $('#formUsuario .form-select').removeClass('is-invalid');
         $('.invalid-feedback').text('');
         isEditing = false;
     }
@@ -383,6 +391,7 @@ $(document).ready(function() {
         let hasErrors = false;
         clearFieldErrors();
 
+        // Validación de nombre
         if (!formData.nombre) {
             showFieldError('nombre', 'El nombre es obligatorio');
             hasErrors = true;
@@ -391,6 +400,7 @@ $(document).ready(function() {
             hasErrors = true;
         }
 
+        // Validación de usuario
         if (!formData.usuario) {
             showFieldError('usuario', 'El usuario es obligatorio');
             hasErrors = true;
@@ -399,11 +409,13 @@ $(document).ready(function() {
             hasErrors = true;
         }
 
-        if (!formData.perfil.id) {
+        // Validación de perfil
+        if (!formData.perfil || !formData.perfil.id) {
             showFieldError('id_perfil', 'Debe seleccionar un perfil');
             hasErrors = true;
         }
 
+        // Validación de contraseña
         if (!isEditing && !formData.clave) {
             showFieldError('clave', 'La contraseña es obligatoria');
             hasErrors = true;
@@ -412,6 +424,7 @@ $(document).ready(function() {
             hasErrors = true;
         }
 
+        // Validación de correo
         if (!formData.correo) {
             showFieldError('correo', 'El correo es obligatorio');
             hasErrors = true;
@@ -440,6 +453,7 @@ $(document).ready(function() {
     function clearFieldErrors() {
         $('.invalid-feedback').text('');
         $('#formUsuario .form-control').removeClass('is-invalid');
+        $('#formUsuario .form-select').removeClass('is-invalid');
     }
 
     /**
@@ -460,7 +474,7 @@ $(document).ready(function() {
         `);
 
         $('#notification-container').append(notification);
-        
+
         const toast = new bootstrap.Toast(notification, {
             delay: 5000
         });

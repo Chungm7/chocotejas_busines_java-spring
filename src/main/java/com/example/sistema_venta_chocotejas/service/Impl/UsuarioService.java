@@ -16,16 +16,15 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    // Constructor corregido para inyectar BCryptPasswordEncoder
+    public UsuarioService(UsuarioRepository usuarioRepository, BCryptPasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
-        this.passwordEncoder = new BCryptPasswordEncoder();
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional(readOnly = true)
     public List<Usuario> listarUsuarios() {
         // Excluimos a los usuarios con estado 2 (eliminados lógicamente)
-        // Nota: Necesitarás crear este método en tu UsuarioRepository.
-        // Ejemplo: List<Usuario> findAllByEstadoNot(Integer estado);
         return usuarioRepository.findAllByEstadoNot(2);
     }
 
@@ -43,6 +42,11 @@ public class UsuarioService {
 
             if (usuario.getCorreo() == null || usuario.getCorreo().trim().isEmpty()) {
                 throw new IllegalArgumentException("El correo es obligatorio");
+            }
+
+            // Validar que tenga un perfil asignado
+            if (usuario.getPerfil() == null || usuario.getPerfil().getId() == null) {
+                throw new IllegalArgumentException("El perfil es obligatorio");
             }
 
             // Normalizar datos
@@ -85,6 +89,8 @@ public class UsuarioService {
                 throw new IllegalArgumentException("El nombre de usuario ya existe");
             } else if (message.contains("correo") || message.contains("email")) {
                 throw new IllegalArgumentException("El correo electrónico ya está registrado");
+            } else if (message.contains("perfil")) {
+                throw new IllegalArgumentException("Error en la asignación del perfil");
             } else {
                 throw new IllegalArgumentException("Error de integridad de datos");
             }
@@ -96,8 +102,6 @@ public class UsuarioService {
     @Transactional(readOnly = true)
     public long contarUsuarios() {
         // Contamos solo los usuarios que no están eliminados lógicamente
-        // Nota: Necesitarás crear este método en tu UsuarioRepository.
-        // Ejemplo: long countByEstadoNot(Integer estado);
         return usuarioRepository.countByEstadoNot(2);
     }
 
@@ -117,7 +121,7 @@ public class UsuarioService {
     @Transactional
     public void eliminarUsuario(Long id) {
         if (id == null || id <= 0) {
-            throw new IllegalArgumentException("ID de usuario invÃ¡lido");
+            throw new IllegalArgumentException("ID de usuario inválido");
         }
 
         // Borrado lógico: cambiamos el estado a 2
