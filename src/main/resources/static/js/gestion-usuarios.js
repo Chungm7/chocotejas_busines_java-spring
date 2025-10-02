@@ -175,7 +175,7 @@ $(document).ready(function() {
 
         // Si es edición y la clave está vacía, eliminar la propiedad clave del objeto
         if (isEditing && (!formData.clave || formData.clave.trim() === "")) {
-            delete formData.clave; // No enviar clave vacía en edición
+            delete formData.clave;
         }
 
         showLoading(true);
@@ -189,7 +189,12 @@ $(document).ready(function() {
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    // Si la respuesta no es OK, intentar leer el mensaje de error
+                    return response.json().then(errorData => {
+                        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+                    }).catch(() => {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    });
                 }
                 return response.json();
             })
@@ -203,17 +208,15 @@ $(document).ready(function() {
                         Object.keys(data.errors).forEach(field => {
                             showFieldError(field, data.errors[field]);
                         });
-                        if (data.message) {
-                            showNotification(data.message, 'error');
-                        }
-                    } else {
-                        showNotification(data.message || 'Error desconocido', 'error');
+                    }
+                    if (data.message) {
+                        showNotification(data.message, 'error');
                     }
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                showNotification('Error de conexión al guardar usuario: ' + error.message, 'error');
+                showNotification('Error al guardar usuario: ' + error.message, 'error');
             })
             .finally(() => {
                 showLoading(false);
@@ -334,6 +337,10 @@ $(document).ready(function() {
         clearForm();
         $('#modalTitle').text('Agregar Usuario');
         $('#clave').prop('required', true).attr('placeholder', '');
+
+        // LIMPIAR EXPLÍCITAMENTE EL ID - ESTO ES CLAVE
+        $('#id').val('');
+
         showModal();
     }
 
@@ -384,6 +391,10 @@ $(document).ready(function() {
         $('#formUsuario .form-control').removeClass('is-invalid');
         $('#formUsuario .form-select').removeClass('is-invalid');
         $('.invalid-feedback').text('');
+
+        // LIMPIAR EXPLÍCITAMENTE EL CAMPO ID
+        $('#id').val('');
+
         isEditing = false;
     }
 

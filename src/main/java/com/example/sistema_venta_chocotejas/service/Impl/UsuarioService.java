@@ -1,6 +1,8 @@
 package com.example.sistema_venta_chocotejas.service.Impl;
 
+import com.example.sistema_venta_chocotejas.model.Perfil;
 import com.example.sistema_venta_chocotejas.model.Usuario;
+import com.example.sistema_venta_chocotejas.repository.PerfilRepository;
 import com.example.sistema_venta_chocotejas.repository.UsuarioRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,10 +16,12 @@ import java.util.Optional;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PerfilRepository perfilRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PerfilRepository perfilRepository, BCryptPasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
+        this.perfilRepository = perfilRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -29,7 +33,7 @@ public class UsuarioService {
     @Transactional
     public Usuario guardarUsuario(Usuario usuario) {
         try {
-            // Validaciones adicionales
+            // Validaciones básicas
             if (usuario.getNombre() == null || usuario.getNombre().trim().isEmpty()) {
                 throw new IllegalArgumentException("El nombre es obligatorio");
             }
@@ -47,34 +51,68 @@ public class UsuarioService {
                 throw new IllegalArgumentException("El perfil es obligatorio");
             }
 
-            // Normalizar datos - MANTENER CASE-SENSITIVE para usuario
+            // Normalizar datos
             usuario.setNombre(usuario.getNombre().trim());
-            usuario.setUsuario(usuario.getUsuario().trim()); // Eliminado .toLowerCase()
-            usuario.setCorreo(usuario.getCorreo().trim().toLowerCase()); // Correo sí en minúsculas
+            usuario.setUsuario(usuario.getUsuario().trim());
+            usuario.setCorreo(usuario.getCorreo().trim().toLowerCase());
 
-            // Manejo de contraseñas
-            if (usuario.getId() != null) {
-                // Usuario existente - actualización
-                Optional<Usuario> usuarioExistente = obtenerUsuarioPorId(usuario.getId());
-                if (usuarioExistente.isPresent()) {
-                    // Si no se proporciona nueva contraseña, mantener la actual
+            boolean esNuevoUsuario = (usuario.getId() == null);
+
+            if (!esNuevoUsuario) {
+                // USUARIO EXISTENTE - ACTUALIZACIÓN
+                Optional<Usuario> usuarioExistenteOpt = obtenerUsuarioPorId(usuario.getId());
+                if (usuarioExistenteOpt.isPresent()) {
+                    Usuario usuarioExistente = usuarioExistenteOpt.get();
+
+                    // Mantener el perfil completo del usuario existente
+                    // Solo actualizar el ID del perfil si es diferente
+                    if (usuarioExistente.getPerfil().getId().equals(usuario.getPerfil().getId())) {
+                        // Mismo perfil, mantener el objeto completo
+                        usuario.setPerfil(usuarioExistente.getPerfil());
+                    } else {
+                        // Diferente perfil, cargar el nuevo perfil completo
+                        Optional<Perfil> nuevoPerfilOpt = perfilRepository.findById(usuario.getPerfil().getId());
+                        if (nuevoPerfilOpt.isPresent()) {
+                            usuario.setPerfil(nuevoPerfilOpt.get());
+                        } else {
+                            throw new IllegalArgumentException("El perfil seleccionado no existe");
+                        }
+                    }
+
+                    // Manejo de contraseña
                     if (usuario.getClave() == null || usuario.getClave().trim().isEmpty()) {
-                        usuario.setClave(usuarioExistente.get().getClave());
+                        // Mantener contraseña actual
+                        usuario.setClave(usuarioExistente.getClave());
                     } else {
                         // Encriptar nueva contraseña
                         usuario.setClave(passwordEncoder.encode(usuario.getClave().trim()));
                     }
+
+                    // Mantener el estado actual
+                    usuario.setEstado(usuarioExistente.getEstado());
+
                 } else {
                     throw new IllegalArgumentException("Usuario no encontrado para actualizar");
                 }
             } else {
-                // Nuevo usuario
+                // NUEVO USUARIO - CREACIÓN
+                usuario.setId(null);
+
+                // Cargar el perfil completo para nuevo usuario
+                Optional<Perfil> perfilOpt = perfilRepository.findById(usuario.getPerfil().getId());
+                if (perfilOpt.isPresent()) {
+                    usuario.setPerfil(perfilOpt.get());
+                } else {
+                    throw new IllegalArgumentException("El perfil seleccionado no existe");
+                }
+
                 if (usuario.getClave() == null || usuario.getClave().trim().isEmpty()) {
                     throw new IllegalArgumentException("La contraseña es obligatoria para nuevos usuarios");
                 }
+
                 // Encriptar contraseña
                 usuario.setClave(passwordEncoder.encode(usuario.getClave().trim()));
-                // Asignar estado activo por defecto a nuevos usuarios
+                // Asignar estado activo por defecto
                 usuario.setEstado(1);
             }
 

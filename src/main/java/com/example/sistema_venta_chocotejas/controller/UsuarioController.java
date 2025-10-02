@@ -75,9 +75,7 @@ public class UsuarioController {
     public ResponseEntity<?> guardarUsuarioAjax(@Valid @RequestBody Usuario usuario, BindingResult bindingResult) {
         Map<String, Object> response = new HashMap<>();
 
-        // Si hay errores de validación (ej. un campo obligatorio está vacío).
         if (bindingResult.hasErrors()) {
-            // Recopila los errores y los devuelve en la respuesta JSON.
             Map<String, String> errores = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errores.put(error.getField(), error.getDefaultMessage()));
             response.put("success", false);
@@ -87,18 +85,31 @@ public class UsuarioController {
         }
 
         try {
-            // Llama al servicio para guardar el usuario.
+            // Validación adicional para el perfil
+            if (usuario.getPerfil() == null || usuario.getPerfil().getId() == null) {
+                response.put("success", false);
+                response.put("message", "El perfil es obligatorio");
+                return ResponseEntity.badRequest().body(response);
+            }
+
             Usuario usuarioGuardado = usuarioService.guardarUsuario(usuario);
             response.put("success", true);
             response.put("usuario", usuarioGuardado);
             response.put("message",
                     usuario.getId() != null ? "Usuario actualizado correctamente" : "Usuario creado correctamente");
             return ResponseEntity.ok(response);
+
+        } catch (IllegalArgumentException e) {
+            // Captura errores de negocio (validaciones, duplicados, etc.)
+            response.put("success", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(response);
         } catch (Exception e) {
-            // Captura cualquier excepción del servicio (ej. usuario duplicado) y la
-            // devuelve como error.
+            // Captura errores inesperados
             response.put("success", false);
             response.put("message", "Error interno del servidor: " + e.getMessage());
+            // Log del error completo para debugging
+            e.printStackTrace();
             return ResponseEntity.internalServerError().body(response);
         }
     }
