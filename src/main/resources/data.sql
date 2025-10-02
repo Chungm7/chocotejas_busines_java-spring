@@ -23,3 +23,9 @@ INSERT INTO perfil_opcion (id_perfil, id_opcion) VALUES
 -- Inserciones de datos iniciales para usuarios
 INSERT INTO usuarios (id, nombre, usuario, clave, correo, estado, id_perfil) VALUES
                                                                                  (1, 'AdministradorBase', 'SuperAdmin', '$2a$10$OZuN1MJlw/01gIodlwqaQOKk.d5XhfbWAD8X2adyG9pkKtpDlVN1O', 'administrador@gmail.com', 1, 1);
+
+-- Inserciones de datos iniciales para categorias
+INSERT INTO categorias (id, nombre, descripcion, estado) VALUES
+                                                             (1, 'Chocolate Negro', 'Productos elaborados con chocolate negro de alta calidad', 1),
+                                                             (2, 'Chocolate con Leche', 'Deliciosos chocolates cremosos con leche', 1),
+                                                             (3, 'Chocolate Blanco', 'Suaves y dulces chocolates blancos premium', 1);
