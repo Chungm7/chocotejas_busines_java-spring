@@ -8,6 +8,6 @@ public class HomeController {
 
     @GetMapping("/")
     public String home() {
-        return "redirect:/tienda/mostrar"; // Redirige a la tienda por defecto
+        return "redirect:/tienda/inicio"; // Redirige a la tienda por defecto
     }
 }

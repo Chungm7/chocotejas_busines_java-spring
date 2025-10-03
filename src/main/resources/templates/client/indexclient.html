@@ -13,101 +13,172 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lobster&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <!-- Estilos personalizados -->
-    <link th:href="@{/css/gestion/gestion-base.css}" rel="stylesheet">
-    <link th:href="@{/css/client/header-footer.css}" rel="stylesheet">
-    <link th:href="@{/css/client/productos.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/client/base.css}">
 </head>
 <body>
 
-    <!-- Header -->
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark">
-            <div class="container">
-                <a class="navbar-brand" href="indexclient.html" style="font-family: 'Lobster', cursive;">ChocoSabor</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="indexclient.html">Inicio</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="productos.html">Productos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="productos.html#pedido-form">Contacto/Pedido</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <main>
-        <!-- Sección de Bienvenida -->
-        <section class="container text-center my-5">
-            <h1 class="display-4">El arte del chocolate hecho a mano</h1>
-            <p class="lead">Bienvenido a ChocoSabor, donde cada chocoteja es una obra de arte, creada con los ingredientes más finos y una pasión que se siente en cada mordida. Descubre la tradición y el sabor que nos hacen únicos.</p>
-        </section>
-
-        <!-- Productos Destacados -->
-        <section class="container my-5">
-            <h2 class="text-center mb-4">Nuestros Productos Destacados</h2>
-            <div id="productos-destacados-container" class="row g-4">
-                <!-- Las fichas de productos se insertarán aquí dinámicamente -->
-            </div>
-            <div class="text-center mt-4">
-                <a href="productos.html" class="btn btn-primary btn-lg">Ver Galería Completa</a>
-            </div>
-        </section>
-
-        <!-- Galería de Imágenes Representativa -->
-        <section class="container my-5">
-            <h2 class="text-center mb-4">Momentos ChocoSabor</h2>
-            <div class="row g-3">
-                <div class="col-lg-4 col-md-6"><img src="https://placehold.co/600x400/5D4037/FFF8E1?text=Rellenos" class="img-fluid rounded shadow" alt="Rellenos cremosos"></div>
-                <div class="col-lg-4 col-md-6"><img src="https://placehold.co/600x400/3E2723/FFF8E1?text=Cobertura" class="img-fluid rounded shadow" alt="Cobertura de chocolate"></div>
-                <div class="col-lg-4 col-md-12"><img src="https://placehold.co/600x400/A1887F/FFF8E1?text=Empaques" class="img-fluid rounded shadow" alt="Empaques para regalo"></div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer">
+<!-- Header -->
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <h5>ChocoSabor</h5>
-                    <p>El Sabor de Casa. <br> Hecho con amor desde 2023.</p>
+            <a class="navbar-brand" th:href="@{/tienda/inicio}">ChocoSabor</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" th:href="@{/tienda/inicio}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/galeria/productos}">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="productos.html#pedido-form">Contacto/Pedido</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <!-- Carrusel de Productos Destacados -->
+    <section id="product-carousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#product-carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#product-carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#product-carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active" style="background-image: url('https://placehold.co/1200x500/5D4037/FFF8E1?text=Chocotejas+Clásicas');">
+                <div class="carousel-caption d-none d-md-block">
+                    <h2>Chocotejas Clásicas</h2>
+                    <p>Nuestras chocotejas tradicionales con rellenos de manjar blanco, nueces y pasas.</p>
+                    <a th:href="@{/galeria/productos}" class="btn btn-primary">Ver Productos</a>
                 </div>
-                <div class="col-md-4 mb-3">
-                    <h5>Contacto</h5>
-                    <p><i class="bi bi-whatsapp"></i> +51 987 654 321</p>
-                    <p><i class="bi bi-envelope"></i> pedidos@chocosabor.com</p>
-                    <p><i class="bi bi-geo-alt"></i> Lima, Perú</p>
+            </div>
+            <div class="carousel-item" style="background-image: url('https://placehold.co/1200x500/8D6E63/FFF8E1?text=Chocotejas+Especiales');">
+                <div class="carousel-caption d-none d-md-block">
+                    <h2>Chocotejas Especiales</h2>
+                    <p>Sabores únicos como maracuyá, piña colada y fresa con crema.</p>
+                    <a th:href="@{/galeria/productos}" class="btn btn-primary">Ver Productos</a>
                 </div>
-                <div class="col-md-4 mb-3">
-                    <h5>Síguenos</h5>
-                    <div class="social-icons">
-                        <a href="#"><i class="bi bi-facebook"></i></a>
-                        <a href="#"><i class="bi bi-instagram"></i></a>
-                        <a href="#"><i class="bi bi-tiktok"></i></a>
+            </div>
+            <div class="carousel-item" style="background-image: url('https://placehold.co/1200x500/6D4C41/FFF8E1?text=Ofertas+Especiales');">
+                <div class="carousel-caption d-none d-md-block">
+                    <h2>Ofertas Especiales</h2>
+                    <p>Combos y promociones para ocasiones especiales.</p>
+                    <a th:href="@{/galeria/productos}" class="btn btn-primary">Ver Productos</a>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#product-carousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#product-carousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+        </button>
+    </section>
+
+    <!-- Sección de Bienvenida -->
+    <section class="container text-center my-5">
+        <h1 class="display-4">El arte del chocolate hecho a mano</h1>
+        <p class="lead">Bienvenido a ChocoSabor, donde cada chocoteja es una obra de arte, creada con los ingredientes más finos y una pasión que se siente en cada mordida. Descubre la tradición y el sabor que nos hacen únicos.</p>
+    </section>
+
+    <!-- Productos Destacados -->
+    <section class="container my-5">
+        <h2 class="text-center mb-4">Nuestros Productos Destacados</h2>
+        <div id="productos-destacados-container" class="row g-4">
+            <!-- Las fichas de productos se insertarán aquí dinámicamente -->
+            <div class="col-lg-4 col-md-6">
+                <div class="product-card">
+                    <img src="https://placehold.co/600x400/5D4037/FFF8E1?text=Chocoteja+Clásica" class="card-img-top" alt="Chocoteja Clásica">
+                    <div class="product-card-body">
+                        <h5 class="card-title">Chocoteja Clásica</h5>
+                        <p class="card-text">Deliciosa chocoteja tradicional con manjar blanco y nueces.</p>
+                        <div class="price">S/ 2.50</div>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal1">Ver Detalles</button>
                     </div>
                 </div>
             </div>
-            <hr>
-            <div class="text-center">
-                <p>&copy; 2024 ChocoSabor. Todos los derechos reservados.</p>
+            <div class="col-lg-4 col-md-6">
+                <div class="product-card">
+                    <img src="https://placehold.co/600x400/8D6E63/FFF8E1?text=Chocoteja+Maracuyá" class="card-img-top" alt="Chocoteja Maracuyá">
+                    <div class="product-card-body">
+                        <h5 class="card-title">Chocoteja Maracuyá</h5>
+                        <p class="card-text">Exquisita combinación de chocolate con relleno de maracuyá.</p>
+                        <div class="price">S/ 3.00</div>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal2">Ver Detalles</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="product-card">
+                    <img src="https://placehold.co/600x400/6D4C41/FFF8E1?text=Chocoteja+Piña+Colada" class="card-img-top" alt="Chocoteja Piña Colada">
+                    <div class="product-card-body">
+                        <h5 class="card-title">Chocoteja Piña Colada</h5>
+                        <p class="card-text">Sabor tropical con piña y coco en una deliciosa chocoteja.</p>
+                        <div class="price">S/ 3.20</div>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal3">Ver Detalles</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </footer>
+        <div class="text-center mt-4">
+            <a href="productos.html" class="btn btn-primary btn-lg">Ver Galería Completa</a>
+        </div>
+    </section>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Scripts de la base de datos y de la app -->
-    <script src="../../static/js/client/database.js"></script>
-    <script src="../../static/js/client/utils.js"></script>
-    <script src="../../static/js/client/app.js"></script>
+    <!-- Galería de Imágenes Representativa -->
+    <section class="container my-5">
+        <h2 class="text-center mb-4">Momentos ChocoSabor</h2>
+        <div class="row g-3">
+            <div class="col-lg-4 col-md-6"><img src="https://placehold.co/600x400/5D4037/FFF8E1?text=Rellenos" class="img-fluid rounded shadow" alt="Rellenos cremosos"></div>
+            <div class="col-lg-4 col-md-6"><img src="https://placehold.co/600x400/3E2723/FFF8E1?text=Cobertura" class="img-fluid rounded shadow" alt="Cobertura de chocolate"></div>
+            <div class="col-lg-4 col-md-12"><img src="https://placehold.co/600x400/A1887F/FFF8E1?text=Empaques" class="img-fluid rounded shadow" alt="Empaques para regalo"></div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <h5>ChocoSabor</h5>
+                <p>El Sabor de Casa. <br> Hecho con amor desde 2023.</p>
+            </div>
+            <div class="col-md-4 mb-3">
+                <h5>Contacto</h5>
+                <p><i class="bi bi-whatsapp"></i> +51 987 654 321</p>
+                <p><i class="bi bi-envelope"></i> pedidos@chocosabor.com</p>
+                <p><i class="bi bi-geo-alt"></i> Lima, Perú</p>
+            </div>
+            <div class="col-md-4 mb-3">
+                <h5>Síguenos</h5>
+                <div class="social-icons">
+                    <a href="#"><i class="bi bi-facebook"></i></a>
+                    <a href="#"><i class="bi bi-instagram"></i></a>
+                    <a href="#"><i class="bi bi-tiktok"></i></a>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="text-center">
+            <p>&copy; 2024 ChocoSabor. Todos los derechos reservados.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Scripts de la base de datos y de la app -->
+<script src="../../static/js/client/database.js"></script>
+<script src="../../static/js/client/utils.js"></script>
+<script src="../../static/js/client/app.js"></script>
 </body>
 </html>
