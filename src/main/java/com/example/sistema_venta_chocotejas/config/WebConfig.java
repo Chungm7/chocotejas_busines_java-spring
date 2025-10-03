@@ -56,7 +56,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(@NonNull InterceptorRegistry registry) {
         // Registra nuestro SessionInterceptor.
         registry.addInterceptor(sessionInterceptor)
-                .addPathPatterns("/gestion/**") // Le dice al interceptor que se aplique a TODAS las rutas.
+                .addPathPatterns("/**") // Le dice al interceptor que se aplique a TODAS las rutas.
                 .excludePathPatterns("/login",
                         "/logout",
                         "/client/**",
