@@ -1,5 +1,5 @@
 // Define el paquete al que pertenece la clase.
-package com.example.sistema_venta_chocotejas.controller;
+package com.example.sistema_venta_chocotejas.controller.gestion;
 
 // Importaciones de clases necesarias de otros paquetes.
 import com.example.sistema_venta_chocotejas.service.CategoriaService;
@@ -10,9 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.HashMap;
-import java.util.Map;
 
 // @Controller: Marca esta clase como un controlador de Spring MVC, encargado de manejar peticiones web.
 @Controller()

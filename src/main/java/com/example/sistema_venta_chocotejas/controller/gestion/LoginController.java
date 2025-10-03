@@ -1,4 +1,4 @@
-package com.example.sistema_venta_chocotejas.controller;
+package com.example.sistema_venta_chocotejas.controller.gestion;
 
 import com.example.sistema_venta_chocotejas.model.Opcion;
 import com.example.sistema_venta_chocotejas.model.Usuario;

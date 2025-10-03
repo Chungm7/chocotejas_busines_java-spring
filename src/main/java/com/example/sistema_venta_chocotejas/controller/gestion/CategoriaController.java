@@ -1,4 +1,4 @@
-package com.example.sistema_venta_chocotejas.controller;
+package com.example.sistema_venta_chocotejas.controller.gestion;
 
 import com.example.sistema_venta_chocotejas.model.Categoria;
 import com.example.sistema_venta_chocotejas.service.Impl.CategoriaIServicempl;
