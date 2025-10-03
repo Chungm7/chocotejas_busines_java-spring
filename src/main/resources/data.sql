@@ -1,6 +1,6 @@
 -- Inserciones de datos iniciales para opciones
 INSERT INTO opciones (id, nombre, ruta, icono) VALUES
-                                                   (1, 'Dashboard', '/', 'bi bi-speedometer2'),
+                                                   (1, 'Dashboard', '/dashboard/mostrar', 'bi bi-speedometer2'),
                                                    (2, 'Gestión de Usuarios', '/usuarios/listar', 'bi bi-people'),
                                                    (3, 'Gestión de Perfiles', '/perfiles/listar', 'bi bi-shield-lock'),
                                                    (4, 'Gestión de Categorías', '/categorias/listar', 'bi bi-tags'),

@@ -24,7 +24,7 @@ public class LoginController {
     @GetMapping("/login")
     public String mostrarFormularioLogin(HttpSession session) {
         if (session.getAttribute("usuarioLogueado") != null) {
-            return "redirect:/";
+            return "redirect:/dashboard/mostrar";
         }
         return "gestion/gestion-login";
     }
@@ -57,7 +57,7 @@ public class LoginController {
                     .toList();
             session.setAttribute("menuOpciones", opcionesMenu);
 
-            return "redirect:/";
+            return "redirect:/dashboard/mostrar";
         } else {
             redirectAttributes.addFlashAttribute("error", "Contraseña incorrecta.");
             return "redirect:/login";

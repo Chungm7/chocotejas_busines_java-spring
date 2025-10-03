@@ -9,9 +9,14 @@ import com.example.sistema_venta_chocotejas.service.ProductoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.HashMap;
+import java.util.Map;
 
 // @Controller: Marca esta clase como un controlador de Spring MVC, encargado de manejar peticiones web.
-@Controller
+@Controller()
+@RequestMapping("/dashboard")
 public class DashboardController {
 
     // Declara una dependencia final al servicio de usuario. 'final' asegura que se
@@ -33,8 +38,9 @@ public class DashboardController {
     // @GetMapping("/"): Asocia este método a las peticiones HTTP GET para la URL
     // raíz ("/").
     // Es la página principal que se muestra después de iniciar sesión.
-    @GetMapping("/")
-    public String mostrarDashboard(Model model) {
+
+    @GetMapping("/mostrar")
+    public String mostradashboard(Model model) {
         // 1. Llama al método contarUsuarios() del servicio para obtener el número total
         // de usuarios activos e inactivos (excluyendo los eliminados).
         long totalUsuarios = usuarioService.contarUsuarios();
@@ -73,9 +79,6 @@ public class DashboardController {
         model.addAttribute("totalPerfiles", totalPerfiles);
         model.addAttribute("totalPerfilesActivos", totalPerfilesActivos);
         model.addAttribute("totalPerfilesInactivos", totalPerfilesInactivos);
-        // 3. Devuelve el nombre de la vista (el archivo HTML) que se debe renderizar.
-        // Spring Boot buscará un archivo llamado "indexclient.html" en la carpeta
-        // 'src/main/resources/templates'.
         return "gestion/gestion-dashboard";
     }
 }

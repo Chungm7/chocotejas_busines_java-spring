@@ -78,7 +78,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(@NonNull CorsRegistry registry) {
         // Configuración CORS para APIs
-        registry.addMapping("/usuarios/api/**")
+        registry.addMapping("/usuarios/api/**") // Aplica CORS solo a las rutas de la API de usuarios
                 .allowedOrigins("http://localhost:8083")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
