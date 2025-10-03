@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/perfiles")
+@RequestMapping("/gestion/perfiles")
 public class PerfilController {
 
     private final PerfilService perfilService;

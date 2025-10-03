@@ -10,7 +10,7 @@ $(document).ready(function () {
     tablaCategorias = $("#tablaCategorias").DataTable({
         responsive: true,
         ajax: {
-            url: "/categorias/api/listar",
+            url: "/gestion/categorias/api/listar",
             dataSrc: "data"
         },
         columns: [

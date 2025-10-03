@@ -21,7 +21,7 @@
 <body>
 <div class="d-flex">
     <!-- Sidebar dinámico -->
-    <div th:replace="~{gestion/gestion-sidebar :: sidebar(activeUri='/dashboard/mostrar')}"></div>
+    <div th:replace="~{gestion/gestion-sidebar :: sidebar(activeUri='/gestion/dashboard/mostrar')}"></div>
 
     <!-- Contenido principal -->
     <div id="main-content" class="main-content w-100">
@@ -43,7 +43,7 @@
                 <!-- Total de Usuarios -->
                 <div class="col-sm-6 col-lg-4"
                     th:each="opcion : ${session.menuOpciones}"
-                    th:if="${opcion.ruta == '/usuarios/listar'}">
+                    th:if="${opcion.ruta == '/gestion/usuarios/listar'}">
                     <div class="card dashboard-card card-usuarios shadow-sm h-100">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start">
@@ -70,7 +70,7 @@
                                     </svg>
                                 </div>
                             </div>
-                            <a th:href="@{/usuarios/listar}" class="dashboard-link d-block mt-3">
+                            <a th:href="@{/gestion/usuarios/listar}" class="dashboard-link d-block mt-3">
                                 Ver detalles &rarr;
                             </a>
                         </div>
@@ -80,7 +80,7 @@
                 <!-- Total de Perfiles -->
                 <div class="col-sm-6 col-lg-4"
                      th:each="opcion : ${session.menuOpciones}"
-                     th:if="${opcion.ruta == '/perfiles/listar'}">
+                     th:if="${opcion.ruta == '/gestion/perfiles/listar'}">
                     <div class="card dashboard-card card-perfiles shadow-sm h-100">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start">
@@ -105,7 +105,7 @@
                                     </svg>
                                 </div>
                             </div>
-                            <a th:href="@{/perfiles/listar}" class="dashboard-link d-block mt-3">
+                            <a th:href="@{/gestion/perfiles/listar}" class="dashboard-link d-block mt-3">
                                 Ver detalles &rarr;
                             </a>
                         </div>
@@ -115,7 +115,7 @@
                 <!-- Total de Productos -->
                 <div class="col-sm-6 col-lg-4"
                      th:each="opcion : ${session.menuOpciones}"
-                     th:if="${opcion.ruta == '/productos/listar'}">
+                     th:if="${opcion.ruta == '/gestion/productos/listar'}">
                     <div class="card dashboard-card card-productos shadow-sm h-100">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start">
@@ -140,7 +140,7 @@
                                     </svg>
                                 </div>
                             </div>
-                            <a th:href="@{/productos/listar}" class="dashboard-link d-block mt-3">
+                            <a th:href="@{/gestion/productos/listar}" class="dashboard-link d-block mt-3">
                                 Ver detalles &rarr;
                             </a>
                         </div>
@@ -150,7 +150,7 @@
                 <!-- Total de Categorias -->
                 <div class="col-sm-6 col-lg-4"
                      th:each="opcion : ${session.menuOpciones}"
-                     th:if="${opcion.ruta == '/categorias/listar'}">
+                     th:if="${opcion.ruta == '/gestion/categorias/listar'}">
                     <div class="card dashboard-card card-categorias shadow-sm h-100">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start">
@@ -175,7 +175,7 @@
                                     </svg>
                                 </div>
                             </div>
-                            <a th:href="@{/categorias/listar}" class="dashboard-link d-block mt-3">
+                            <a th:href="@{/gestion/categorias/listar}" class="dashboard-link d-block mt-3">
                                 Ver detalles &rarr;
                             </a>
                         </div>

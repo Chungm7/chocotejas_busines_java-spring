@@ -18,7 +18,7 @@ $(document).ready(function () {
     tablaProductos = $("#tablaProductos").DataTable({
         responsive: true,
         ajax: {
-            url: "/productos/api/listar",
+            url: "/gestion/productos/api/listar",
             dataSrc: "data"
         },
         columns: [

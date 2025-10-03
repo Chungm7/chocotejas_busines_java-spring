@@ -16,7 +16,7 @@ import java.util.Map;
 
 // @Controller: Marca esta clase como un controlador de Spring MVC, encargado de manejar peticiones web.
 @Controller()
-@RequestMapping("/dashboard")
+@RequestMapping("/gestion/dashboard")
 public class DashboardController {
 
     // Declara una dependencia final al servicio de usuario. 'final' asegura que se

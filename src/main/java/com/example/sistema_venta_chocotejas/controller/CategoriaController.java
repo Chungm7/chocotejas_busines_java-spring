@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/categorias")
+@RequestMapping("/gestion/categorias")
 public class CategoriaController {
 
     private final CategoriaIServicempl categoriaService;

@@ -10,7 +10,7 @@ $(document).ready(function() {
     let usuarioModal;
 
     // Configuración inicial
-    const API_BASE = '/usuarios/api';
+    const API_BASE = '/gestion/usuarios/api';
     const ENDPOINTS = {
         list: `${API_BASE}/listar`,
         save: `${API_BASE}/guardar`,

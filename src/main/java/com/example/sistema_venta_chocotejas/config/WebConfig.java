@@ -54,21 +54,18 @@ public class WebConfig implements WebMvcConfigurer {
     // Este método se usa para registrar interceptores.
     @Override
     public void addInterceptors(@NonNull InterceptorRegistry registry) {
-        // Registra nuestro SessionInterceptor.
         registry.addInterceptor(sessionInterceptor)
-                .addPathPatterns("/**") // Le dice al interceptor que se aplique a TODAS las rutas.
-                .excludePathPatterns("/login",
+                .addPathPatterns("/gestion/**") // SOLO protege las rutas de gestión
+                .excludePathPatterns(
+                        "/login",
                         "/logout",
-                        "/client/**",
                         "/css/**",
                         "/js/**",
                         "/images/**",
+                        "/imagenes/**",
                         "/error",
-                        "/favicon.ico"); // Excluye
-                                                                                                                        // rutas
-        // públicas que
-        // no necesitan
-        // autenticación.
+                        "/favicon.ico"
+                );
     }
 
     // Configura CORS (Cross-Origin Resource Sharing). Es necesario si tu frontend y

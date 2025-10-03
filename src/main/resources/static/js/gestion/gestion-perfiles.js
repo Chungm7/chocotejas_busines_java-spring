@@ -11,7 +11,7 @@ $(document).ready(function() {
     let permisosModal;
 
     // Configuración inicial
-    const API_BASE = '/perfiles/api';
+    const API_BASE = '/gestion/perfiles/api';
     const ENDPOINTS = {
         list: `${API_BASE}/listar`,
         save: `${API_BASE}/guardar`,

@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/productos")
+@RequestMapping("/gestion/productos")
 public class ProductoController {
 
     private final ProductoServiceImpl productoService;

@@ -1,5 +1,5 @@
 // Define el paquete al que pertenece la clase.
-package com.example.sistema_venta_chocotejas.controller;
+package com.example.sistema_venta_chocotejas.config;
 
 // Importaciones para el manejo de logs y excepciones específicas.
 import org.slf4j.Logger;

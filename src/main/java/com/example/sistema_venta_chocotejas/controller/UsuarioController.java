@@ -18,7 +18,7 @@ import java.util.Map;
 // @Controller: Indica que esta clase es un controlador web.
 // @RequestMapping("/usuarios"): Todas las rutas de este controlador empezarán con "/usuarios".
 @Controller
-@RequestMapping("/usuarios")
+@RequestMapping("/gestion/usuarios")
 public class UsuarioController {
     // Inyección del servicio de usuario.
     private final UsuarioService usuarioService;
