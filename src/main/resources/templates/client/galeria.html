@@ -34,7 +34,7 @@
                         <a class="nav-link active" aria-current="page" th:href="@{/galeria/productos}">Productos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#pedido-form">Contacto/Pedido</a>
+                        <a class="nav-link" href="#contacto">Contacto</a>
                     </li>
                 </ul>
             </div>
@@ -117,50 +117,10 @@
             </div>
         </section>
     </div>
-
-    <!-- Sección de Carrito y Pedido -->
-    <section id="pedido-form" class="mt-5 pt-5">
-        <div class="row">
-            <div class="col-lg-7">
-                <h2 class="mb-4">Tu Carrito de Compras</h2>
-                <div id="cart-items-container">
-                    <!-- Items del carrito se insertarán aquí -->
-                    <p id="cart-empty-msg">Tu carrito está vacío.</p>
-                </div>
-                <div class="text-end mt-3">
-                    <h4>Total: <span id="cart-total">S/ 0.00</span></h4>
-                </div>
-            </div>
-            <div class="col-lg-5">
-                <h2 class="mb-4">Realizar Pedido</h2>
-                <form id="order-form">
-                    <div class="mb-3">
-                        <label for="nombre" class="form-label">Nombre Completo</label>
-                        <input type="text" class="form-control" id="nombre" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="direccion" class="form-label">Dirección de Entrega</label>
-                        <input type="text" class="form-control" id="direccion" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="referencia" class="form-label">Referencia</label>
-                        <input type="text" class="form-control" id="referencia">
-                    </div>
-                    <div class="mb-3">
-                        <label for="telefono" class="form-label">Teléfono (WhatsApp)</label>
-                        <input type="tel" class="form-control" id="telefono" required placeholder="987654321">
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100 btn-lg">
-                        <i class="bi bi-whatsapp"></i> Enviar Pedido por WhatsApp
-                    </button>
-                </form>
-            </div>
-        </div>
-    </section>
 </main>
 
 <!-- Footer -->
-<footer class="footer">
+<footer class="footer" id="contacto">
     <div class="container">
         <div class="row">
             <div class="col-md-4 mb-3">
@@ -225,8 +185,11 @@
                         </ul>
 
                         <div class="mt-4" th:if="${producto.stock > 0}">
-                            <button class="btn btn-primary btn-lg">
-                            <i class="bi bi-cart-plus"></i> Agregar al Carrito
+                            <button class="btn btn-success btn-lg w-100 whatsapp-order-btn"
+                                    th:data-product-id="${producto.id}"
+                                    th:data-product-name="${producto.nombre}"
+                                    th:data-product-price="${producto.precio}">
+                                <i class="bi bi-whatsapp"></i> Solicitar Pedido por WhatsApp
                             </button>
                         </div>
                     </div>

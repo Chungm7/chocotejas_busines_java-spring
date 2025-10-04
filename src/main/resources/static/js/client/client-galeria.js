@@ -6,13 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const priceRange = document.getElementById('price-range');
     const priceValue = document.getElementById('price-value');
     const productGalleryContainer = document.getElementById('product-gallery-container');
-    const cartItemsContainer = document.getElementById('cart-items-container');
-    const cartTotal = document.getElementById('cart-total');
-    const orderForm = document.getElementById('order-form');
 
     // Variables globales
     let allProducts = [];
-    let cart = [];
     let selectedCategories = new Set();
     let maxPrice = 10;
 
@@ -22,12 +18,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // Event Listeners
     searchInput.addEventListener('input', filterProducts);
     priceRange.addEventListener('input', updatePriceFilter);
-    orderForm.addEventListener('submit', handleOrderSubmit);
+
+    // Agregar event listener a los botones de WhatsApp
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('whatsapp-order-btn') ||
+            e.target.closest('.whatsapp-order-btn')) {
+            const button = e.target.classList.contains('whatsapp-order-btn') ? e.target : e.target.closest('.whatsapp-order-btn');
+            handleWhatsAppOrder(button);
+        }
+    });
 
     // Inicializar la galería
     function initializeGallery() {
-        // Los productos ya están en el HTML mediante Thymeleaf
-        // Convertimos los productos estáticos en datos dinámicos
         extractProductsFromHTML();
         initializeCategoryFilters();
         updatePriceFilter();
@@ -52,10 +54,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Inicializar filtros de categoría
     function initializeCategoryFilters() {
-        // Reemplazar los checkboxes estáticos por dinámicos
         categoryFilters.innerHTML = '';
 
-        // Obtener categorías únicas de los productos
         const categories = [...new Set(allProducts.map(p => p.category))];
 
         categories.forEach(category => {
@@ -72,7 +72,6 @@ document.addEventListener('DOMContentLoaded', function() {
             categoryFilters.appendChild(checkbox);
         });
 
-        // Agregar event listeners a los checkboxes de categoría
         document.querySelectorAll('.category-checkbox').forEach(checkbox => {
             checkbox.addEventListener('change', handleCategoryFilter);
         });
@@ -120,119 +119,37 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Manejar envío del pedido
-    function handleOrderSubmit(e) {
-        e.preventDefault();
-
-        if (cart.length === 0) {
-            alert('Por favor agrega productos al carrito antes de enviar el pedido.');
-            return;
-        }
-
-        const nombre = document.getElementById('nombre').value;
-        const direccion = document.getElementById('direccion').value;
-        const referencia = document.getElementById('referencia').value;
-        const telefono = document.getElementById('telefono').value;
-
-        if (!nombre || !direccion || !telefono) {
-            alert('Por favor completa todos los campos obligatorios.');
-            return;
-        }
+    // Manejar pedido por WhatsApp
+    function handleWhatsAppOrder(button) {
+        const productId = button.dataset.productId;
+        const productName = button.dataset.productName;
+        const productPrice = button.dataset.productPrice;
 
         // Construir mensaje de WhatsApp
-        const mensaje = construirMensajeWhatsApp(nombre, direccion, referencia, telefono);
-        const urlWhatsApp = `https://wa.me/51${telefono}?text=${encodeURIComponent(mensaje)}`;
+        const mensaje = construirMensajeWhatsApp(productName, productPrice);
+
+        // Número de WhatsApp de la tienda (cambiar por el número real)
+        const phoneNumber = '51987654321';
+        const urlWhatsApp = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(mensaje)}`;
 
         window.open(urlWhatsApp, '_blank');
+
+        // Cerrar el modal después de enviar
+        const modalElement = button.closest('.modal');
+        const modal = bootstrap.Modal.getInstance(modalElement);
+        if (modal) {
+            modal.hide();
+        }
     }
 
     // Construir mensaje para WhatsApp
-    function construirMensajeWhatsApp(nombre, direccion, referencia, telefono) {
-        let mensaje = `*PEDIDO - CHOCOTEJAS "EL SABOR DE CASA"*\n\n`;
-        mensaje += `*Cliente:* ${nombre}\n`;
-        mensaje += `*Dirección:* ${direccion}\n`;
-        mensaje += `*Referencia:* ${referencia || 'No especificada'}\n`;
-        mensaje += `*Teléfono:* ${telefono}\n\n`;
-        mensaje += `*DETALLE DEL PEDIDO:*\n`;
-
-        cart.forEach(item => {
-            mensaje += `- ${item.name} x${item.quantity}: S/ ${(item.price * item.quantity).toFixed(2)}\n`;
-        });
-
-        mensaje += `\n*TOTAL: S/ ${calculateTotal().toFixed(2)}*`;
-        mensaje += `\n\n¡Gracias por su pedido!`;
+    function construirMensajeWhatsApp(productName, productPrice) {
+        let mensaje = `¡Hola! Estoy interesado en el siguiente producto:\n\n`;
+        mensaje += `*${productName}*\n`;
+        mensaje += `Precio: S/ ${parseFloat(productPrice).toFixed(2)}\n\n`;
+        mensaje += `Por favor, necesito que me contacten para realizar mi pedido.`;
+        mensaje += `\n\n(Mensaje generado desde la tienda online Chocotejas "El Sabor de Casa")`;
 
         return mensaje;
     }
-
-    // Funciones del carrito (simplificadas para este ejemplo)
-    function addToCart(productId, productName, productPrice) {
-        const existingItem = cart.find(item => item.id === productId);
-
-        if (existingItem) {
-            existingItem.quantity += 1;
-        } else {
-            cart.push({
-                id: productId,
-                name: productName,
-                price: productPrice,
-                quantity: 1
-            });
-        }
-
-        updateCartDisplay();
-    }
-
-    function removeFromCart(productId) {
-        cart = cart.filter(item => item.id !== productId);
-        updateCartDisplay();
-    }
-
-    function updateCartDisplay() {
-        cartItemsContainer.innerHTML = '';
-
-        if (cart.length === 0) {
-            cartItemsContainer.innerHTML = '<p id="cart-empty-msg">Tu carrito está vacío.</p>';
-            cartTotal.textContent = 'S/ 0.00';
-            return;
-        }
-
-        cart.forEach(item => {
-            const cartItem = document.createElement('div');
-            cartItem.className = 'cart-item mb-2 p-2 border rounded';
-            cartItem.innerHTML = `
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <strong>${item.name}</strong>
-                        <br>
-                        <small>S/ ${item.price.toFixed(2)} x ${item.quantity}</small>
-                    </div>
-                    <div>
-                        <span class="me-2">S/ ${(item.price * item.quantity).toFixed(2)}</span>
-                        <button class="btn btn-sm btn-danger remove-from-cart" data-product-id="${item.id}">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            `;
-            cartItemsContainer.appendChild(cartItem);
-        });
-
-        // Agregar event listeners a los botones de eliminar
-        document.querySelectorAll('.remove-from-cart').forEach(button => {
-            button.addEventListener('click', function() {
-                const productId = this.dataset.productId;
-                removeFromCart(productId);
-            });
-        });
-
-        cartTotal.textContent = `S/ ${calculateTotal().toFixed(2)}`;
-    }
-
-    function calculateTotal() {
-        return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-    }
-
-    // Hacer funciones globales para que los modales puedan acceder a ellas
-    window.addToCart = addToCart;
 });
