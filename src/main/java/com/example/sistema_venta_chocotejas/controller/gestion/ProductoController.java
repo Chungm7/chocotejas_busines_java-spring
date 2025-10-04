@@ -275,5 +275,30 @@ public class ProductoController {
             return ResponseEntity.internalServerError().body(response);
         }
     }
+
+    @PostMapping("/api/cambiar-destacado/{id}")
+    @ResponseBody
+    public ResponseEntity<?> cambiarDestacadoProducto(@PathVariable Long id) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            return productoService.cambiarDestacadoProducto(id)
+                    .map(producto -> {
+                        response.put("success", true);
+                        response.put("message", producto.getDestacado() ?
+                                "Producto marcado como destacado" : "Producto ya no es destacado");
+                        response.put("data", producto);
+                        return ResponseEntity.ok(response);
+                    })
+                    .orElseGet(() -> {
+                        response.put("success", false);
+                        response.put("message", "Producto no encontrado");
+                        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+                    });
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Error al cambiar el estado destacado del producto: " + e.getMessage());
+            return ResponseEntity.internalServerError().body(response);
+        }
+    }
 }
 

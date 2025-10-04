@@ -158,4 +158,16 @@ public class ProductoServiceImpl implements ProductoService {
         producto.setEstado(2);
         productoRepository.save(producto);
     }
+
+    @Override
+    @Transactional
+    public Optional<Producto> cambiarDestacadoProducto(Long id) {
+        if (id == null || id <= 0) {
+            return Optional.empty();
+        }
+        return obtenerProductoPorId(id).map(producto -> {
+            producto.setDestacado(!producto.getDestacado());
+            return productoRepository.save(producto);
+        });
+    }
 }

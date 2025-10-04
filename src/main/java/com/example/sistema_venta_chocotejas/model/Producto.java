@@ -40,6 +40,9 @@ public class Producto {
     @Column(nullable = false)
     private Integer estado = 1;
 
+    @Column(nullable = false)
+    private Boolean destacado = false;
+
     public Producto() {
     }
 
@@ -70,6 +73,13 @@ public class Producto {
     public Integer getEstado() { return estado; }
     public void setEstado(Integer estado) { this.estado = estado; }
 
+    public Boolean getDestacado() {
+        return destacado;
+    }
+    public void setDestacado(Boolean destacado) {
+        this.destacado = destacado;
+    }
+
     @Override
     public String toString() {
         return "Producto{" +
@@ -81,6 +91,7 @@ public class Producto {
                 ", categoria=" + (categoria != null ? categoria.getNombre() : "null") +
                 ", imagen='" + imagen + '\'' +
                 ", estado=" + estado +
+                ", destacado=" + destacado +
                 '}';
     }
 }

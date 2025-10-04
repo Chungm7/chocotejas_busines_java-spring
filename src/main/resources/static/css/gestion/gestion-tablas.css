@@ -11,8 +11,8 @@
     background: linear-gradient(135deg, var(--color-milk-chocolate) 0%, var(--color-medium-brown) 100%);
     color: var(--color-cream);
     border: none;
-    padding: 12px 10px;
-    font-weight: 600;
+    padding: 6px 8px;
+    font-weight: 100;
 }
 
 .table tbody tr {
@@ -24,7 +24,7 @@
 }
 
 .table tbody td {
-    padding: 10px;
+    padding: 6px 8px;
     border-color: #e0e0e0;
     vertical-align: middle;
 }
