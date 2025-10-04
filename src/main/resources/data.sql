@@ -1,11 +1,11 @@
 -- Inserciones de datos iniciales para opciones
 INSERT INTO opciones (id, nombre, ruta, icono) VALUES
-                                                   (1, 'Dashboard', '/dashboard/mostrar', 'bi bi-speedometer2'),
-                                                   (2, 'Gestión de Usuarios', '/usuarios/listar', 'bi bi-people'),
-                                                   (3, 'Gestión de Perfiles', '/perfiles/listar', 'bi bi-shield-lock'),
-                                                   (4, 'Gestión de Categorías', '/categorias/listar', 'bi bi-tags'),
-                                                   (5, 'Gestión de Productos', '/productos/listar', 'bi bi-box-seam'),
-                                                   (6,'Gestion de Opciones','/opciones/listar','bi bi-gear');
+                                                   (1, 'Dashboard', '/gestion/dashboard/mostrar', 'bi bi-speedometer2'),
+                                                   (2, 'Gestión de Usuarios', '/gestion/usuarios/listar', 'bi bi-people'),
+                                                   (3, 'Gestión de Perfiles', '/gestion/perfiles/listar', 'bi bi-shield-lock'),
+                                                   (4, 'Gestión de Categorías', '/gestion/categorias/listar', 'bi bi-tags'),
+                                                   (5, 'Gestión de Productos', '/gestion/productos/listar', 'bi bi-box-seam'),
+                                                   (6,'Gestion de Opciones','/gestion/opciones/listar','bi bi-gear');
 
 -- Inserciones de datos iniciales para perfiles
 INSERT INTO perfiles (id, nombre, descripcion, estado) VALUES

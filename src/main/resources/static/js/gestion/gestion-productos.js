@@ -154,7 +154,7 @@ $(document).ready(function () {
             }
         }
 
-        const url = isEdit ? `/productos/api/actualizar/${id}` : "/productos/api/guardar";
+        const url = isEdit ? `/gestion/productos/api/actualizar/${id}` : "/gestion/productos/api/guardar";
 
         $.ajax({
             url: url,
@@ -185,7 +185,7 @@ $(document).ready(function () {
     // Editar producto
     $("#tablaProductos").on("click", ".btn-editar", function () {
         const id = $(this).data("id");
-        $.get(`/productos/api/${id}`, function (res) {
+        $.get(`/gestion/productos/api/${id}`, function (res) {
             if (res.success) {
                 const producto = res.data;
 
@@ -226,7 +226,7 @@ $(document).ready(function () {
     // Cambiar estado
     $("#tablaProductos").on("change", ".btn-estado", function () {
         const id = $(this).data("id");
-        $.post(`/productos/api/cambiar-estado/${id}`, function (res) {
+        $.post(`/gestion/productos/api/cambiar-estado/${id}`, function (res) {
             if (res.success) {
                 mostrarNotificacion(res.message, "info");
                 tablaProductos.ajax.reload();
@@ -251,7 +251,7 @@ $(document).ready(function () {
         const id = $("#idProductoStock").val();
         const cantidad = $("#cantidad").val();
 
-        $.post(`/productos/api/actualizar-stock/${id}`, { cantidad: cantidad }, function (res) {
+        $.post(`/gestion/productos/api/actualizar-stock/${id}`, { cantidad: cantidad }, function (res) {
             if (res.success) {
                 mostrarNotificacion(res.message, "success");
                 stockModal.hide();
@@ -275,7 +275,7 @@ $(document).ready(function () {
             confirmButtonColor: "#d33"
         }).then((result) => {
             if (result.isConfirmed) {
-                $.post(`/productos/api/eliminar/${id}`, function (res) {
+                $.post(`/gestion/productos/api/eliminar/${id}`, function (res) {
                     if (res.success) {
                         mostrarNotificacion(res.message, "success");
                         tablaProductos.ajax.reload();
@@ -290,7 +290,7 @@ $(document).ready(function () {
 
 // Función para cargar categorías
 function cargarCategorias() {
-    $.get("/categorias/api/listar", function (res) {
+    $.get("/gestion/categorias/api/listar", function (res) {
         if (res.success) {
             categorias = res.data;
             const select = $("#categoria");

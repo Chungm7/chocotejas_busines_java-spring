@@ -75,7 +75,7 @@ $(document).ready(function () {
         };
 
         $.ajax({
-            url: "/categorias/api/guardar",
+            url: "/gestion/categorias/api/guardar",
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify(categoria),
@@ -97,7 +97,7 @@ $(document).ready(function () {
     // Editar
     $("#tablaCategorias").on("click", ".btn-editar", function () {
         const id = $(this).data("id");
-        $.get(`/categorias/api/${id}`, function (res) {
+        $.get(`/gestion/categorias/api/${id}`, function (res) {
             if (res.success) {
                 $("#idCategoria").val(res.data.id);
                 $("#nombre").val(res.data.nombre);
@@ -113,7 +113,7 @@ $(document).ready(function () {
     // Cambiar estado
     $("#tablaCategorias").on("change", ".btn-estado", function () {
         const id = $(this).data("id");
-        $.post(`/categorias/api/cambiar-estado/${id}`, function (res) {
+        $.post(`/gestion/categorias/api/cambiar-estado/${id}`, function (res) {
             if (res.success) {
                 mostrarNotificacion(res.message, "info");
                 tablaCategorias.ajax.reload();
@@ -135,7 +135,7 @@ $(document).ready(function () {
             cancelButtonText: "Cancelar"
         }).then((result) => {
             if (result.isConfirmed) {
-                $.post(`/categorias/api/eliminar/${id}`, function (res) {
+                $.post(`/gestion/categorias/api/eliminar/${id}`, function (res) {
                     if (res.success) {
                         mostrarNotificacion(res.message, "success");
                         tablaCategorias.ajax.reload();
