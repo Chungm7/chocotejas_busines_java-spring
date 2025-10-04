@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- GESTIÓN DE PRODUCTOS ---
-    if (currentPage.endsWith('gestion-productos.html')) {
+    if (currentPage.endsWith('gestion-galeria.html')) {
         const productContainer = document.getElementById('product-management-container');
         const productModal = new bootstrap.Modal(document.getElementById('product-modal'));
         const productForm = document.getElementById('product-form');

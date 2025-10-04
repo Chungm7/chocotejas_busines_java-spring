@@ -26,7 +26,7 @@ public class ProductoController {
 
     @GetMapping("/listar")
     public String mostrarPaginaProductos() {
-        return "gestion/gestion-productos"; // Devuelve el nombre de la vista (productos.html)
+        return "gestion/gestion-productos"; // Devuelve el nombre de la vista (gestion-productos.html)
     }
 
     @GetMapping("api/listar")

@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (usuarioValido) {
                 // Guardar sesión en sessionStorage para que se borre al cerrar la pestaña
                 sessionStorage.setItem('usuarioLogueado', JSON.stringify(usuarioValido));
-                window.location.href = 'gestion-productos.html'; // Redirigir al panel principal
+                window.location.href = 'gestion-galeria.html'; // Redirigir al panel principal
             } else {
                 // Mostrar notificación de error
                 showToast('Usuario o contraseña incorrectos, o la cuenta está inactiva.', 'danger');
