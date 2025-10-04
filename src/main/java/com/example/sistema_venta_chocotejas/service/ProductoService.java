@@ -11,6 +11,8 @@ import java.util.Optional;
 public interface ProductoService {
     List<Producto> listarProductosActivos();
 
+    List<Producto> listarProductosActivos1();
+
     List<Producto> listarTodoslosProductos();
 
     List<Producto> listarProductosActivos0();

@@ -14,4 +14,6 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
     Long countByEstado(Integer estado);
 
     Long countByEstadoNot(Integer estado);
+
+    List<Categoria> findByEstado(Integer estado);
 }

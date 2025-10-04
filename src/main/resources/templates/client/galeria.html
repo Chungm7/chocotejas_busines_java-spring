@@ -55,34 +55,11 @@
                     <label for="search-input" class="form-label">Buscar por nombre</label>
                     <input type="text" class="form-control" id="search-input" placeholder="Ej: Clásica">
                 </div>
-                <!-- Categorías -->
                 <div class="mb-4">
                     <label class="form-label">Categoría</label>
                     <div id="category-filters">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="category-clasica">
-                            <label class="form-check-label" for="category-clasica">
-                                Chocotejas Clásicas
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="category-especial">
-                            <label class="form-check-label" for="category-especial">
-                                Chocotejas Especiales
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="category-frutas">
-                            <label class="form-check-label" for="category-frutas">
-                                Con Frutas
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="category-premium">
-                            <label class="form-check-label" for="category-premium">
-                                Premium
-                            </label>
-                        </div>
+                        <!-- Las categorías se generarán dinámicamente con JavaScript -->
+                        <div class="text-muted">Cargando categorías...</div>
                     </div>
                 </div>
                 <!-- Precio -->
@@ -97,71 +74,44 @@
         <!-- Galería de Productos -->
         <section class="col-lg-9">
             <div id="product-gallery-container" class="row g-4">
-                <!-- Las fichas de productos se insertarán aquí dinámicamente -->
-                <div class="col-lg-4 col-md-6">
+                <!-- Productos cargados dinámicamente desde Thymeleaf -->
+                <div th:each="producto : ${productos}"
+                     class="col-lg-4 col-md-6 product-card-item"
+                     th:data-id="${producto.id}"
+                     th:data-category="${producto.categoria.nombre}"
+                     th:data-category-id="${producto.categoria.id}"
+                     th:data-price="${producto.precio}"
+                     th:data-stock="${producto.stock}">
                     <div class="product-card">
-                        <img src="https://placehold.co/600x400/5D4037/FFF8E1?text=Chocoteja+Clásica" class="card-img-top" alt="Chocoteja Clásica">
+                        <img th:src="@{'/imagenes/' + ${producto.imagen}}"
+                             th:alt="${producto.nombre}"
+                             class="card-img-top"
+                             style="height: 200px; object-fit: cover;">
                         <div class="product-card-body">
-                            <h5 class="card-title">Chocoteja Clásica</h5>
-                            <p class="card-text">Deliciosa chocoteja tradicional con manjar blanco y nueces.</p>
-                            <div class="price">S/ 2.50</div>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal1">Ver Detalles</button>
+                            <h5 class="card-title" th:text="${producto.nombre}">Nombre del producto</h5>
+                            <p class="card-text" th:text="${producto.descripcion}">Descripción del producto</p>
+                            <div class="price" th:text="'S/ ' + ${#numbers.formatDecimal(producto.precio, 1, 2)}">Precio</div>
+                            <div class="stock mb-2" th:classappend="${producto.stock == 0} ? 'text-danger' : 'text-success'"
+                                 th:text="${producto.stock == 0} ? 'Agotado' : 'Stock: ' + ${producto.stock}">
+                                Stock
+                            </div>
+                            <button class="btn btn-primary"
+                                    th:if="${producto.stock > 0}"
+                                    th:data-bs-target="'#productModal' + ${producto.id}"
+                                    data-bs-toggle="modal">
+                                Ver Detalles
+                            </button>
+                            <button class="btn btn-secondary" th:if="${producto.stock == 0}" disabled>
+                                Agotado
+                            </button>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="product-card">
-                        <img src="https://placehold.co/600x400/8D6E63/FFF8E1?text=Chocoteja+Maracuyá" class="card-img-top" alt="Chocoteja Maracuyá">
-                        <div class="product-card-body">
-                            <h5 class="card-title">Chocoteja Maracuyá</h5>
-                            <p class="card-text">Exquisita combinación de chocolate con relleno de maracuyá.</p>
-                            <div class="price">S/ 3.00</div>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal2">Ver Detalles</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="product-card">
-                        <img src="https://placehold.co/600x400/6D4C41/FFF8E1?text=Chocoteja+Piña+Colada" class="card-img-top" alt="Chocoteja Piña Colada">
-                        <div class="product-card-body">
-                            <h5 class="card-title">Chocoteja Piña Colada</h5>
-                            <p class="card-text">Sabor tropical con piña y coco en una deliciosa chocoteja.</p>
-                            <div class="price">S/ 3.20</div>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal3">Ver Detalles</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="product-card">
-                        <img src="https://placehold.co/600x400/5D4037/FFF8E1?text=Chocoteja+Fresa" class="card-img-top" alt="Chocoteja Fresa">
-                        <div class="product-card-body">
-                            <h5 class="card-title">Chocoteja Fresa</h5>
-                            <p class="card-text">Fresas frescas con crema en una exquisita chocoteja.</p>
-                            <div class="price">S/ 3.50</div>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal4">Ver Detalles</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="product-card">
-                        <img src="https://placehold.co/600x400/8D6E63/FFF8E1?text=Chocoteja+Café" class="card-img-top" alt="Chocoteja Café">
-                        <div class="product-card-body">
-                            <h5 class="card-title">Chocoteja Café</h5>
-                            <p class="card-text">Para los amantes del café, con un toque de espresso.</p>
-                            <div class="price">S/ 3.80</div>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal5">Ver Detalles</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="product-card">
-                        <img src="https://placehold.co/600x400/6D4C41/FFF8E1?text=Chocoteja+Menta" class="card-img-top" alt="Chocoteja Menta">
-                        <div class="product-card-body">
-                            <h5 class="card-title">Chocoteja Menta</h5>
-                            <p class="card-text">Refrescante combinación de chocolate oscuro y menta.</p>
-                            <div class="price">S/ 3.20</div>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal6">Ver Detalles</button>
-                        </div>
+
+                <!-- Mensaje cuando no hay productos -->
+                <div th:if="${#lists.isEmpty(productos)}" class="col-12 text-center">
+                    <div class="alert alert-info">
+                        No hay productos disponibles en este momento.
                     </div>
                 </div>
             </div>
@@ -239,102 +189,45 @@
     </div>
 </footer>
 
-<!-- Modales para productos -->
-<!-- Modal 1 -->
-<div class="modal fade" id="productModal1" tabindex="-1" aria-labelledby="productModalLabel1" aria-hidden="true">
+<!-- Modales para productos - Generados dinámicamente -->
+<div th:each="producto : ${productos}"
+     class="modal fade"
+     th:id="'productModal' + ${producto.id}"
+     tabindex="-1"
+     th:aria-labelledby="'productModalLabel' + ${producto.id}"
+     aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="productModalLabel1">Chocoteja Clásica</h5>
+                <h5 class="modal-title" th:id="'productModalLabel' + ${producto.id}" th:text="${producto.nombre}">Nombre del producto</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <img src="https://placehold.co/600x400/5D4037/FFF8E1?text=Chocoteja+Clásica" alt="Chocoteja Clásica" class="img-fluid">
+                        <img th:src="@{'/imagenes/' + ${producto.imagen}}"
+                             th:alt="${producto.nombre}"
+                             class="img-fluid rounded"
+                             style="max-height: 400px; object-fit: cover;">
                     </div>
                     <div class="col-md-6">
                         <h4>Descripción</h4>
-                        <p>Nuestra chocoteja clásica, elaborada con la receta tradicional que ha pasado de generación en generación. Combina el mejor chocolate con un delicioso relleno de manjar blanco y nueces tostadas.</p>
-                        <h4>Ingredientes</h4>
-                        <ul>
-                            <li>Chocolate premium</li>
-                            <li>Manjar blanco artesanal</li>
-                            <li>Nueces tostadas</li>
-                            <li>Azúcar</li>
-                        </ul>
-                        <h4>Precio: S/ 2.50</h4>
-                        <div class="mt-3">
-                            <button class="btn btn-primary">Agregar al Carrito</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                        <p th:text="${producto.descripcion}">Descripción del producto</p>
 
-<!-- Modal 2 -->
-<div class="modal fade" id="productModal2" tabindex="-1" aria-labelledby="productModalLabel2" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="productModalLabel2">Chocoteja Maracuyá</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <img src="https://placehold.co/600x400/8D6E63/FFF8E1?text=Chocoteja+Maracuyá" alt="Chocoteja Maracuyá" class="img-fluid">
-                    </div>
-                    <div class="col-md-6">
-                        <h4>Descripción</h4>
-                        <p>Una explosión de sabor tropical en cada bocado. Nuestra chocoteja de maracuyá combina la acidez natural de esta fruta con la suavidad del chocolate, creando un equilibrio perfecto.</p>
-                        <h4>Ingredientes</h4>
-                        <ul>
-                            <li>Chocolate premium</li>
-                            <li>Pulpa de maracuyá natural</li>
-                            <li>Azúcar</li>
-                            <li>Crema de leche</li>
-                        </ul>
-                        <h4>Precio: S/ 3.00</h4>
-                        <div class="mt-3">
-                            <button class="btn btn-primary">Agregar al Carrito</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                        <h4>Categoría</h4>
+                        <p th:text="${producto.categoria.nombre}">Categoría</p>
 
-<!-- Modal 3 -->
-<div class="modal fade" id="productModal3" tabindex="-1" aria-labelledby="productModalLabel3" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="productModalLabel3">Chocoteja Piña Colada</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <img src="https://placehold.co/600x400/6D4C41/FFF8E1?text=Chocoteja+Piña+Colada" alt="Chocoteja Piña Colada" class="img-fluid">
-                    </div>
-                    <div class="col-md-6">
-                        <h4>Descripción</h4>
-                        <p>Disfruta de las vacaciones en cada mordida con nuestra chocoteja piña colada. La combinación perfecta de piña dulce y coco cremoso envuelta en chocolate de primera calidad.</p>
-                        <h4>Ingredientes</h4>
+                        <h4>Información</h4>
                         <ul>
-                            <li>Chocolate premium</li>
-                            <li>Piña natural</li>
-                            <li>Coco rallado</li>
-                            <li>Crema de leche</li>
-                            <li>Azúcar</li>
+                            <li><strong>Precio:</strong> <span th:text="'S/ ' + ${#numbers.formatDecimal(producto.precio, 1, 2)}">Precio</span></li>
+                            <li th:if="${producto.stock > 0}"><strong>Stock disponible:</strong> <span th:text="${producto.stock}">Stock</span></li>
+                            <li th:if="${producto.stock == 0}" class="text-danger"><strong>Estado:</strong> Agotado</li>
                         </ul>
-                        <h4>Precio: S/ 3.20</h4>
-                        <div class="mt-3">
-                            <button class="btn btn-primary">Agregar al Carrito</button>
+
+                        <div class="mt-4" th:if="${producto.stock > 0}">
+                            <button class="btn btn-primary btn-lg">
+                            <i class="bi bi-cart-plus"></i> Agregar al Carrito
+                            </button>
                         </div>
                     </div>
                 </div>

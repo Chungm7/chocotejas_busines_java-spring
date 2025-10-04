@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface CategoriaService {
     List<Categoria> listarCategoriasActivas();
 
-    List<Categoria> listarTodaslasCategorias();
+    List<Categoria> listarCategorias1();
 
     Categoria guardarCategoria(Categoria categoria);
 

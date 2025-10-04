@@ -48,10 +48,10 @@ public class CategoriaIServicempl implements CategoriaService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<Categoria> listarTodaslasCategorias() {
-        return categoriaRepository.findAll();
+    public List<Categoria> listarCategorias1() {
+        return categoriaRepository.findByEstado(1);
     }
+
 
     @Override
     @Transactional
