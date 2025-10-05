@@ -1,5 +1,6 @@
 package com.example.sistema_venta_chocotejas.model;
 
+import com.example.sistema_venta_chocotejas.Enum.IconoRedSocial;
 import jakarta.persistence.*;
 
 @Entity
@@ -18,7 +19,7 @@ public class RedSocial {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "icono", nullable = false)
-    private RedSocial icono;
+    private IconoRedSocial icono;
 
     @Column(name = "estado", nullable = false)
     private Integer estado = 1; // 1 = Activo, 0 = Inactivo 2= Eliminado
@@ -52,11 +53,11 @@ public class RedSocial {
         this.url = url;
     }
 
-    public RedSocial getIcono() {
+    public IconoRedSocial getIcono() {
         return icono;
     }
 
-    public void setIcono(RedSocial icono) {
+    public void setIcono(IconoRedSocial icono) {
         this.icono = icono;
     }
 
