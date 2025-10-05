@@ -13,7 +13,6 @@ public class Venta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @Column(nullable = false)
     private LocalDateTime fecha;
 
@@ -26,13 +25,12 @@ public class Venta {
     @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DetalleVenta> detalleVentas = new ArrayList<>();
 
-    // Constructores, getters y setters...
-
+    // Constructores
     public Venta() {
         this.fecha = LocalDateTime.now();
     }
 
-    public Venta( Double total) {
+    public Venta(Double total) {
         this();
         this.total = total;
     }
@@ -40,7 +38,6 @@ public class Venta {
     // Getters y setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
 
     public LocalDateTime getFecha() { return fecha; }
     public void setFecha(LocalDateTime fecha) { this.fecha = fecha; }

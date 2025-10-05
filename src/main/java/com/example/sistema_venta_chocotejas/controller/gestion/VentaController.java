@@ -56,6 +56,7 @@ public class VentaController {
     @ResponseBody
     public ResponseEntity<?> registrarVenta(@RequestBody VentaRequest ventaRequest) {
         try {
+            // Validaciones básicas
             if (ventaRequest.getDetalles() == null || ventaRequest.getDetalles().isEmpty()) {
                 return ResponseEntity.badRequest().body(createErrorResponse("Debe agregar al menos un producto a la venta"));
             }
@@ -70,6 +71,18 @@ public class VentaController {
             for (DetalleVentaRequest detalleReq : ventaRequest.getDetalles()) {
                 Producto producto = productoService.obtenerProductoPorId(detalleReq.getProductoId())
                         .orElseThrow(() -> new RuntimeException("Producto no encontrado: " + detalleReq.getProductoId()));
+
+                // Validar que el producto tenga precio
+                if (producto.getPrecio() == null) {
+                    throw new RuntimeException("El producto '" + producto.getNombre() + "' no tiene precio asignado");
+                }
+
+                // Validar stock
+                if (producto.getStock() < detalleReq.getCantidad()) {
+                    throw new RuntimeException("Stock insuficiente para: " + producto.getNombre() +
+                            ". Stock disponible: " + producto.getStock() +
+                            ", solicitado: " + detalleReq.getCantidad());
+                }
 
                 DetalleVenta detalle = new DetalleVenta();
                 detalle.setProducto(producto);

@@ -105,6 +105,16 @@ $(document).ready(function () {
         if (productoId) {
             const producto = productosDisponibles.find(p => p.id == productoId);
             if (producto) {
+                // Validar que el producto tenga precio
+                if (!producto.precio || producto.precio <= 0) {
+                    mostrarNotificacion(`El producto "${producto.nombre}" no tiene precio asignado`, "warning");
+                    $(this).val(""); // Limpiar selección
+                    precioInput.val("");
+                    stockInfo.html("");
+                    cantidadInput.prop("disabled", true);
+                    return;
+                }
+
                 precioInput.val(`S/ ${producto.precio.toFixed(2)}`);
 
                 // Actualizar información de stock
@@ -167,8 +177,10 @@ $(document).ready(function () {
 function cargarProductosDisponibles() {
     $.get("/gestion/productos/api/listar", function (res) {
         if (res.success) {
-            // Filtrar solo productos activos y con stock
-            productosDisponibles = res.data.filter(p => p.estado === 1);
+            // Filtrar solo productos activos, con stock y con precio
+            productosDisponibles = res.data.filter(p =>
+                p.estado === 1 && p.precio !== null && p.precio !== undefined && p.precio > 0
+            );
         }
     }).fail(function() {
         mostrarNotificacion("Error al cargar los productos disponibles", "danger");
@@ -245,6 +257,7 @@ function registrarVenta() {
     const detalles = [];
     let hayErrores = false;
     let productosSinStock = [];
+    let productosSinPrecio = [];
 
     // Validar cada fila de producto
     $(".producto-row").each(function() {
@@ -269,6 +282,13 @@ function registrarVenta() {
         const producto = productosDisponibles.find(p => p.id == productoSelect.val());
         const cantidad = parseInt(cantidadInput.val());
 
+        // Validar que el producto tenga precio
+        if (!producto.precio || producto.precio <= 0) {
+            hayErrores = true;
+            productosSinPrecio.push(producto.nombre);
+            return false;
+        }
+
         // Validar stock
         if (cantidad > producto.stock) {
             hayErrores = true;
@@ -287,6 +307,12 @@ function registrarVenta() {
     });
 
     if (hayErrores) {
+        if (productosSinPrecio.length > 0) {
+            const mensaje = productosSinPrecio.map(p =>
+                `${p} no tiene precio asignado`
+            ).join('\n');
+            mostrarNotificacion(`Productos sin precio:\n${mensaje}`, "danger");
+        }
         if (productosSinStock.length > 0) {
             const mensaje = productosSinStock.map(p =>
                 `${p.producto}: Stock ${p.stock}, Solicitado ${p.solicitado}`
