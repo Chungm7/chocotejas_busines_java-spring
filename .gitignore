@@ -32,11 +32,7 @@ build/
 .vscode/
 
 ### Imagenes ###
-imagenes/*.png
-imagenes/*.jpg
-imagenes/*.jpeg
-imagenes/*.gif
-imagenes/*.svg
-imagenes/*.bmp
-imagenes/*.tiff
-imagenes/*.ico
+imagenes/
+logos/
+momentos/
+sliders/
