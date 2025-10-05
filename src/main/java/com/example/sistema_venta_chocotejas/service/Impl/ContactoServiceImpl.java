@@ -16,7 +16,6 @@ public class ContactoServiceImpl implements ContactoService {
     public ContactoServiceImpl(ContactoRepository contactoRepository) {
         this.contactoRepository = contactoRepository;
         // Inicializar el contacto si no existe
-        this.inicializarContacto();
     }
 
     @Override
