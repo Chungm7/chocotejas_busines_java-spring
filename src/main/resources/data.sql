@@ -5,7 +5,10 @@ INSERT INTO opciones (id, nombre, ruta, icono) VALUES
                                                    (3, 'Gestión de Perfiles', '/gestion/perfiles/listar', 'bi bi-shield-lock'),
                                                    (4, 'Gestión de Categorías', '/gestion/categorias/listar', 'bi bi-tags'),
                                                    (5, 'Gestión de Productos', '/gestion/productos/listar', 'bi bi-box-seam'),
-                                                   (6,'Gestion de Opciones','/gestion/opciones/listar','bi bi-gear');
+                                                   (6, 'Gestión de Slider', '/gestion/slider/listar', 'bi bi-images'),
+                                                   (7, 'Gestión de Ventas', '/gestion/ventas/listar', 'bi bi-cash-stack'),
+                                                   (8, 'Gestión de Logo', '/gestion/logo/listar', 'bi bi-image'),
+                                                   (9, 'Gestión de Momentos', '/gestion/momentos/listar', 'bi bi-camera-reels');
 
 -- Inserciones de datos iniciales para perfiles
 INSERT INTO perfiles (id, nombre, descripcion, estado) VALUES
@@ -18,7 +21,10 @@ INSERT INTO perfil_opcion (id_perfil, id_opcion) VALUES
                                                      (1, 3),
                                                      (1, 4),
                                                      (1, 5),
-                                                     (1, 6);
+                                                     (1, 6),
+                                                     (1, 7),
+                                                     (1, 8),
+                                                     (1, 9);
 
 -- Inserciones de datos iniciales para usuarios
 INSERT INTO usuarios (id, nombre, usuario, clave, correo, estado, id_perfil) VALUES
