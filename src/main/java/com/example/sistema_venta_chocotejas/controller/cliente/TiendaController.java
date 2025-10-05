@@ -23,11 +23,11 @@ public class TiendaController {
     public String home(Model model) {
         List<Producto> productosDestacados = productoService.listarProductosDestacadosActivos();
 
-        // Verificar si hay más de 3 productos destacados para usar carrusel
-        boolean usarCarousel = productosDestacados.size() > 3;
+        // Verificar si hay más de 4 productos para mostrar controles de navegación
+        boolean mostrarControles = productosDestacados.size() > 4;
 
         model.addAttribute("productosDestacados", productosDestacados);
-        model.addAttribute("usarCarousel", usarCarousel);
+        model.addAttribute("mostrarControles", mostrarControles);
 
         return "client/indexclient";
     }

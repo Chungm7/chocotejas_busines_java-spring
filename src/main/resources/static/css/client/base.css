@@ -267,6 +267,102 @@ body {
     border-radius: 8px;
 }
 
+/* Estilos para la rueda de productos destacados */
+.productos-destacados-wrapper {
+    padding: 0 50px;
+}
+
+.productos-destacados-container {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.productos-destacados-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    gap: 20px;
+}
+
+.producto-destacado-item {
+    flex: 0 0 calc(25% - 15px); /* 4 productos por vista */
+    min-width: 0;
+}
+
+.btn-carousel-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--color-dark-chocolate);
+    border: none;
+    color: var(--color-cream);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.3s ease;
+}
+
+.btn-carousel-control:hover {
+    background: var(--color-medium-brown);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.btn-carousel-control.prev {
+    left: 0;
+}
+
+.btn-carousel-control.next {
+    right: 0;
+}
+
+.btn-carousel-control:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.carousel-indicators-custom {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.carousel-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--color-light-brown);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.carousel-indicator.active {
+    background: var(--color-dark-chocolate);
+    transform: scale(1.2);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .producto-destacado-item {
+        flex: 0 0 calc(33.333% - 15px); /* 3 productos en tablets grandes */
+    }
+}
+
+@media (max-width: 992px) {
+    .producto-destacado-item {
+        flex: 0 0 calc(50% - 15px); /* 2 productos en tablets */
+    }
+
+    .productos-destacados-wrapper {
+        padding: 0 40px;
+    }
+}
+
 /* ==============================
    Responsive Global
    ============================== */
@@ -286,5 +382,17 @@ body {
 
     .carousel-item {
         height: 300px;
+    }
+    .producto-destacado-item {
+        flex: 0 0 calc(100% - 15px); /* 1 producto en móviles */
+    }
+
+    .productos-destacados-wrapper {
+        padding: 0 30px;
+    }
+
+    .btn-carousel-control {
+        width: 35px;
+        height: 35px;
     }
 }
