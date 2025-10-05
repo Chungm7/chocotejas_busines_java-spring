@@ -31,8 +31,3 @@ spring:
 
 file:
   upload-dir: ${UPLOAD_DIR:./imagenes/}
-#  web:
-#    resource:
-#      static-locations: file:${UPLOAD_DIR:./imagenes/}
-#    mvc:
-#      static-path-pattern: /imagenes/**

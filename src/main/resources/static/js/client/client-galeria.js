@@ -1,5 +1,28 @@
-// client-galeria.js
+// client-galeria.js - Script completo para galería y funcionalidad WhatsApp
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('client-galeria.js cargado - Inicializando...');
+
+    // Solo inicializar funcionalidades de galería si estamos en la página de galería
+    const searchInput = document.getElementById('search-input');
+    const categoryFilters = document.getElementById('category-filters');
+    const priceRange = document.getElementById('price-range');
+    const productGalleryContainer = document.getElementById('product-gallery-container');
+
+    // Verificar si estamos en la página de galería
+    const isGaleriaPage = searchInput && categoryFilters && priceRange && productGalleryContainer;
+
+    if (isGaleriaPage) {
+        console.log('Inicializando funcionalidades de galería...');
+        initializeGallery();
+    } else {
+        console.log('No es página de galería, solo inicializando WhatsApp...');
+    }
+
+    // Inicializar funcionalidad de WhatsApp en TODAS las páginas
+    initializeWhatsApp();
+});
+
+function initializeGallery() {
     // Elementos del DOM
     const searchInput = document.getElementById('search-input');
     const categoryFilters = document.getElementById('category-filters');
@@ -12,31 +35,14 @@ document.addEventListener('DOMContentLoaded', function() {
     let selectedCategories = new Set();
     let maxPrice = 10;
 
-    // Si existen los elementos de la galería, inicializar filtros
-    if (searchInput && categoryFilters && priceRange && productGalleryContainer) {
-        initializeGallery();
-    }
-    initializeWhatsApp();
+    // Inicializar la galería
+    extractProductsFromHTML();
+    initializeCategoryFilters();
+    updatePriceFilter();
 
-    // Event Listeners
+    // Event Listeners específicos de galería
     searchInput.addEventListener('input', filterProducts);
     priceRange.addEventListener('input', updatePriceFilter);
-
-    // Agregar event listener a los botones de WhatsApp
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('whatsapp-order-btn') ||
-            e.target.closest('.whatsapp-order-btn')) {
-            const button = e.target.classList.contains('whatsapp-order-btn') ? e.target : e.target.closest('.whatsapp-order-btn');
-            handleWhatsAppOrder(button);
-        }
-    });
-
-    // Inicializar la galería
-    function initializeGallery() {
-        extractProductsFromHTML();
-        initializeCategoryFilters();
-        updatePriceFilter();
-    }
 
     // Extraer productos del HTML generado por Thymeleaf
     function extractProductsFromHTML() {
@@ -53,6 +59,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 stock: parseInt(card.dataset.stock)
             };
         });
+
+        // Establecer el precio máximo para el rango
+        if (allProducts.length > 0) {
+            const maxProductPrice = Math.max(...allProducts.map(p => p.price));
+            maxPrice = Math.ceil(maxProductPrice);
+            priceRange.max = maxPrice;
+            priceRange.value = maxPrice;
+            priceValue.textContent = `S/ ${maxPrice.toFixed(2)}`;
+        }
     }
 
     // Inicializar filtros de categoría
@@ -77,15 +92,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         document.querySelectorAll('.category-checkbox').forEach(checkbox => {
             checkbox.addEventListener('change', handleCategoryFilter);
-        });
-    }
-    function initializeWhatsApp() {
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('whatsapp-order-btn') ||
-                e.target.closest('.whatsapp-order-btn')) {
-                const button = e.target.classList.contains('whatsapp-order-btn') ? e.target : e.target.closest('.whatsapp-order-btn');
-                handleWhatsAppOrder(button);
-            }
         });
     }
 
@@ -130,31 +136,66 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+}
 
-    function handleWhatsAppOrder(button) {
-        const productId = button.dataset.productId;
-        const productName = button.dataset.productName;
-        const productPrice = button.dataset.productPrice;
+// Inicializar funcionalidad WhatsApp (funciona en todas las páginas)
+function initializeWhatsApp() {
+    console.log('Inicializando funcionalidad WhatsApp...');
 
-        const mensaje = construirMensajeWhatsApp(productName, productPrice);
-        const phoneNumber = '51987654321'; // Cambiar por número real
-        const urlWhatsApp = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(mensaje)}`;
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('whatsapp-order-btn') ||
+            e.target.closest('.whatsapp-order-btn')) {
+            const button = e.target.classList.contains('whatsapp-order-btn') ?
+                e.target : e.target.closest('.whatsapp-order-btn');
+            handleWhatsAppOrder(button);
+        }
+    });
+}
 
-        window.open(urlWhatsApp, '_blank');
+// Manejar pedido por WhatsApp
+function handleWhatsAppOrder(button) {
+    console.log('Manejando pedido por WhatsApp...');
 
-        const modalElement = button.closest('.modal');
+    const productId = button.dataset.productId;
+    const productName = button.dataset.productName;
+    const productPrice = button.dataset.productPrice;
+
+    // Construir mensaje de WhatsApp
+    const mensaje = construirMensajeWhatsApp(productName, productPrice);
+
+    // Número de WhatsApp de la tienda (cambiar por el número real)
+    const phoneNumber = '51987654321';
+    const urlWhatsApp = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(mensaje)}`;
+
+    window.open(urlWhatsApp, '_blank');
+
+    // Cerrar el modal después de enviar
+    const modalElement = button.closest('.modal');
+    if (modalElement) {
         const modal = bootstrap.Modal.getInstance(modalElement);
         if (modal) {
             modal.hide();
         }
     }
+}
 
-    function construirMensajeWhatsApp(productName, productPrice) {
-        let mensaje = `¡Hola! Estoy interesado en el siguiente producto:\n\n`;
-        mensaje += `*${productName}*\n`;
-        mensaje += `Precio: S/ ${parseFloat(productPrice).toFixed(2)}\n\n`;
-        mensaje += `Por favor, necesito que me contacten para realizar mi pedido.`;
-        mensaje += `\n\n(Mensaje generado desde la tienda online Chocotejas "El Sabor de Casa")`;
-        return mensaje;
-    }
-});
+// Construir mensaje para WhatsApp
+function construirMensajeWhatsApp(productName, productPrice) {
+    let mensaje = `¡Hola! Estoy interesado en el siguiente producto:\n\n`;
+    mensaje += `*${productName}*\n`;
+    mensaje += `Precio: S/ ${parseFloat(productPrice).toFixed(2)}\n\n`;
+    mensaje += `Por favor, necesito que me contacten para realizar mi pedido.`;
+    mensaje += `\n\n(Mensaje generado desde la tienda online Chocotejas "El Sabor de Casa")`;
+
+    return mensaje;
+}
+
+// Funciones auxiliares para debugging (opcional)
+function debugProducts() {
+    console.log('Productos cargados:', allProducts);
+}
+
+function debugFilters() {
+    console.log('Categorías seleccionadas:', Array.from(selectedCategories));
+    console.log('Precio máximo:', maxPrice);
+}
