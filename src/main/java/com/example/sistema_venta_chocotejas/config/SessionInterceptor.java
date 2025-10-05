@@ -30,7 +30,8 @@ public class SessionInterceptor implements HandlerInterceptor {
                 requestURI.startsWith("/images/") ||
                 requestURI.startsWith("/imagenes/") ||
                 requestURI.startsWith("/logos/") ||
-                requestURI.startsWith("/sliders/")) {
+                requestURI.startsWith("/sliders/") ||
+                requestURI.startsWith("/momentos/")){
             return true;
         }
 
