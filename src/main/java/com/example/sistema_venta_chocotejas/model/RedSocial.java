@@ -18,7 +18,7 @@ public class RedSocial {
     private String url;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "icono", nullable = false)
+    @Column(name = "icono", nullable = false, unique = true)
     private IconoRedSocial icono;
 
     @Column(name = "estado", nullable = false)

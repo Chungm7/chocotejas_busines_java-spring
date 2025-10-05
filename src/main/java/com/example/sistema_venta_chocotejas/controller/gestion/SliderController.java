@@ -44,15 +44,15 @@ public class SliderController {
                     Map<String, Object> response = new HashMap<>();
                     response.put("success", true);
                     // Preparamos los datos para el frontend
-                    Map<String, Object> productoData = new HashMap<>();
-                    productoData.put("id", slider.getId());
-                    productoData.put("nombre", slider.getNombre());
-                    productoData.put("descripcion", slider.getDescripcion());
-                    productoData.put("estado", slider.getEstado());
-                    productoData.put("activo", slider.getActivo());
-                    productoData.put("imagen", slider.getRuta());
+                    Map<String, Object> sliderData = new HashMap<>();
+                    sliderData.put("id", slider.getId());
+                    sliderData.put("nombre", slider.getNombre());
+                    sliderData.put("descripcion", slider.getDescripcion());
+                    sliderData.put("estado", slider.getEstado());
+                    sliderData.put("activo", slider.getActivo());
+                    sliderData.put("imagen", slider.getRuta());
 
-                    response.put("data", productoData);
+                    response.put("data", sliderData);
                     return ResponseEntity.ok(response);
                 }).orElse(ResponseEntity.notFound().build());
     }
