@@ -42,3 +42,12 @@ INSERT INTO categorias (id, nombre, descripcion, estado) VALUES
                                                              (1, 'Chocolate Negro', 'Productos elaborados con chocolate negro de alta calidad', 1),
                                                              (2, 'Chocolate con Leche', 'Deliciosos chocolates cremosos con leche', 1),
                                                              (3, 'Chocolate Blanco', 'Suaves y dulces chocolates blancos premium', 1);
+INSERT INTO inicio (titulo, contenido)
+VALUES ('Bienvenidos a Chocotejas Delicias',
+        'Disfruta de nuestras chocotejas artesanales elaboradas con los mejores ingredientes del Valle del Mantaro. ¡Dulces momentos que alegran tu día!');
+
+INSERT INTO contactos (telefono, direccion, email, descripcion)
+VALUES ('+51 987 654 321',
+        'Av. Mariscal Castilla 456, Huancayo - Junín',
+        'contacto@chocotejasdelicias.com',
+        'Atendemos pedidos personalizados y envíos a todo el país. ¡Contáctanos para endulzar tus momentos especiales!');
