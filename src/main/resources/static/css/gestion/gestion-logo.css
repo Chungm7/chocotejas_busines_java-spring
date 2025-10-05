@@ -24,9 +24,7 @@
     transition: all 0.3s ease;
     max-height: 50px;
     max-width: 50px;
-    object-fit: contain;
-    background-color: white;
-    padding: 2px;
+    object-fit: cover;
 }
 
 .logo-img-thumbnail:hover {

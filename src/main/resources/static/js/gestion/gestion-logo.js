@@ -41,7 +41,7 @@ function cargarTablaLogos() {
                 data: 'ruta',
                 render: function(data) {
                     return data ?
-                        `<img src="../../../../../logos/${data}" class="logo-img-thumbnail" alt="Logo">` :
+                        `<img src="../../../../../logos/${data}"  style="max-height: 50px; max-width: 50px;" class="logo-img-thumbnail" alt="Logo">` :
                         '<span class="text-muted">Sin imagen</span>';
                 }
             },
@@ -107,11 +107,13 @@ function abrirModalLogo(logo = null) {
     $('#descripcion').val(logo ? logo.descripcion : '');
 
     // Limpiar vista previa
-    $('#imagenPreviewContainer').hide();
-    $('#rutaFile').val('');
+    if(logo.ruta) {
+        $("#imagenPreview").attr("src", `../../../../../logos/${logo.ruta}`);
+        $("#imagenPreviewContainer").show();
+    } else {
+        $("#imagenPreviewContainer").hide();
+    }
 
-    // Cambiar requerimiento de imagen solo para nuevo
-    $('#rutaFile').prop('required', !logo);
 
     modalLogo.show();
 }
