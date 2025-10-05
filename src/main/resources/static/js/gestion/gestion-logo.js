@@ -41,7 +41,7 @@ function cargarTablaLogos() {
                 data: 'ruta',
                 render: function(data) {
                     return data ?
-                        `<img src="/images/logos/${data}" class="logo-img-thumbnail" alt="Logo">` :
+                        `<img src="../../../../../logos/${data}" class="logo-img-thumbnail" alt="Logo">` :
                         '<span class="text-muted">Sin imagen</span>';
                 }
             },
