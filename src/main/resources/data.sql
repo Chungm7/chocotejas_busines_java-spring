@@ -27,7 +27,9 @@ INSERT INTO perfil_opcion (id_perfil, id_opcion) VALUES
                                                      (1, 6),
                                                      (1, 7),
                                                      (1, 8),
-                                                     (1, 9);
+                                                     (1, 9),
+                                                     (1, 10),
+                                                     (1, 11);
 
 -- Inserciones de datos iniciales para usuarios
 INSERT INTO usuarios (id, nombre, usuario, clave, correo, estado, id_perfil) VALUES
