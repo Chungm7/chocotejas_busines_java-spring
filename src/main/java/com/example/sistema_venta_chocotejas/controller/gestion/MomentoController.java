@@ -1,9 +1,7 @@
 package com.example.sistema_venta_chocotejas.controller.gestion;
 
-import com.example.sistema_venta_chocotejas.model.Logo;
-import com.example.sistema_venta_chocotejas.model.Producto;
-import com.example.sistema_venta_chocotejas.model.Slider;
-import com.example.sistema_venta_chocotejas.service.SliderService;
+import com.example.sistema_venta_chocotejas.model.Momento;
+import com.example.sistema_venta_chocotejas.service.MomentoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,49 +12,48 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/gestion/sliders")
-public class SliderController {
-    private final SliderService sliderService;
+@RequestMapping("/gestion/momentos")
+public class MomentoController {
+    private final MomentoService momentoService;
 
-    public SliderController(SliderService sliderService) {
-        this.sliderService = sliderService;
+    public MomentoController(MomentoService momentoService) {
+        this.momentoService = momentoService;
     }
 
     @GetMapping("/listar")
-    public String listarSliders() {
-        return "gestion/gestion-slider";
+    public String listarMomentos() {
+        return "gestion/gestion-momentos";
     }
 
     @GetMapping("api/listar")
     @ResponseBody
-    public ResponseEntity<?> listarSlider() {
+    public ResponseEntity<?> listarMomento() {
         Map<String, Object> response = new HashMap<>();
         response.put("success", true);
-        response.put("data", sliderService.listarSlidersActivos());
+        response.put("data", momentoService.listarMomentosActivos());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/api/{id}")
     @ResponseBody
-    public ResponseEntity<?> obtenerSlider(@PathVariable Long id) {
-        return sliderService.obtenerSliderPorId(id)
-                .map(slider -> {
+    public ResponseEntity<?> obtenerMomento(@PathVariable Long id) {
+        return momentoService.obtenerMomentoPorId(id)
+                .map(momento -> {
                     Map<String, Object> response = new HashMap<>();
                     response.put("success", true);
-                    // Preparamos los datos para el frontend
-                    Map<String, Object> productoData = new HashMap<>();
-                    productoData.put("id", slider.getId());
-                    productoData.put("nombre", slider.getNombre());
-                    productoData.put("descripcion", slider.getDescripcion());
-                    productoData.put("estado", slider.getEstado());
-                    productoData.put("activo", slider.getActivo());
-                    productoData.put("imagen", slider.getRuta());
+                    Map<String, Object> momentoData = new HashMap<>();
+                    momentoData.put("id", momento.getId());
+                    momentoData.put("nombre", momento.getNombre());
+                    momentoData.put("descripcion", momento.getDescripcion());
+                    momentoData.put("estado", momento.getEstado());
+                    momentoData.put("activo", momento.getActivo());
+                    momentoData.put("imagen", momento.getRuta());
 
-                    response.put("data", productoData);
+                    response.put("data", momentoData);
                     return ResponseEntity.ok(response);
                 }).orElse(ResponseEntity.notFound().build());
     }
-    // Método auxiliar para respuestas de error
+
     private Map<String, Object> createErrorResponse(String message) {
         Map<String, Object> response = new HashMap<>();
         response.put("success", false);
@@ -66,13 +63,12 @@ public class SliderController {
 
     @PostMapping("/api/guardar")
     @ResponseBody
-    public ResponseEntity<?> guardarSlider(
+    public ResponseEntity<?> guardarMomento(
             @RequestParam("nombre") String nombre,
             @RequestParam("descripcion") String descripcion,
             @RequestParam("imagenFile") MultipartFile imagenFile) {
 
         try {
-            // Validaciones
             if (nombre == null || nombre.trim().isEmpty()) {
                 return ResponseEntity.badRequest().body(createErrorResponse("El nombre es obligatorio"));
             }
@@ -81,18 +77,16 @@ public class SliderController {
                 return ResponseEntity.badRequest().body(createErrorResponse("La imagen es obligatoria"));
             }
 
+            Momento nuevoMomento = new Momento();
+            nuevoMomento.setNombre(nombre.trim());
+            nuevoMomento.setDescripcion(descripcion != null ? descripcion.trim() : "Sin descripción");
 
-            Slider nuevoSlider = new Slider();
-            nuevoSlider.setNombre(nombre.trim());
-            nuevoSlider.setDescripcion(descripcion != null ? descripcion.trim() : "Sin descripción");
-
-
-            Slider sliderGuardado = sliderService.guardarSlider(nuevoSlider, imagenFile);
+            Momento momentoGuardado = momentoService.guardarMomento(nuevoMomento, imagenFile);
 
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
-            response.put("message", "Producto creado con éxito");
-            response.put("data", sliderGuardado);
+            response.put("message", "Momento creado con éxito");
+            response.put("data", momentoGuardado);
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
@@ -106,30 +100,27 @@ public class SliderController {
 
     @PostMapping("/api/actualizar/{id}")
     @ResponseBody
-    public ResponseEntity<?> actualizarSlider(
+    public ResponseEntity<?> actualizarMomento(
             @PathVariable Long id,
             @RequestParam(value = "nombre", required = false) String nombre,
             @RequestParam(value = "descripcion", required = false) String descripcion,
             @RequestParam(value = "rutaFile", required = false) MultipartFile rutaFile) {
 
         try {
-            Slider slider = sliderService.obtenerSliderPorId(id)
-                    .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+            Momento momento = momentoService.obtenerMomentoPorId(id)
+                    .orElseThrow(() -> new RuntimeException("Momento no encontrado"));
 
             boolean hasChanges = false;
 
-
-            // Actualizar campos...
             if (nombre != null && !nombre.trim().isEmpty()) {
-                slider.setNombre(nombre.trim());
+                momento.setNombre(nombre.trim());
                 hasChanges = true;
             }
 
             if (descripcion != null) {
-                slider.setDescripcion(descripcion.trim());
+                momento.setDescripcion(descripcion.trim());
                 hasChanges = true;
             }
-
 
             if (rutaFile != null && !rutaFile.isEmpty()) {
                 hasChanges = true;
@@ -139,12 +130,12 @@ public class SliderController {
                 return ResponseEntity.badRequest().body(createErrorResponse("No se realizaron cambios"));
             }
 
-            Slider sliderActualizado = sliderService.guardarSlider(slider, rutaFile);
+            Momento momentoActualizado = momentoService.guardarMomento(momento, rutaFile);
 
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
-            response.put("message", "Producto actualizado con éxito");
-            response.put("data", sliderActualizado);
+            response.put("message", "Momento actualizado con éxito");
+            response.put("data", momentoActualizado);
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
@@ -156,41 +147,41 @@ public class SliderController {
 
     @PostMapping("/api/cambiar-estado/{id}")
     @ResponseBody
-    public ResponseEntity<?> cambiarEstadoSlider(@PathVariable Long id) {
+    public ResponseEntity<?> cambiarEstadoMomento(@PathVariable Long id) {
         Map<String, Object> response = new HashMap<>();
         try {
-            return sliderService.cambiarEstadoSlider(id)
-                    .map(slider -> {
+            return momentoService.cambiarEstadoMomento(id)
+                    .map(momento -> {
                         response.put("success", true);
-                        response.put("message", slider.getEstado() == 1 ? "Slider habilitado con éxito" : "Slider deshabilitado con éxito");
-                        response.put("data", slider);
+                        response.put("message", momento.getEstado() == 1 ? "Momento habilitado con éxito" : "Momento deshabilitado con éxito");
+                        response.put("data", momento);
                         return ResponseEntity.ok(response);
                     })
                     .orElseGet(() -> {
                         response.put("success", false);
-                        response.put("message", "Slider no encontrado");
+                        response.put("message", "Momento no encontrado");
                         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
                     });
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "Error al cambiar el estado del logo: " + e.getMessage());
+            response.put("message", "Error al cambiar el estado del momento: " + e.getMessage());
             return ResponseEntity.internalServerError().body(response);
         }
     }
 
     @PostMapping("/api/eliminar/{id}")
     @ResponseBody
-    public ResponseEntity<?> eliminarSlider(@PathVariable Long id) {
+    public ResponseEntity<?> eliminarMomento(@PathVariable Long id) {
         Map<String, Object> response = new HashMap<>();
         try {
-            if (sliderService.obtenerSliderPorId(id).isEmpty()) {
+            if (momentoService.obtenerMomentoPorId(id).isEmpty()) {
                 response.put("success", false);
-                response.put("message", "Producto no encontrado");
+                response.put("message", "Momento no encontrado");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
-            sliderService.eliminarSlider(id);
+            momentoService.eliminarMomento(id);
             response.put("success", true);
-            response.put("message", "Producto eliminado con éxito");
+            response.put("message", "Momento eliminado con éxito");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("success", false);
@@ -199,27 +190,27 @@ public class SliderController {
         }
     }
 
-    @PostMapping("/api/activar-logo/{id}")
+    @PostMapping("/api/activar-momento/{id}")
     @ResponseBody
-    public ResponseEntity<?> cambiarSliderActivo(@PathVariable Long id) {
+    public ResponseEntity<?> cambiarMomentoActivo(@PathVariable Long id) {
         Map<String, Object> response = new HashMap<>();
         try {
-            return sliderService.activarSlider(id)
-                    .map(slider -> {
+            return momentoService.activarMomento(id)
+                    .map(momento -> {
                         response.put("success", true);
-                        response.put("message", slider.getActivo() ?
-                                "Slider marcado como Activo" : "Slider ya no es Activo");
-                        response.put("data", slider);
+                        response.put("message", momento.getActivo() ?
+                                "Momento marcado como Activo" : "Momento ya no es Activo");
+                        response.put("data", momento);
                         return ResponseEntity.ok(response);
                     })
                     .orElseGet(() -> {
                         response.put("success", false);
-                        response.put("message", "Producto no encontrado");
+                        response.put("message", "Momento no encontrado");
                         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
                     });
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "Error al cambiar el estado destacado del producto: " + e.getMessage());
+            response.put("message", "Error al cambiar el estado destacado del momento: " + e.getMessage());
             return ResponseEntity.internalServerError().body(response);
         }
     }
