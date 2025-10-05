@@ -32,6 +32,7 @@ services:
     volumes:
       - ./imagenes:/app/imagenes
       - ./logos:/app/logos
+      - ./sliders:/app/sliders
 
   phpmyadmin:
     container_name: phpmyadmin_container
