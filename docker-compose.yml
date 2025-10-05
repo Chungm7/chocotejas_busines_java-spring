@@ -31,6 +31,7 @@ services:
       - db_mysql_chocotejas
     volumes:
       - ./imagenes:/app/imagenes
+      - ./logos:/app/logos
 
   phpmyadmin:
     container_name: phpmyadmin_container

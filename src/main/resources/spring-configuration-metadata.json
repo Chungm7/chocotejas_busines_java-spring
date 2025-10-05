@@ -4,6 +4,11 @@
       "name": "file.upload-dir",
       "type": "java.lang.String",
       "description": "Directorio para guardar los archivos de imagen subidos."
+    },
+    {
+      "name": "file.logo-dir",
+      "type": "java.lang.String",
+      "description": "Directorio para guardar los archivos de logo subidos."
     }
   ]
 }

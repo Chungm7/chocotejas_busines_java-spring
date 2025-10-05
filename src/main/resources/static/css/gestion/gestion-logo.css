@@ -1,0 +1,110 @@
+/*
+ * Estilos específicos para Gestión de Logos
+ */
+
+.logos-table thead th {
+    background: linear-gradient(135deg, var(--color-milk-chocolate) 0%, var(--color-medium-brown) 100%);
+    color: var(--color-cream);
+    font-weight: 600;
+    border: none;
+    padding: 12px 10px;
+}
+
+.logos-table tbody tr {
+    transition: background-color 0.3s ease;
+}
+
+.logos-table tbody tr:hover {
+    background-color: var(--color-caramel);
+}
+
+.logo-img-thumbnail {
+    border-radius: 6px;
+    border: 2px solid var(--color-caramel);
+    transition: all 0.3s ease;
+    max-height: 50px;
+    max-width: 50px;
+    object-fit: contain;
+    background-color: white;
+    padding: 2px;
+}
+
+.logo-img-thumbnail:hover {
+    transform: scale(1.1);
+    border-color: var(--color-accent);
+}
+
+.logos-modal .modal-header {
+    background: linear-gradient(135deg, var(--color-milk-chocolate) 0%, var(--color-medium-brown) 100%);
+    color: var(--color-cream);
+    border-bottom: none;
+    padding: 15px;
+}
+
+.logos-preview-container {
+    border: 2px dashed var(--color-caramel);
+    border-radius: 8px;
+    padding: 12px;
+    background-color: #fafafa;
+    transition: all 0.3s ease;
+}
+
+.logos-preview-container:hover {
+    border-color: var(--color-accent);
+    background-color: var(--color-cream);
+}
+
+.logos-preview-img {
+    max-height: 150px;
+    max-width: 100%;
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    object-fit: contain;
+    background-color: white;
+    padding: 5px;
+}
+
+.logos-form .form-control,
+.logos-form .form-select {
+    border-radius: 6px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+}
+
+.logos-form .form-control:focus,
+.logos-form .form-select:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 0.2rem rgba(255, 152, 0, 0.25);
+}
+
+/* Estilos específicos para el botón de activo */
+.btn-destacado.active {
+    background-color: rgba(255, 152, 0, 0.2);
+    border: 2px solid var(--color-accent);
+}
+
+.btn-destacado .bi-check-circle-fill {
+    font-size: 1.2rem;
+}
+
+.btn-destacado .bi-circle {
+    font-size: 1.2rem;
+    color: var(--color-light-brown);
+}
+
+.btn-destacado:hover .bi-circle {
+    color: var(--color-accent);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .logo-img-thumbnail {
+        max-height: 40px;
+        max-width: 40px;
+    }
+
+    .logos-preview-img {
+        max-height: 120px;
+    }
+}

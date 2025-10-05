@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CategoriaIServicempl implements CategoriaService {
+public class CategoriaIServiceImpl implements CategoriaService {
 
     private final CategoriaRepository categoriaRepository;
     private final ProductoRepository productoRepository;
 
-    public CategoriaIServicempl(CategoriaRepository categoriaRepository, ProductoRepository productoRepository) {
+    public CategoriaIServiceImpl(CategoriaRepository categoriaRepository, ProductoRepository productoRepository) {
         this.categoriaRepository = categoriaRepository;
         this.productoRepository = productoRepository;
     }
