@@ -7,5 +7,4 @@ public interface ContactoService {
     Optional<Contacto> obtenerContacto();
     Contacto guardarContacto(Contacto contacto);
     Contacto actualizarContacto(Contacto contacto);
-    void inicializarContacto();
 }

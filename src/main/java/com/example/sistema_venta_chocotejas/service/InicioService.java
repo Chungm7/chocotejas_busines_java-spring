@@ -7,5 +7,4 @@ public interface InicioService {
     Optional<Inicio> obtenerInicio();
     Inicio guardarInicio(Inicio inicio);
     Inicio actualizarInicio(Inicio inicio);
-    void inicializarInicio();
 }

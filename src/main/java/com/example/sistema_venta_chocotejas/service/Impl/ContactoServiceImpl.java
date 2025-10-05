@@ -52,16 +52,4 @@ public class ContactoServiceImpl implements ContactoService {
         }
     }
 
-    @Override
-    @Transactional
-    public void inicializarContacto() {
-        if (contactoRepository.obtenerContacto() == null) {
-            Contacto contactoInicial = new Contacto();
-            contactoInicial.setTelefono("+51 123 456 789");
-            contactoInicial.setDireccion("Av. Principal 123, Lima, Perú");
-            contactoInicial.setEmail("info@chocotejas.com");
-            contactoInicial.setDescripcion("Somos una empresa dedicada a la producción y venta de los mejores chocolates y tejas del Perú.");
-            contactoRepository.save(contactoInicial);
-        }
-    }
 }

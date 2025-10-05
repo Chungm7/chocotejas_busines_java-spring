@@ -16,7 +16,6 @@ public class InicioServiceImpl implements InicioService {
     public InicioServiceImpl(InicioRepository inicioRepository) {
         this.inicioRepository = inicioRepository;
         // Inicializar el inicio si no existe
-        this.inicializarInicio();
     }
 
     @Override
@@ -47,25 +46,6 @@ public class InicioServiceImpl implements InicioService {
         } else {
             // Si no existe, crear uno nuevo
             return inicioRepository.save(inicio);
-        }
-    }
-
-    @Override
-    @Transactional
-    public void inicializarInicio() {
-        if (inicioRepository.obtenerInicio() == null) {
-            Inicio inicioInicial = new Inicio();
-            inicioInicial.setTitulo("Bienvenido a ChocoTejas");
-            inicioInicial.setContenido("""
-                <h2>Descubre el auténtico sabor peruano</h2>
-                <p>En ChocoTejas nos enorgullecemos de ofrecer los mejores chocolates y tejas artesanales, 
-                elaborados con ingredientes 100% naturales y recetas tradicionales que han pasado de 
-                generación en generación.</p>
-                <p>Nuestra pasión por la calidad y el sabor nos ha convertido en líderes del sector, 
-                llevando la dulzura peruana a cada hogar.</p>
-                <p>¡Déjate seducir por el exquisito sabor de nuestros productos!</p>
-                """);
-            inicioRepository.save(inicioInicial);
         }
     }
 }
