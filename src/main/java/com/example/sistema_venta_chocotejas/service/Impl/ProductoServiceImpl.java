@@ -170,4 +170,9 @@ public class ProductoServiceImpl implements ProductoService {
             return productoRepository.save(producto);
         });
     }
+    @Override
+    @Transactional(readOnly = true)
+    public List<Producto> listarProductosDestacadosActivos() {
+        return productoRepository.findByDestacadoTrueAndEstado(1);
+    }
 }

@@ -12,8 +12,11 @@ document.addEventListener('DOMContentLoaded', function() {
     let selectedCategories = new Set();
     let maxPrice = 10;
 
-    // Inicializar la galería
-    initializeGallery();
+    // Si existen los elementos de la galería, inicializar filtros
+    if (searchInput && categoryFilters && priceRange && productGalleryContainer) {
+        initializeGallery();
+    }
+    initializeWhatsApp();
 
     // Event Listeners
     searchInput.addEventListener('input', filterProducts);
@@ -76,6 +79,15 @@ document.addEventListener('DOMContentLoaded', function() {
             checkbox.addEventListener('change', handleCategoryFilter);
         });
     }
+    function initializeWhatsApp() {
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('whatsapp-order-btn') ||
+                e.target.closest('.whatsapp-order-btn')) {
+                const button = e.target.classList.contains('whatsapp-order-btn') ? e.target : e.target.closest('.whatsapp-order-btn');
+                handleWhatsAppOrder(button);
+            }
+        });
+    }
 
     // Manejar filtro de categorías
     function handleCategoryFilter(e) {
@@ -119,22 +131,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Manejar pedido por WhatsApp
     function handleWhatsAppOrder(button) {
         const productId = button.dataset.productId;
         const productName = button.dataset.productName;
         const productPrice = button.dataset.productPrice;
 
-        // Construir mensaje de WhatsApp
         const mensaje = construirMensajeWhatsApp(productName, productPrice);
-
-        // Número de WhatsApp de la tienda (cambiar por el número real)
-        const phoneNumber = '51987654321';
+        const phoneNumber = '51987654321'; // Cambiar por número real
         const urlWhatsApp = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(mensaje)}`;
 
         window.open(urlWhatsApp, '_blank');
 
-        // Cerrar el modal después de enviar
         const modalElement = button.closest('.modal');
         const modal = bootstrap.Modal.getInstance(modalElement);
         if (modal) {
@@ -142,14 +149,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Construir mensaje para WhatsApp
     function construirMensajeWhatsApp(productName, productPrice) {
         let mensaje = `¡Hola! Estoy interesado en el siguiente producto:\n\n`;
         mensaje += `*${productName}*\n`;
         mensaje += `Precio: S/ ${parseFloat(productPrice).toFixed(2)}\n\n`;
         mensaje += `Por favor, necesito que me contacten para realizar mi pedido.`;
         mensaje += `\n\n(Mensaje generado desde la tienda online Chocotejas "El Sabor de Casa")`;
-
         return mensaje;
     }
 });

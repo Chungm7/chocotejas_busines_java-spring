@@ -36,4 +36,7 @@ public interface ProductoService {
     Long contarProductos();
 
     Optional<Producto> cambiarDestacadoProducto(Long id);
+
+    List<Producto> listarProductosDestacadosActivos();
+
 }

@@ -92,44 +92,96 @@
     <!-- Productos Destacados -->
     <section class="container my-5">
         <h2 class="text-center mb-4">Nuestros Productos Destacados</h2>
-        <div id="productos-destacados-container" class="row g-4">
-            <!-- Las fichas de productos se insertarán aquí dinámicamente -->
-            <div class="col-lg-4 col-md-6">
-                <div class="product-card">
-                    <img src="https://placehold.co/600x400/5D4037/FFF8E1?text=Chocoteja+Clásica" class="card-img-top" alt="Chocoteja Clásica">
-                    <div class="product-card-body">
-                        <h5 class="card-title">Chocoteja Clásica</h5>
-                        <p class="card-text">Deliciosa chocoteja tradicional con manjar blanco y nueces.</p>
-                        <div class="price">S/ 2.50</div>
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal1">Ver Detalles</button>
+
+        <!-- Carrusel para cuando hay más de 3 productos -->
+        <div th:if="${usarCarousel}">
+            <div id="destacadosCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+                <div class="carousel-indicators">
+                    <button th:each="producto, iter : ${productosDestacados}"
+                            type="button"
+                            th:data-bs-target="'#destacadosCarousel'"
+                            th:data-bs-slide-to="${iter.index}"
+                            th:classappend="${iter.index == 0} ? 'active' : ''"
+                            th:aria-label="'Slide ' + ${iter.index}"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div th:each="producto, iter : ${productosDestacados}"
+                         th:classappend="${iter.index == 0} ? 'carousel-item active' : 'carousel-item'">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="product-card h-100">
+                                    <img th:src="@{'/imagenes/' + ${producto.imagen}}"
+                                         class="card-img-top"
+                                         th:alt="${producto.nombre}"
+                                         style="height: 300px; object-fit: cover;">
+                                    <div class="product-card-body text-center">
+                                        <h5 th:text="${producto.nombre}" class="card-title"></h5>
+                                        <p class="card-text" th:text="${producto.descripcion}">Descripción del producto</p>
+                                        <div class="price" th:text="'S/ ' + ${#numbers.formatDecimal(producto.precio, 1, 2)}">Precio</div>
+                                        <div class="stock mb-2" th:classappend="${producto.stock == 0} ? 'text-danger' : 'text-success'"
+                                             th:text="${producto.stock == 0} ? 'Agotado' : 'Stock: ' + ${producto.stock}">
+                                            Stock
+                                        </div>
+                                        <button class="btn btn-primary"
+                                                th:if="${producto.stock > 0}"
+                                                th:data-bs-target="'#productModal' + ${producto.id}"
+                                                data-bs-toggle="modal">
+                                            Ver Detalles
+                                        </button>
+                                        <button class="btn btn-secondary" th:if="${producto.stock == 0}" disabled>
+                                            Agotado
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#destacadosCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#destacadosCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
             </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="product-card">
-                    <img src="https://placehold.co/600x400/8D6E63/FFF8E1?text=Chocoteja+Maracuyá" class="card-img-top" alt="Chocoteja Maracuyá">
-                    <div class="product-card-body">
-                        <h5 class="card-title">Chocoteja Maracuyá</h5>
-                        <p class="card-text">Exquisita combinación de chocolate con relleno de maracuyá.</p>
-                        <div class="price">S/ 3.00</div>
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal2">Ver Detalles</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="product-card">
-                    <img src="https://placehold.co/600x400/6D4C41/FFF8E1?text=Chocoteja+Piña+Colada" class="card-img-top" alt="Chocoteja Piña Colada">
-                    <div class="product-card-body">
-                        <h5 class="card-title">Chocoteja Piña Colada</h5>
-                        <p class="card-text">Sabor tropical con piña y coco en una deliciosa chocoteja.</p>
-                        <div class="price">S/ 3.20</div>
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal3">Ver Detalles</button>
+        </div>
+
+        <!-- Grid normal para cuando hay 3 o menos productos -->
+        <div th:unless="${usarCarousel}">
+            <div class="row g-4 justify-content-center">
+                <div th:each="producto : ${productosDestacados}" class="col-lg-4 col-md-6">
+                    <div class="product-card h-100">
+                        <img th:src="@{'/imagenes/' + ${producto.imagen}}"
+                             class="card-img-top"
+                             th:alt="${producto.nombre}"
+                             style="height: 250px; object-fit: cover;">
+                        <div class="product-card-body text-center">
+                            <h5 th:text="${producto.nombre}" class="card-title"></h5>
+                            <p class="card-text" th:text="${producto.descripcion}">Descripción del producto</p>
+                            <div class="price" th:text="'S/ ' + ${#numbers.formatDecimal(producto.precio, 1, 2)}">Precio</div>
+                            <div class="stock mb-2" th:classappend="${producto.stock == 0} ? 'text-danger' : 'text-success'"
+                                 th:text="${producto.stock == 0} ? 'Agotado' : 'Stock: ' + ${producto.stock}">
+                                Stock
+                            </div>
+                            <button class="btn btn-primary"
+                                    th:if="${producto.stock > 0}"
+                                    th:data-bs-target="'#productModal' + ${producto.id}"
+                                    data-bs-toggle="modal">
+                                Ver Detalles
+                            </button>
+                            <button class="btn btn-secondary" th:if="${producto.stock == 0}" disabled>
+                                Agotado
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="text-center mt-4">
-            <a href="galeria.html" class="btn btn-primary btn-lg">Ver Galería Completa</a>
+            <a th:href="@{/galeria/productos}" class="btn btn-primary btn-lg">Ver Galería Completa</a>
         </div>
     </section>
 
@@ -143,6 +195,56 @@
         </div>
     </section>
 </main>
+
+<!-- Modales para productos destacados - Generados dinámicamente -->
+<div th:each="producto : ${productosDestacados}"
+     class="modal fade"
+     th:id="'productModal' + ${producto.id}"
+     tabindex="-1"
+     th:aria-labelledby="'productModalLabel' + ${producto.id}"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" th:id="'productModalLabel' + ${producto.id}" th:text="${producto.nombre}">Nombre del producto</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img th:src="@{'/imagenes/' + ${producto.imagen}}"
+                             th:alt="${producto.nombre}"
+                             class="img-fluid rounded"
+                             style="max-height: 400px; object-fit: cover;">
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Descripción</h4>
+                        <p th:text="${producto.descripcion}">Descripción del producto</p>
+
+                        <h4>Categoría</h4>
+                        <p th:text="${producto.categoria.nombre}">Categoría</p>
+
+                        <h4>Información</h4>
+                        <ul>
+                            <li><strong>Precio:</strong> <span th:text="'S/ ' + ${#numbers.formatDecimal(producto.precio, 1, 2)}">Precio</span></li>
+                            <li th:if="${producto.stock > 0}"><strong>Stock disponible:</strong> <span th:text="${producto.stock}">Stock</span></li>
+                            <li th:if="${producto.stock == 0}" class="text-danger"><strong>Estado:</strong> Agotado</li>
+                        </ul>
+
+                        <div class="mt-4" th:if="${producto.stock > 0}">
+                            <button class="btn btn-success btn-lg w-100 whatsapp-order-btn"
+                                    th:data-product-id="${producto.id}"
+                                    th:data-product-name="${producto.nombre}"
+                                    th:data-product-price="${producto.precio}">
+                                <i class="bi bi-whatsapp"></i> Solicitar Pedido por WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Footer -->
 <footer class="footer">
@@ -176,9 +278,6 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Scripts de la base de datos y de la app -->
-<script src="../../static/js/client/database.js"></script>
-<script src="../../static/js/client/utils.js"></script>
-<script src="../../static/js/client/app.js"></script>
+<script th:src="@{/js/client/client-galeria.js}"></script>
 </body>
 </html>

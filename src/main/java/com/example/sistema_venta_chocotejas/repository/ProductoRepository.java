@@ -18,4 +18,7 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     Long countByEstado(Integer estado);
 
     Long countByEstadoNot(Integer estado);
+
+    List<Producto> findByDestacadoTrueAndEstado(Integer estado);
+
 }
