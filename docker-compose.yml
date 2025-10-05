@@ -33,6 +33,7 @@ services:
       - ./imagenes:/app/imagenes
       - ./logos:/app/logos
       - ./sliders:/app/sliders
+      - ./momentos:/app/momentos
 
   phpmyadmin:
     container_name: phpmyadmin_container
