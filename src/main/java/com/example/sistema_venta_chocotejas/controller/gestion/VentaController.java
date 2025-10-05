@@ -56,17 +56,12 @@ public class VentaController {
     @ResponseBody
     public ResponseEntity<?> registrarVenta(@RequestBody VentaRequest ventaRequest) {
         try {
-            // Validaciones básicas
-            if (ventaRequest.getIdCliente() == null) {
-                return ResponseEntity.badRequest().body(createErrorResponse("El ID del cliente es obligatorio"));
-            }
             if (ventaRequest.getDetalles() == null || ventaRequest.getDetalles().isEmpty()) {
                 return ResponseEntity.badRequest().body(createErrorResponse("Debe agregar al menos un producto a la venta"));
             }
 
             // Crear la venta
             Venta venta = new Venta();
-            venta.setIdCliente(ventaRequest.getIdCliente());
             venta.setFecha(LocalDateTime.now());
 
             Double total = 0.0;
@@ -123,12 +118,9 @@ public class VentaController {
 
     // Clases DTO para la request
     public static class VentaRequest {
-        private Long idCliente;
         private java.util.List<DetalleVentaRequest> detalles;
 
         // Getters y setters
-        public Long getIdCliente() { return idCliente; }
-        public void setIdCliente(Long idCliente) { this.idCliente = idCliente; }
         public java.util.List<DetalleVentaRequest> getDetalles() { return detalles; }
         public void setDetalles(java.util.List<DetalleVentaRequest> detalles) { this.detalles = detalles; }
     }

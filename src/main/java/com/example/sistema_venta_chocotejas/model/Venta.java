@@ -13,8 +13,6 @@ public class Venta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "id_cliente", nullable = false)
-    private Long idCliente;
 
     @Column(nullable = false)
     private LocalDateTime fecha;
@@ -34,9 +32,8 @@ public class Venta {
         this.fecha = LocalDateTime.now();
     }
 
-    public Venta(Long idCliente, Double total) {
+    public Venta( Double total) {
         this();
-        this.idCliente = idCliente;
         this.total = total;
     }
 
@@ -44,8 +41,6 @@ public class Venta {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public Long getIdCliente() { return idCliente; }
-    public void setIdCliente(Long idCliente) { this.idCliente = idCliente; }
 
     public LocalDateTime getFecha() { return fecha; }
     public void setFecha(LocalDateTime fecha) { this.fecha = fecha; }
