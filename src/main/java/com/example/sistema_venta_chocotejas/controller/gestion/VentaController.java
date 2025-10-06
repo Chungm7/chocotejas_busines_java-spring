@@ -73,8 +73,8 @@ public class VentaController {
                         .orElseThrow(() -> new RuntimeException("Producto no encontrado: " + detalleReq.getProductoId()));
 
                 // Validar que el producto tenga precio
-                if (producto.getPrecio() == null) {
-                    throw new RuntimeException("El producto '" + producto.getNombre() + "' no tiene precio asignado");
+                if (producto.getPrecio() == null || producto.getPrecio() <= 0) {
+                    throw new RuntimeException("El producto '" + producto.getNombre() + "' no tiene un precio válido asignado");
                 }
 
                 // Validar stock
@@ -84,11 +84,11 @@ public class VentaController {
                             ", solicitado: " + detalleReq.getCantidad());
                 }
 
+                // Crear detalle de venta usando el constructor corregido
                 DetalleVenta detalle = new DetalleVenta();
                 detalle.setProducto(producto);
                 detalle.setCantidad(detalleReq.getCantidad());
-                detalle.setPrecioUnitario(producto.getPrecio());
-                detalle.setSubtotal(detalleReq.getCantidad() * producto.getPrecio());
+                // El precio unitario se establece automáticamente en el setter de producto
 
                 venta.agregarDetalle(detalle);
                 total += detalle.getSubtotal();
@@ -106,6 +106,7 @@ public class VentaController {
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
+            e.printStackTrace(); // Para debugging
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);
             errorResponse.put("message", "Error al registrar la venta: " + e.getMessage());

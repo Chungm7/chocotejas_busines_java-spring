@@ -17,7 +17,7 @@ public class Venta {
     private LocalDateTime fecha;
 
     @Column(nullable = false)
-    private Double total;
+    private Double total = 0.0;
 
     @Column(nullable = false)
     private Integer estado = 1; // 1: activo, 0: eliminado
@@ -28,11 +28,12 @@ public class Venta {
     // Constructores
     public Venta() {
         this.fecha = LocalDateTime.now();
+        this.total = 0.0;
     }
 
     public Venta(Double total) {
         this();
-        this.total = total;
+        this.total = total != null ? total : 0.0;
     }
 
     // Getters y setters
@@ -42,8 +43,8 @@ public class Venta {
     public LocalDateTime getFecha() { return fecha; }
     public void setFecha(LocalDateTime fecha) { this.fecha = fecha; }
 
-    public Double getTotal() { return total; }
-    public void setTotal(Double total) { this.total = total; }
+    public Double getTotal() { return total != null ? total : 0.0; }
+    public void setTotal(Double total) { this.total = total != null ? total : 0.0; }
 
     public Integer getEstado() { return estado; }
     public void setEstado(Integer estado) { this.estado = estado; }
@@ -52,7 +53,9 @@ public class Venta {
     public void setDetalleVentas(List<DetalleVenta> detalleVentas) { this.detalleVentas = detalleVentas; }
 
     public void agregarDetalle(DetalleVenta detalle) {
-        detalleVentas.add(detalle);
-        detalle.setVenta(this);
+        if (detalle != null) {
+            detalleVentas.add(detalle);
+            detalle.setVenta(this);
+        }
     }
 }

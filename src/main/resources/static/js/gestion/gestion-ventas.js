@@ -263,7 +263,6 @@ function registrarVenta() {
     $(".producto-row").each(function() {
         const productoSelect = $(this).find(".producto-select");
         const cantidadInput = $(this).find(".cantidad-input");
-        const stockInfo = $(this).find(".stock-info");
 
         if (!productoSelect.val()) {
             hayErrores = true;
@@ -281,6 +280,13 @@ function registrarVenta() {
 
         const producto = productosDisponibles.find(p => p.id == productoSelect.val());
         const cantidad = parseInt(cantidadInput.val());
+
+        // Validar que el producto exista
+        if (!producto) {
+            hayErrores = true;
+            mostrarNotificacion("Producto no encontrado", "danger");
+            return false;
+        }
 
         // Validar que el producto tenga precio
         if (!producto.precio || producto.precio <= 0) {
@@ -356,7 +362,9 @@ function registrarVenta() {
             try {
                 const response = JSON.parse(xhr.responseText);
                 errorMsg = response.message || errorMsg;
-            } catch (e) {}
+            } catch (e) {
+                errorMsg = "Error de conexión al registrar la venta";
+            }
             mostrarNotificacion(errorMsg, "danger");
         },
         complete: function() {

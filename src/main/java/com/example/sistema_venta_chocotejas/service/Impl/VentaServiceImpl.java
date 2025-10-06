@@ -47,6 +47,16 @@ public class VentaServiceImpl implements VentaService {
         for (DetalleVenta detalle : venta.getDetalleVentas()) {
             Producto producto = detalle.getProducto();
 
+            // Validaciones de seguridad
+            if (producto == null) {
+                throw new IllegalArgumentException("Producto no puede ser null en el detalle de venta");
+            }
+
+            if (detalle.getPrecioUnitario() == null) {
+                // Si por alguna razón el precio unitario es null, usar el precio del producto
+                detalle.setPrecioUnitario(producto.getPrecio() != null ? producto.getPrecio() : 0.0);
+            }
+
             // Validar stock disponible
             if (producto.getStock() < detalle.getCantidad()) {
                 throw new IllegalArgumentException(
@@ -73,8 +83,10 @@ public class VentaServiceImpl implements VentaService {
         // Restaurar stock de productos
         for (DetalleVenta detalle : venta.getDetalleVentas()) {
             Producto producto = detalle.getProducto();
-            producto.setStock(producto.getStock() + detalle.getCantidad());
-            productoRepository.save(producto);
+            if (producto != null) {
+                producto.setStock(producto.getStock() + detalle.getCantidad());
+                productoRepository.save(producto);
+            }
         }
 
         // Cambiar estado a eliminado (0)
