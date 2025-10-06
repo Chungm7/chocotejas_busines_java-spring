@@ -1,6 +1,6 @@
 services:
   db_mysql_chocotejas:
-    container_name: db_mysql_container
+    container_name: db_mysql_container_chocotejas
     image: mysql:8.0
     ports:
       - "${MYSQL_PORT}:3306"   # host:contenedor
