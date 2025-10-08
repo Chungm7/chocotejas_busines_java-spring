@@ -14,8 +14,53 @@
     width: 200px;
     background: linear-gradient(180deg, var(--color-milk-chocolate) 0%, var(--color-medium-brown) 100%);
     color: var(--color-cream);
+    display: flex;
+    flex-direction: column;
 }
 
+/* Contenedor para el menú con scroll */
+.sidebar-menu-container {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 5px;
+    scroll-behavior: smooth;
+}
+
+/* Personalización del scrollbar para navegadores WebKit */
+.sidebar-menu-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar-menu-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.sidebar-menu-container::-webkit-scrollbar-thumb {
+    background: var(--color-accent);
+    border-radius: 3px;
+}
+
+.sidebar-menu-container::-webkit-scrollbar-thumb:hover {
+    background: var(--color-gold);
+}
+
+.sidebar-link.active {
+    position: relative;
+}
+
+.sidebar-link.active::after {
+    content: '';
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    background-color: var(--color-gold);
+    border-radius: 50%;
+}
 .sidebar .nav-link {
     color: var(--color-cream);
     transition: all 0.3s ease;
