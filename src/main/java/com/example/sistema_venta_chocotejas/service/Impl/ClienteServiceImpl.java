@@ -41,14 +41,33 @@ public class ClienteServiceImpl implements ClienteService {
     public Cliente guardarCliente(Cliente cliente) {
         // Validar que el número de documento no exista (excluyendo eliminados)
         if (clienteRepository.existsByNumeroDocumentoAndEstadoNot(cliente.getNumeroDocumento(), 2)) {
-            throw new IllegalArgumentException("Ya existe un cliente con ese número de documento");
+            throw new IllegalArgumentException("Ya existe un cliente con ese número de documento: " + cliente.getNumeroDocumento());
         }
+
+        // Validaciones adicionales
+        if (cliente.getTipoDocumento() == null || cliente.getTipoDocumento().trim().isEmpty()) {
+            throw new IllegalArgumentException("El tipo de documento es obligatorio");
+        }
+        if (cliente.getNumeroDocumento() == null || cliente.getNumeroDocumento().trim().isEmpty()) {
+            throw new IllegalArgumentException("El número de documento es obligatorio");
+        }
+        if (cliente.getNombreCompleto() == null || cliente.getNombreCompleto().trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre completo es obligatorio");
+        }
+        if (cliente.getDireccion() == null || cliente.getDireccion().trim().isEmpty()) {
+            throw new IllegalArgumentException("La dirección es obligatoria");
+        }
+
         return clienteRepository.save(cliente);
     }
 
     @Override
     @Transactional
     public Optional<Cliente> cambiarEstadoCliente(Long id) {
+        if (id == null || id <= 0) {
+            return Optional.empty();
+        }
+
         return clienteRepository.findById(id).map(cliente -> {
             if (cliente.getEstado() == 1) {
                 cliente.setEstado(0);
@@ -62,26 +81,54 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     @Transactional
     public void eliminarCliente(Long id) {
-        clienteRepository.findById(id).ifPresent(cliente -> {
-            cliente.setEstado(2);
-            clienteRepository.save(cliente);
-        });
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("El ID del cliente no puede ser nulo");
+        }
+
+        Cliente cliente = obtenerClientePorId(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado con ID: " + id));
+        cliente.setEstado(2);
+        clienteRepository.save(cliente);
     }
 
     @Override
     @Transactional
     public Optional<Cliente> actualizarCliente(Long id, String tipoDocumento, String numeroDocumento, String nombreCompleto, String direccion) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("El ID del cliente no puede ser nulo");
+        }
+
         return clienteRepository.findById(id).map(cliente -> {
-            // Validar que el número de documento no esté duplicado
-            if (clienteRepository.existsByNumeroDocumentoAndEstadoNot(numeroDocumento, 2) &&
-                    !cliente.getNumeroDocumento().equals(numeroDocumento)) {
-                throw new IllegalArgumentException("Ya existe un cliente con ese número de documento");
+            boolean hasChanges = false;
+
+            // Validar que el número de documento no esté duplicado (excluyendo el actual cliente y los eliminados)
+            if (numeroDocumento != null && !numeroDocumento.trim().equals(cliente.getNumeroDocumento())) {
+                if (clienteRepository.existsByNumeroDocumentoAndEstadoNotAndIdNot(numeroDocumento.trim(), 2, id)) {
+                    throw new IllegalArgumentException("Ya existe un cliente con ese número de documento: " + numeroDocumento);
+                }
+                cliente.setNumeroDocumento(numeroDocumento.trim());
+                hasChanges = true;
             }
 
-            cliente.setTipoDocumento(tipoDocumento);
-            cliente.setNumeroDocumento(numeroDocumento);
-            cliente.setNombreCompleto(nombreCompleto);
-            cliente.setDireccion(direccion);
+            if (tipoDocumento != null && !tipoDocumento.trim().equals(cliente.getTipoDocumento())) {
+                cliente.setTipoDocumento(tipoDocumento.trim());
+                hasChanges = true;
+            }
+
+            if (nombreCompleto != null && !nombreCompleto.trim().equals(cliente.getNombreCompleto())) {
+                cliente.setNombreCompleto(nombreCompleto.trim());
+                hasChanges = true;
+            }
+
+            if (direccion != null && !direccion.trim().equals(cliente.getDireccion())) {
+                cliente.setDireccion(direccion.trim());
+                hasChanges = true;
+            }
+
+            if (!hasChanges) {
+                throw new IllegalArgumentException("No se realizaron cambios en el cliente");
+            }
+
             return clienteRepository.save(cliente);
         });
     }

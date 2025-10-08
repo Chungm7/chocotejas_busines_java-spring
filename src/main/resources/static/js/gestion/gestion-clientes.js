@@ -112,11 +112,24 @@ $(document).ready(function () {
     $("#numeroDocumento").blur(function() {
         const tipo = $("#tipoDocumento").val();
         const numero = $(this).val().trim();
+        const idCliente = $("#idCliente").val();
 
         if (tipo && numero &&
             ((tipo === "DNI" && numero.length === 8) ||
                 (tipo === "RUC" && numero.length === 11))) {
-            consultarApiDocumento(tipo, numero);
+
+            // Primero verificar si el documento ya existe
+            verificarDocumentoExistente(numero, idCliente || null).then(existe => {
+                if (existe) {
+                    mostrarNotificacion("Ya existe un cliente con este número de documento", "warning");
+                    $("#formCliente button[type='submit']").prop("disabled", true);
+                } else {
+                    $("#formCliente button[type='submit']").prop("disabled", false);
+                    consultarApiDocumento(tipo, numero);
+                }
+            }).catch(() => {
+                consultarApiDocumento(tipo, numero);
+            });
         }
     });
 
@@ -342,6 +355,25 @@ function consultarApiDocumento(tipo, numero) {
             console.error("Error en la consulta API:", error);
             mostrarNotificacion("Error al consultar la API: " + (xhr.responseJSON?.message || error), "danger");
         }
+    });
+}
+
+function verificarDocumentoExistente(numeroDocumento, idCliente = null) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: "/gestion/clientes/api/verificar-documento",
+            type: "POST",
+            data: {
+                numeroDocumento: numeroDocumento,
+                idCliente: idCliente
+            },
+            success: function(res) {
+                resolve(res.existe);
+            },
+            error: function() {
+                reject(false);
+            }
+        });
     });
 }
 

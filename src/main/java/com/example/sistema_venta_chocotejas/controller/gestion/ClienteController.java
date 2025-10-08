@@ -1,6 +1,7 @@
 package com.example.sistema_venta_chocotejas.controller.gestion;
 
 import com.example.sistema_venta_chocotejas.model.Cliente;
+import com.example.sistema_venta_chocotejas.repository.ClienteRepository;
 import com.example.sistema_venta_chocotejas.service.Impl.ClienteServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +18,11 @@ import java.util.Optional;
 public class ClienteController {
 
     private final ClienteServiceImpl clienteService;
+    private final ClienteRepository clienteRepository;
 
-    public ClienteController(ClienteServiceImpl clienteService) {
+    public ClienteController(ClienteServiceImpl clienteService, ClienteRepository clienteRepository) {
         this.clienteService = clienteService;
+        this.clienteRepository = clienteRepository;
     }
 
     @GetMapping("/listar")
@@ -100,6 +103,20 @@ public class ClienteController {
             @RequestParam("direccion") String direccion) {
 
         try {
+            // Validaciones básicas
+            if (tipoDocumento == null || tipoDocumento.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body(createErrorResponse("El tipo de documento es obligatorio"));
+            }
+            if (numeroDocumento == null || numeroDocumento.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body(createErrorResponse("El número de documento es obligatorio"));
+            }
+            if (nombreCompleto == null || nombreCompleto.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body(createErrorResponse("El nombre completo es obligatorio"));
+            }
+            if (direccion == null || direccion.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body(createErrorResponse("La dirección es obligatoria"));
+            }
+
             Optional<Cliente> resultado = clienteService.actualizarCliente(id, tipoDocumento, numeroDocumento, nombreCompleto, direccion);
 
             if (resultado.isPresent()) {
@@ -109,14 +126,16 @@ public class ClienteController {
                 response.put("data", resultado.get());
                 return ResponseEntity.ok(response);
             } else {
-                return ResponseEntity.notFound().build();
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(createErrorResponse("Cliente no encontrado"));
             }
 
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(createErrorResponse(e.getMessage()));
         } catch (Exception e) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("success", false);
-            errorResponse.put("message", "Error al actualizar: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            e.printStackTrace(); // Para debugging
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(createErrorResponse("Error interno al actualizar el cliente: " + e.getMessage()));
         }
     }
 
@@ -168,5 +187,24 @@ public class ClienteController {
         response.put("success", false);
         response.put("message", message);
         return response;
+    }
+    // Y agregar este endpoint en el Controller:
+    @PostMapping("/api/verificar-documento")
+    @ResponseBody
+    public ResponseEntity<?> verificarDocumentoExistente(
+            @RequestParam("numeroDocumento") String numeroDocumento,
+            @RequestParam(value = "idCliente", required = false) Long idCliente) {
+
+        Map<String, Object> response = new HashMap<>();
+        boolean existe;
+
+        if (idCliente != null) {
+            existe = clienteRepository.existsByNumeroDocumentoAndEstadoNotAndIdNot(numeroDocumento, 2, idCliente);
+        } else {
+            existe = clienteRepository.existsByNumeroDocumentoAndEstadoNot(numeroDocumento, 2);
+        }
+
+        response.put("existe", existe);
+        return ResponseEntity.ok(response);
     }
 }
