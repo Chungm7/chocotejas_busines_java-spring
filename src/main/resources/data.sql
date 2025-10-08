@@ -5,13 +5,14 @@ INSERT INTO opciones (id, nombre, ruta, icono) VALUES
                                                    (3, 'Gestión de Perfiles', '/gestion/perfiles/listar', 'bi bi-shield-lock'),
                                                    (4, 'Gestión de Categorías', '/gestion/categorias/listar', 'bi bi-tags'),
                                                    (5, 'Gestión de Productos', '/gestion/productos/listar', 'bi bi-box-seam'),
-                                                   (6, 'Gestión de Ventas', '/gestion/ventas/listar', 'bi bi-cash-stack'),
-                                                   (7, 'Gestión de Slider', '/gestion/sliders/listar', 'bi bi-images'),
-                                                   (8, 'Gestión de Logo', '/gestion/logos/listar', 'bi bi-image'),
-                                                   (9, 'Gestión de Momentos', '/gestion/momentos/listar', 'bi bi-camera-reels'),
-                                                   (10, 'Gestion de Redes Sociales', '/gestion/redes-sociales/listar', 'bi bi-share'),
-                                                   (11, 'Gestión de Contacto', '/gestion/contacto/mostrar', 'bi bi-envelope'),
-                                                   (12, 'Gestion de Inicio', '/gestion/inicio/mostrar', 'bi bi-house');
+                                                   (6, 'Gestion de Clientes' , '/gestion/clientes/listar', 'bi bi-person-lines-fill'),
+                                                   (7, 'Gestión de Ventas', '/gestion/ventas/listar', 'bi bi-cash-stack'),
+                                                   (8, 'Gestión de Slider', '/gestion/sliders/listar', 'bi bi-images'),
+                                                   (9, 'Gestión de Logo', '/gestion/logos/listar', 'bi bi-image'),
+                                                   (10, 'Gestión de Momentos', '/gestion/momentos/listar', 'bi bi-camera-reels'),
+                                                   (11, 'Gestion de Redes Sociales', '/gestion/redes-sociales/listar', 'bi bi-share'),
+                                                   (12, 'Gestión de Contacto', '/gestion/contacto/mostrar', 'bi bi-envelope'),
+                                                   (13, 'Gestion de Inicio', '/gestion/inicio/mostrar', 'bi bi-house');
 
 
 -- Inserciones de datos iniciales para perfiles
@@ -31,7 +32,8 @@ INSERT INTO perfil_opcion (id_perfil, id_opcion) VALUES
                                                      (1, 9),
                                                      (1, 10),
                                                      (1, 11),
-                                                     (1, 12);
+                                                     (1, 12),
+                                                     (1, 13);
 
 -- Inserciones de datos iniciales para usuarios
 INSERT INTO usuarios (id, nombre, usuario, clave, correo, estado, id_perfil) VALUES

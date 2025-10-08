@@ -55,11 +55,25 @@ public class ClienteController {
     public ResponseEntity<?> guardarCliente(
             @RequestParam("tipoDocumento") String tipoDocumento,
             @RequestParam("numeroDocumento") String numeroDocumento,
+            @RequestParam("nombreCompleto") String nombreCompleto,
             @RequestParam("direccion") String direccion) {
 
         try {
-            // Validar y construir el cliente usando las APIs externas
-            Cliente cliente = clienteService.validarYConstruirCliente(tipoDocumento, numeroDocumento, direccion);
+            // Validaciones básicas
+            if (nombreCompleto == null || nombreCompleto.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body(createErrorResponse("El nombre completo es obligatorio"));
+            }
+            if (direccion == null || direccion.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body(createErrorResponse("La dirección es obligatoria"));
+            }
+
+            Cliente cliente = new Cliente();
+            cliente.setTipoDocumento(tipoDocumento);
+            cliente.setNumeroDocumento(numeroDocumento);
+            cliente.setNombreCompleto(nombreCompleto.trim());
+            cliente.setDireccion(direccion.trim());
+            cliente.setEstado(1); // Siempre activo al crearse
+
             Cliente clienteGuardado = clienteService.guardarCliente(cliente);
 
             Map<String, Object> response = new HashMap<>();
@@ -82,14 +96,11 @@ public class ClienteController {
             @PathVariable Long id,
             @RequestParam("tipoDocumento") String tipoDocumento,
             @RequestParam("numeroDocumento") String numeroDocumento,
+            @RequestParam("nombreCompleto") String nombreCompleto,
             @RequestParam("direccion") String direccion) {
 
         try {
-            // Revalidar el documento en las APIs
-            Cliente clienteActualizado = clienteService.validarYConstruirCliente(tipoDocumento, numeroDocumento, direccion);
-            clienteActualizado.setId(id);
-
-            Optional<Cliente> resultado = clienteService.actualizarCliente(id, clienteActualizado);
+            Optional<Cliente> resultado = clienteService.actualizarCliente(id, tipoDocumento, numeroDocumento, nombreCompleto, direccion);
 
             if (resultado.isPresent()) {
                 Map<String, Object> response = new HashMap<>();
@@ -149,5 +160,13 @@ public class ClienteController {
             response.put("message", "Error al eliminar el cliente: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
+    }
+
+    // Método auxiliar para respuestas de error
+    private Map<String, Object> createErrorResponse(String message) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", false);
+        response.put("message", message);
+        return response;
     }
 }

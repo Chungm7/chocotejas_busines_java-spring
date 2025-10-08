@@ -13,7 +13,6 @@ public interface ClienteService {
     Cliente guardarCliente(Cliente cliente);
     Optional<Cliente> cambiarEstadoCliente(Long id);
     void eliminarCliente(Long id);
-    Optional<Cliente> actualizarCliente(Long id, Cliente cliente);
+    Optional<Cliente> actualizarCliente(Long id, String tipoDocumento, String numeroDocumento, String nombreCompleto, String direccion);
     Optional<Cliente> buscarPorDocumento(String numeroDocumento);
-    Cliente validarYConstruirCliente(String tipoDocumento, String numeroDocumento, String direccion) throws IOException;
 }
