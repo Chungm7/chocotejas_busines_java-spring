@@ -13,19 +13,24 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.sistema_venta_chocotejas.model.Cliente;
+import com.example.sistema_venta_chocotejas.repository.ClienteRepository;
+
 @Service
 public class VentaServiceImpl implements VentaService {
 
     private final VentaRepository ventaRepository;
     private final DetalleVentaRepository detalleVentaRepository;
     private final ProductoRepository productoRepository;
+    private final ClienteRepository clienteRepository;
 
     public VentaServiceImpl(VentaRepository ventaRepository,
                             DetalleVentaRepository detalleVentaRepository,
-                            ProductoRepository productoRepository) {
+                            ProductoRepository productoRepository, ClienteRepository clienteRepository) {
         this.ventaRepository = ventaRepository;
         this.detalleVentaRepository = detalleVentaRepository;
         this.productoRepository = productoRepository;
+        this.clienteRepository = clienteRepository;
     }
 
     @Override
@@ -42,7 +47,22 @@ public class VentaServiceImpl implements VentaService {
 
     @Override
     @Transactional
-    public Venta registrarVenta(Venta venta) {
+    public Venta registrarVenta(Venta venta, Long clienteId, String tipoPago) {
+        // Asignar cliente
+        Cliente cliente = clienteRepository.findById(clienteId)
+                .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado con ID: " + clienteId));
+        venta.setCliente(cliente);
+
+        // Establecer tipo de pago y estado
+        venta.setTipoPago(tipoPago);
+        if ("Contado".equalsIgnoreCase(tipoPago)) {
+            venta.setEstadoPago("Pagado");
+            venta.setMontoPagado(venta.getTotal());
+        } else {
+            venta.setEstadoPago("Pendiente");
+            venta.setMontoPagado(0.0);
+        }
+
         // Validar stock y actualizar productos
         for (DetalleVenta detalle : venta.getDetalleVentas()) {
             Producto producto = detalle.getProducto();

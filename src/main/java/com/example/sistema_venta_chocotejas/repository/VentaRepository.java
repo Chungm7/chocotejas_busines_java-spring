@@ -16,4 +16,6 @@ public interface VentaRepository extends JpaRepository<Venta, Long> {
     List<Venta> findVentasActivas();
 
     Long countByEstado(Integer estado);
+
+    List<Venta> findByEstadoPago(String estadoPago);
 }

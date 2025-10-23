@@ -8,7 +8,7 @@ public interface VentaService {
 
     List<Venta> listarVentasActivas();
     Optional<Venta> obtenerVentaPorId(Long id);
-    Venta registrarVenta(Venta venta);
+    Venta registrarVenta(Venta venta, Long clienteId, String tipoPago);
     void eliminarVenta(Long id);
     Long contarVentasActivas();
 }

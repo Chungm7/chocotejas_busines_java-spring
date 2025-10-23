@@ -108,30 +108,6 @@ $(document).ready(function () {
         $("#nombreCompleto").val("");
     });
 
-    // Consultar API al perder foco del número de documento
-    $("#numeroDocumento").blur(function() {
-        const tipo = $("#tipoDocumento").val();
-        const numero = $(this).val().trim();
-        const idCliente = $("#idCliente").val();
-
-        if (tipo && numero &&
-            ((tipo === "DNI" && numero.length === 8) ||
-                (tipo === "RUC" && numero.length === 11))) {
-
-            // Primero verificar si el documento ya existe
-            verificarDocumentoExistente(numero, idCliente || null).then(existe => {
-                if (existe) {
-                    mostrarNotificacion("Ya existe un cliente con este número de documento", "warning");
-                    $("#formCliente button[type='submit']").prop("disabled", true);
-                } else {
-                    $("#formCliente button[type='submit']").prop("disabled", false);
-                    consultarApiDocumento(tipo, numero);
-                }
-            }).catch(() => {
-                consultarApiDocumento(tipo, numero);
-            });
-        }
-    });
 
     // Botón nuevo cliente
     $("#btnNuevoCliente").click(function () {
@@ -280,81 +256,35 @@ $(document).ready(function () {
             }
         });
     });
+
+    // Verificar cliente
+    $("#btnVerificarCliente").click(function () {
+        verificarCliente();
+    });
 });
 
-// Función para consultar la API de documentos
-function consultarApiDocumento(tipo, numero) {
-    // Mostrar loading
-    $("#infoApi").html('<small><i class="spinner-border spinner-border-sm"></i> Consultando API...</small>').show();
+function verificarCliente() {
+    const tipoDocumento = $("#tipoDocumento").val();
+    const numeroDocumento = $("#numeroDocumento").val().trim();
 
-    let url;
-    if (tipo === "DNI") {
-        url = `https://miapi.cloud/v1/dni/${numero}`;
-    } else {
-        url = `https://miapi.cloud/v1/ruc/${numero}`;
+    if (!numeroDocumento) {
+        mostrarNotificacion("Ingrese un número de documento", "danger");
+        return;
     }
 
-    $.ajax({
-        url: url,
-        type: "GET",
-        headers: {
-            "Authorization": `Bearer ${API_TOKEN}`,
-            "Accept": "application/json"
-        },
-        success: function (res) {
-            if (res.success) {
-                let nombreCompleto = "";
-                let estadoApi = "";
-
-                if (tipo === "DNI") {
-                    // Construir nombre completo para DNI
-                    const datos = res.datos;
-                    nombreCompleto = `${datos.nombres} ${datos.ape_paterno} ${datos.ape_materno}`.trim();
-                    estadoApi = "ACTIVO"; // DNI siempre activo
-                } else {
-                    // Para RUC
-                    const datos = res.datos;
-                    nombreCompleto = datos.razon_social;
-                    estadoApi = datos.estado;
-                }
-
-                // Actualizar el campo oculto con el nombre completo
-                $("#nombreCompleto").val(nombreCompleto);
-
-                // Mostrar información en el modal
-                $("#infoNombre").text(nombreCompleto);
-
-                if (tipo === "RUC") {
-                    $("#infoEstado").text(`Estado: ${estadoApi}`);
-                    if (estadoApi !== "ACTIVO") {
-                        $("#infoApi").removeClass("alert-info").addClass("alert-warning");
-                        mostrarNotificacion("El RUC no está activo. No se puede registrar.", "warning");
-                    } else {
-                        $("#infoApi").removeClass("alert-warning").addClass("alert-info");
-                    }
-                } else {
-                    $("#infoEstado").text("Estado: ACTIVO (DNI)");
-                    $("#infoApi").removeClass("alert-warning").addClass("alert-info");
-                }
-
-                $("#infoApi").show();
-
-                // Si es RUC y no está activo, deshabilitar el botón de guardar
-                if (tipo === "RUC" && estadoApi !== "ACTIVO") {
-                    $("#formCliente button[type='submit']").prop("disabled", true);
-                } else {
-                    $("#formCliente button[type='submit']").prop("disabled", false);
-                }
-            } else {
-                $("#infoApi").hide();
-                mostrarNotificacion("Documento no encontrado en la API", "warning");
-            }
-        },
-        error: function(xhr, status, error) {
-            $("#infoApi").hide();
-            console.error("Error en la consulta API:", error);
-            mostrarNotificacion("Error al consultar la API: " + (xhr.responseJSON?.message || error), "danger");
+    $.get(`/gestion/clientes/api/consultar-documento?tipoDocumento=${tipoDocumento}&numeroDocumento=${numeroDocumento}`, function (res) {
+        if (res.success) {
+            const cliente = res.data;
+            $("#nombreCompleto").val(cliente.nombreCompleto);
+            $("#direccion").val(cliente.direccion);
+            $("#infoNombre").text(cliente.nombreCompleto);
+            $("#infoApi").show();
+            mostrarNotificacion("Cliente encontrado y datos rellenados", "success");
+        } else {
+            mostrarNotificacion(res.message, "danger");
         }
+    }).fail(function () {
+        mostrarNotificacion("Error al verificar el cliente", "danger");
     });
 }
 

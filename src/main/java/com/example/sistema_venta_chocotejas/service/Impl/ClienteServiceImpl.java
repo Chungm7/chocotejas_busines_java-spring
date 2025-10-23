@@ -3,19 +3,23 @@ package com.example.sistema_venta_chocotejas.service.Impl;
 import com.example.sistema_venta_chocotejas.model.Cliente;
 import com.example.sistema_venta_chocotejas.repository.ClienteRepository;
 import com.example.sistema_venta_chocotejas.service.ClienteService;
+import com.example.sistema_venta_chocotejas.service.ExternalApiService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.JsonNode;
 @Service
 public class ClienteServiceImpl implements ClienteService {
 
     private final ClienteRepository clienteRepository;
+    private final ExternalApiService externalApiService;
 
-    public ClienteServiceImpl(ClienteRepository clienteRepository) {
+    public ClienteServiceImpl(ClienteRepository clienteRepository, ExternalApiService externalApiService) {
         this.clienteRepository = clienteRepository;
+        this.externalApiService = externalApiService;
     }
 
     @Override
@@ -137,5 +141,45 @@ public class ClienteServiceImpl implements ClienteService {
     @Transactional(readOnly = true)
     public Optional<Cliente> buscarPorDocumento(String numeroDocumento) {
         return clienteRepository.findByNumeroDocumentoAndEstadoNot(numeroDocumento, 2);
+    }
+
+    @Override
+    @Transactional
+    public Cliente buscarOCrearCliente(String tipoDocumento, String numeroDocumento) {
+        // Buscar cliente existente
+        Optional<Cliente> clienteOpt = buscarPorDocumento(numeroDocumento);
+        if (clienteOpt.isPresent()) {
+            return clienteOpt.get();
+        }
+
+        // Si no existe, consultar la API externa
+        JsonNode apiData;
+        if ("DNI".equalsIgnoreCase(tipoDocumento)) {
+            apiData = externalApiService.consultarDNI(numeroDocumento);
+        } else if ("RUC".equalsIgnoreCase(tipoDocumento)) {
+            apiData = externalApiService.consultarRUC(numeroDocumento);
+        } else {
+            throw new IllegalArgumentException("Tipo de documento no válido: " + tipoDocumento);
+        }
+
+        if (apiData == null || apiData.get("success").asBoolean() == false) {
+            throw new RuntimeException("No se pudo obtener datos del documento: " + numeroDocumento);
+        }
+
+        // Crear y guardar el nuevo cliente
+        Cliente nuevoCliente = new Cliente();
+        nuevoCliente.setTipoDocumento(tipoDocumento);
+        nuevoCliente.setNumeroDocumento(numeroDocumento);
+
+        if ("DNI".equalsIgnoreCase(tipoDocumento)) {
+            nuevoCliente.setNombreCompleto(apiData.get("nombre").asText());
+            nuevoCliente.setDireccion(""); // API de DNI no provee dirección
+        } else { // RUC
+            nuevoCliente.setNombreCompleto(apiData.get("razonSocial").asText());
+            nuevoCliente.setDireccion(apiData.get("direccion").asText());
+        }
+
+        nuevoCliente.setEstado(1); // Activo
+        return guardarCliente(nuevoCliente);
     }
 }

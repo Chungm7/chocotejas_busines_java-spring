@@ -1,0 +1,24 @@
+{
+  "properties": [
+    {
+      "name": "file.upload-dir",
+      "type": "java.lang.String",
+      "description": "Directorio para guardar los archivos de imagen subidos."
+    },
+    {
+      "name": "file.logo-dir",
+      "type": "java.lang.String",
+      "description": "Directorio para guardar los archivos de logo subidos."
+    },
+    {
+      "name": "file.slider-dir",
+      "type": "java.lang.String",
+      "description": "Directorio prar guardar los archivos de slider subidos."
+    },
+    {
+      "name": "file.momentos-dir",
+      "type": "java.lang.String",
+      "description": "Directorio prar guardar los archivos de moemntos subidos."
+    }
+  ]
+}

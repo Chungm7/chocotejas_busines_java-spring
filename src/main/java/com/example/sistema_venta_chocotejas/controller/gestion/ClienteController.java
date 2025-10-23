@@ -207,4 +207,21 @@ public class ClienteController {
         response.put("existe", existe);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/api/consultar-documento")
+    @ResponseBody
+    public ResponseEntity<?> consultarDocumento(
+            @RequestParam("tipoDocumento") String tipoDocumento,
+            @RequestParam("numeroDocumento") String numeroDocumento) {
+        try {
+            Cliente cliente = clienteService.buscarOCrearCliente(tipoDocumento, numeroDocumento);
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("data", cliente);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(createErrorResponse("Error al consultar documento: " + e.getMessage()));
+        }
+    }
 }

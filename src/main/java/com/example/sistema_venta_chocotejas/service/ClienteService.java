@@ -15,4 +15,5 @@ public interface ClienteService {
     void eliminarCliente(Long id);
     Optional<Cliente> actualizarCliente(Long id, String tipoDocumento, String numeroDocumento, String nombreCompleto, String direccion);
     Optional<Cliente> buscarPorDocumento(String numeroDocumento);
+    Cliente buscarOCrearCliente(String tipoDocumento, String numeroDocumento);
 }

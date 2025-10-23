@@ -60,6 +60,13 @@ public class VentaController {
             if (ventaRequest.getDetalles() == null || ventaRequest.getDetalles().isEmpty()) {
                 return ResponseEntity.badRequest().body(createErrorResponse("Debe agregar al menos un producto a la venta"));
             }
+            if (ventaRequest.getClienteId() == null) {
+                return ResponseEntity.badRequest().body(createErrorResponse("Debe seleccionar un cliente"));
+            }
+            if (ventaRequest.getTipoPago() == null || ventaRequest.getTipoPago().trim().isEmpty()) {
+                return ResponseEntity.badRequest().body(createErrorResponse("Debe seleccionar un tipo de pago"));
+            }
+
 
             // Crear la venta
             Venta venta = new Venta();
@@ -97,7 +104,7 @@ public class VentaController {
             venta.setTotal(total);
 
             // Registrar venta (esto actualizará el stock automáticamente)
-            Venta ventaRegistrada = ventaService.registrarVenta(venta);
+            Venta ventaRegistrada = ventaService.registrarVenta(venta, ventaRequest.getClienteId(), ventaRequest.getTipoPago());
 
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
@@ -132,9 +139,17 @@ public class VentaController {
 
     // Clases DTO para la request
     public static class VentaRequest {
+        private Long clienteId;
+        private String tipoPago;
         private java.util.List<DetalleVentaRequest> detalles;
 
         // Getters y setters
+        public Long getClienteId() { return clienteId; }
+        public void setClienteId(Long clienteId) { this.clienteId = clienteId; }
+
+        public String getTipoPago() { return tipoPago; }
+        public void setTipoPago(String tipoPago) { this.tipoPago = tipoPago; }
+
         public java.util.List<DetalleVentaRequest> getDetalles() { return detalles; }
         public void setDetalles(java.util.List<DetalleVentaRequest> detalles) { this.detalles = detalles; }
     }

@@ -1,0 +1,139 @@
+/*
+ * Estilos específicos para Gestión de Ventas
+ */
+
+.ventas-table thead th {
+    background: linear-gradient(135deg, var(--color-milk-chocolate) 0%, var(--color-medium-brown) 100%);
+    color: var(--color-cream);
+    font-weight: 600;
+    border: none;
+    padding: 12px 10px;
+}
+
+.ventas-table tbody tr {
+    transition: background-color 0.3s ease;
+}
+
+.ventas-table tbody tr:hover {
+    background-color: var(--color-caramel);
+}
+
+.venta-modal .modal-header {
+    background: linear-gradient(135deg, var(--color-milk-chocolate) 0%, var(--color-medium-brown) 100%);
+    color: var(--color-cream);
+    border-bottom: none;
+    padding: 15px;
+}
+
+/* Filas de productos en el modal */
+.producto-row {
+    background-color: #fafafa;
+    transition: all 0.3s ease;
+    border: 1px solid #e0e0e0 !important;
+}
+
+.producto-row:hover {
+    background-color: var(--color-cream);
+    border-color: var(--color-accent) !important;
+}
+
+.venta-form .form-control,
+.venta-form .form-select {
+    border-radius: 6px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+}
+
+.venta-form .form-control:focus,
+.venta-form .form-select:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 0.2rem rgba(255, 152, 0, 0.25);
+}
+
+/* Resumen de venta */
+.venta-summary {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+
+.total-venta {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-milk-chocolate);
+    border-top: 2px solid var(--color-accent);
+    padding-top: 8px;
+}
+
+/* Detalles de venta */
+.detalles-venta .list-group-item {
+    border: none;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 12px 15px;
+}
+
+.detalles-venta .list-group-item:last-child {
+    border-bottom: none;
+}
+
+.producto-img-thumbnail {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 2px solid var(--color-caramel);
+}
+
+/* Información de stock */
+.stock-info {
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.stock-disponible {
+    color: #198754;
+}
+
+.stock-bajo {
+    color: #fd7e14;
+}
+
+.stock-agotado {
+    color: #dc3545;
+}
+
+/* Badges para estados */
+.badge-venta {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .producto-row .col-md-2,
+    .producto-row .col-md-1 {
+        margin-top: 10px;
+    }
+
+    .venta-summary {
+        margin-top: 20px;
+    }
+}
+
+/* Efectos de loading */
+.loading-venta {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.producto-row {
+    animation: fadeIn 0.3s ease;
+}

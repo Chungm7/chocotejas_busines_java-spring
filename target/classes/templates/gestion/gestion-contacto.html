@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Contacto - ChocoSabor</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bootstrap-4/bootstrap-4.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Estilos personalizados -->
+    <link th:href="@{/css/gestion/gestion-base.css}" rel="stylesheet">
+    <link th:href="@{/css/gestion/gestion-sidebar.css}" rel="stylesheet">
+    <link th:href="@{/css/gestion/gestion-modales.css}" rel="stylesheet">
+    <link th:href="@{/css/gestion/gestion-contacto.css}" rel="stylesheet">
+</head>
+<body>
+
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div th:replace="~{gestion/gestion-sidebar :: sidebar(activeUri='/gestion/contacto/mostrar')}"></div>
+
+    <!-- Main content -->
+    <main id="main-content" class="main-content w-100">
+        <!-- Top bar -->
+        <header class="p-3 mb-3 border-bottom shadow-sm bg-cream">
+            <div class="d-flex align-items-center">
+                <button id="open-sidebar" class="btn btn-light d-md-none me-3 p-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+                    </svg>
+                </button>
+                <h1 class="h3 mb-0 fw-bold">Gestión de Información de Contacto</h1>
+            </div>
+        </header>
+
+        <!-- Formulario de Contacto -->
+        <div class="container-fluid p-4">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-md-10">
+                    <div class="card shadow-sm rounded-lg">
+                        <div class="card-header">
+                            <h2 class="card-title h5 mb-0 fw-bold">
+                                <i class="bi bi-telephone-fill me-2"></i>
+                                Información de Contacto
+                            </h2>
+                        </div>
+                        <div class="card-body">
+                            <form id="formContacto">
+                                <input type="hidden" id="idContacto" name="id">
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="telefono" class="form-label">
+                                                <i class="bi bi-telephone me-1"></i>
+                                                Teléfono *
+                                            </label>
+                                            <input type="text" id="telefono" name="telefono" class="form-control"
+                                                   required maxlength="20" placeholder="+51 123 456 789">
+                                            <div class="form-text">Número de teléfono de contacto</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="email" class="form-label">
+                                                <i class="bi bi-envelope me-1"></i>
+                                                Email *
+                                            </label>
+                                            <input type="email" id="email" name="email" class="form-control"
+                                                   required maxlength="100" placeholder="contacto@chocosabor.com">
+                                            <div class="form-text">Correo electrónico de contacto</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="direccion" class="form-label">
+                                        <i class="bi bi-geo-alt me-1"></i>
+                                        Dirección *
+                                    </label>
+                                    <input type="text" id="direccion" name="direccion" class="form-control"
+                                           required maxlength="200" placeholder="Av. Principal 123, Lima, Perú">
+                                    <div class="form-text">Dirección física de la empresa</div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="descripcion" class="form-label">
+                                        <i class="bi bi-chat-left-text me-1"></i>
+                                        Descripción
+                                    </label>
+                                    <textarea id="descripcion" name="descripcion" class="form-control"
+                                              rows="4" maxlength="500"
+                                              placeholder="Información adicional sobre la empresa..."></textarea>
+                                    <div class="form-text">Descripción o información adicional (máximo 500 caracteres)</div>
+                                </div>
+
+                                <div class="d-flex justify-content-end gap-2">
+                                    <button type="button" id="btnCancelar" class="btn btn-primary">Cancelar</button>
+                                    <button type="submit" class="btn btn-secondary">
+                                        <i class="bi bi-check-lg me-1"></i>
+                                        Guardar Cambios
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Información Adicional -->
+                    <div class="card shadow-sm rounded-lg mt-4">
+                        <div class="card-header">
+                            <h3 class="card-title h6 mb-0 fw-bold">
+                                <i class="bi bi-info-circle me-2"></i>
+                                Información Importante
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-info mb-0">
+                                <i class="bi bi-lightbulb me-2"></i>
+                                <strong>Nota:</strong> Esta información será visible en la sección de contacto del sitio web público.
+                                Asegúrese de que todos los datos sean correctos y estén actualizados.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Contenedor de notificaciones -->
+<div id="notification-container" class="position-fixed top-0 end-0 p-3" style="z-index: 2000;"></div>
+
+<!-- JS -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script th:src="@{/js/gestion/gestion-contacto.js}"></script>
+<script th:src="@{/js/gestion/gestion-main.js}"></script>
+</body>
+</html>

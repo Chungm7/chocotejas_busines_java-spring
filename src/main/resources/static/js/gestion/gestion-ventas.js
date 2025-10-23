@@ -3,6 +3,7 @@ let ventaModal;
 let detallesVentaModal;
 let formVenta;
 let productosDisponibles = [];
+let clienteSeleccionado = null;
 
 $(document).ready(function () {
     ventaModal = new bootstrap.Modal(document.getElementById("ventaModal"));
@@ -34,19 +35,15 @@ $(document).ready(function () {
                 }
             },
             {
-                data: "total",
-                render: function (total) {
-                    return `S/ ${total.toFixed(2)}`;
+                data: "cliente",
+                render: function (cliente) {
+                    return cliente ? cliente.nombreCompleto : 'N/A';
                 }
             },
             {
-                data: "detalleVentas",
-                render: function (detalles) {
-                    if (!detalles) return '-';
-                    const productos = detalles.map(d =>
-                        `${d.producto.nombre} (${d.cantidad} und)`
-                    );
-                    return productos.join(', ');
+                data: "total",
+                render: function (total) {
+                    return `S/ ${total.toFixed(2)}`;
                 }
             },
             {
@@ -172,7 +169,34 @@ $(document).ready(function () {
         const ventaId = $(this).data("id");
         eliminarVenta(ventaId);
     });
+
+    // Buscar cliente
+    $("#btnBuscarCliente").click(function () {
+        buscarCliente();
+    });
 });
+
+function buscarCliente() {
+    const tipoDocumento = $("#tipoDocumento").val();
+    const numeroDocumento = $("#numeroDocumento").val().trim();
+
+    if (!numeroDocumento) {
+        mostrarNotificacion("Ingrese un número de documento", "danger");
+        return;
+    }
+
+    $.get(`/gestion/clientes/api/consultar-documento?tipoDocumento=${tipoDocumento}&numeroDocumento=${numeroDocumento}`, function (res) {
+        if (res.success) {
+            clienteSeleccionado = res.data;
+            $("#nombreCliente").text(clienteSeleccionado.nombreCompleto);
+            mostrarNotificacion("Cliente encontrado", "success");
+        } else {
+            mostrarNotificacion(res.message, "danger");
+        }
+    }).fail(function () {
+        mostrarNotificacion("Error al buscar el cliente", "danger");
+    });
+}
 
 function cargarProductosDisponibles() {
     $.get("/gestion/productos/api/listar", function (res) {
@@ -206,6 +230,11 @@ function agregarFilaProducto() {
 }
 
 function resetFormVenta() {
+    clienteSeleccionado = null;
+    $("#tipoDocumento").val("DNI");
+    $("#numeroDocumento").val("");
+    $("#nombreCliente").text("-");
+    $("#tipoPago").val("Contado");
     $("#productosContainer").empty();
     $("#subtotalVenta").text("S/ 0.00");
     $("#igvVenta").text("S/ 0.00");
@@ -254,6 +283,11 @@ function calcularTotales() {
 }
 
 function registrarVenta() {
+    if (!clienteSeleccionado) {
+        mostrarNotificacion("Debe seleccionar un cliente", "danger");
+        return;
+    }
+
     const detalles = [];
     let hayErrores = false;
     let productosSinStock = [];
@@ -334,6 +368,8 @@ function registrarVenta() {
     }
 
     const ventaData = {
+        clienteId: clienteSeleccionado.id,
+        tipoPago: $("#tipoPago").val(),
         detalles: detalles
     };
 
@@ -388,6 +424,12 @@ function cargarDetallesVenta(ventaId) {
                         </div>
                     </div>
                     
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <strong>Cliente:</strong> ${venta.cliente.nombreCompleto}
+                        </div>
+                    </div>
+
                     <h6 class="fw-bold mb-3">Productos Vendidos:</h6>
                     <div class="list-group mb-4">
             `;
