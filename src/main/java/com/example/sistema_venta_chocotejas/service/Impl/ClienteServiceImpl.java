@@ -172,11 +172,14 @@ public class ClienteServiceImpl implements ClienteService {
         nuevoCliente.setNumeroDocumento(numeroDocumento);
 
         if ("DNI".equalsIgnoreCase(tipoDocumento)) {
-            nuevoCliente.setNombreCompleto(apiData.get("nombre").asText());
-            nuevoCliente.setDireccion(""); // API de DNI no provee dirección
+            String nombres = apiData.get("datos").get("nombres").asText();
+            String apePaterno = apiData.get("datos").get("ape_paterno").asText();
+            String apeMaterno = apiData.get("datos").get("ape_materno").asText();
+            nuevoCliente.setNombreCompleto(nombres + " " + apePaterno + " " + apeMaterno);
+            nuevoCliente.setDireccion("");
         } else { // RUC
-            nuevoCliente.setNombreCompleto(apiData.get("razonSocial").asText());
-            nuevoCliente.setDireccion(apiData.get("direccion").asText());
+            nuevoCliente.setNombreCompleto(apiData.get("datos").get("razon_social").asText());
+            nuevoCliente.setDireccion("");
         }
 
         nuevoCliente.setEstado(1); // Activo
