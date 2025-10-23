@@ -19,6 +19,15 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
+    @Value("${file.logo-dir}")
+    private String logoDir;
+
+    @Value("${file.slider-dir}")
+    private String sliderDir;
+
+    @Value("${file.momentos-dir}")
+    private String momentoDir;
+
     // Constructor para la inyección de dependencias.
     public WebConfig(SessionInterceptor sessionInterceptor) {
         this.sessionInterceptor = sessionInterceptor;
@@ -49,6 +58,13 @@ public class WebConfig implements WebMvcConfigurer {
         // 👇 NUEVO: mapeo para imágenes subidas dinámicamente
         registry.addResourceHandler("/imagenes/**")
                 .addResourceLocations("file:" + uploadDir);
+        // 👇 NUEVO: mapeo para imágenes subidas dinámicamente
+        registry.addResourceHandler("/logos/**")
+                .addResourceLocations("file:" + logoDir);
+        registry.addResourceHandler("/sliders/**")
+                .addResourceLocations("file:" + sliderDir);
+        registry.addResourceHandler("/momentos/**")
+                .addResourceLocations("file:" + momentoDir);
     }
 
     // Este método se usa para registrar interceptores.
@@ -63,6 +79,9 @@ public class WebConfig implements WebMvcConfigurer {
                         "/js/**",
                         "/images/**",
                         "/imagenes/**",
+                        "/logos/**",
+                        "/sliders/**",
+                        "/momentos/**",
                         "/error",
                         "/favicon.ico"
                 );

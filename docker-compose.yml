@@ -1,6 +1,6 @@
 services:
   db_mysql_chocotejas:
-    container_name: db_mysql_container
+    container_name: db_mysql_container_chocotejas
     image: mysql:8.0
     ports:
       - "${MYSQL_PORT}:3306"   # host:contenedor
@@ -31,6 +31,9 @@ services:
       - db_mysql_chocotejas
     volumes:
       - ./imagenes:/app/imagenes
+      - ./logos:/app/logos
+      - ./sliders:/app/sliders
+      - ./momentos:/app/momentos
 
   phpmyadmin:
     container_name: phpmyadmin_container

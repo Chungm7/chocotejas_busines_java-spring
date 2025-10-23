@@ -361,7 +361,6 @@ $(document).ready(function() {
         // Configurar campo de clave para edición
         $('#clave')
             .val('')
-            .removeAttr('required')
             .attr('placeholder', 'Dejar en blanco para conservar la contraseña actual')
             .attr('title', 'Dejar vacío para mantener la contraseña actual');
 

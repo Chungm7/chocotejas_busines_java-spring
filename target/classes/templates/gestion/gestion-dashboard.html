@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Acceso</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS principal -->
+    <link th:href="@{/css/gestion/gestion-base.css}" rel="stylesheet">
+    <link th:href="@{/css/gestion/gestion-sidebar.css}" rel="stylesheet">
+    <link th:href="@{/css/gestion/gestion-dashboard.css}" rel="stylesheet">
+</head>
+<body>
+<div class="d-flex">
+    <!-- Sidebar dinámico -->
+    <div th:replace="~{gestion/gestion-sidebar :: sidebar(activeUri='/gestion/dashboard/mostrar')}"></div>
+
+    <!-- Contenido principal -->
+    <div id="main-content" class="main-content w-100">
+        <header class="p-3 mb-3 border-bottom shadow-sm bg-cream">
+            <div class="d-flex align-items-center">
+                <button id="open-sidebar" class="btn btn-light d-md-none me-3 p-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                         class="bi bi-list" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                              d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+                    </svg>
+                </button>
+                <h1 class="h3 mb-0 fw-bold">Dashboard</h1>
+            </div>
+        </header>
+
+        <main class="container-fluid p-4">
+            <div class="row g-4">
+                <!-- Total de Usuarios -->
+                <div class="col-sm-6 col-lg-4"
+                    th:each="opcion : ${session.menuOpciones}"
+                    th:if="${opcion.ruta == '/gestion/usuarios/listar'}">
+                    <div class="card dashboard-card card-usuarios shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="stats-container">
+                                    <h5 class="card-title fw-semibold">Total de Usuarios</h5>
+                                    <h2 class="main-stat fw-bold" th:text="${totalUsuarios}">0</h2>
+                                    <div class="sub-stats">
+                                        <div class="sub-stat">
+                                            <span class="sub-stat-value" th:text="${totalUsuariosActivos}">0</span>
+                                            <span class="sub-stat-label">Activos</span>
+                                        </div>
+                                        <div class="sub-stat">
+                                            <span class="sub-stat-value" th:text="${totalUsuariosInactivos}">0</span>
+                                            <span class="sub-stat-label">Inactivos</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
+                                         class="bi bi-people-fill" viewBox="0 0 16 16">
+                                        <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                                        <path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/>
+                                        <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <a th:href="@{/gestion/usuarios/listar}" class="dashboard-link d-block mt-3">
+                                Ver detalles &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total de Perfiles -->
+                <div class="col-sm-6 col-lg-4"
+                     th:each="opcion : ${session.menuOpciones}"
+                     th:if="${opcion.ruta == '/gestion/perfiles/listar'}">
+                    <div class="card dashboard-card card-perfiles shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="stats-container">
+                                    <h5 class="card-title fw-semibold">Total de Perfiles</h5>
+                                    <h2 class="main-stat fw-bold" th:text="${totalPerfiles}">0</h2>
+                                    <div class="sub-stats">
+                                        <div class="sub-stat">
+                                            <span class="sub-stat-value" th:text="${totalPerfilesActivos}">0</span>
+                                            <span class="sub-stat-label">Activos</span>
+                                        </div>
+                                        <div class="sub-stat">
+                                            <span class="sub-stat-value" th:text="${totalPerfilesInactivos}">0</span>
+                                            <span class="sub-stat-label">Inactivos</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
+                                         class="bi bi-person-badge-fill" viewBox="0 0 16 16">
+                                        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm4.5 0a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zM8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm5 2.755C12.146 12.825 10.623 12 8 12s-4.146.826-5 1.755V14a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.245z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <a th:href="@{/gestion/perfiles/listar}" class="dashboard-link d-block mt-3">
+                                Ver detalles &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total de Productos -->
+                <div class="col-sm-6 col-lg-4"
+                     th:each="opcion : ${session.menuOpciones}"
+                     th:if="${opcion.ruta == '/gestion/productos/listar'}">
+                    <div class="card dashboard-card card-productos shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="stats-container">
+                                    <h5 class="card-title fw-semibold">Total de Productos</h5>
+                                    <h2 class="main-stat fw-bold" th:text="${totalProductos}">0</h2>
+                                    <div class="sub-stats">
+                                        <div class="sub-stat">
+                                            <span class="sub-stat-value" th:text="${totalProductosActivos}">0</span>
+                                            <span class="sub-stat-label">Activos</span>
+                                        </div>
+                                        <div class="sub-stat">
+                                            <span class="sub-stat-value" th:text="${totalProductosInactivos}">0</span>
+                                            <span class="sub-stat-label">Inactivos</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
+                                         class="bi bi-box-seam-fill" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M15.528 2.973a.75.75 0 0 1 .472.696v8.662a.75.75 0 0 1-.472.696l-7.25 2.9a.75.75 0 0 1-.557 0l-7.25-2.9A.75.75 0 0 1 0 12.331V3.669a.75.75 0 0 1 .471-.696L7.443.184l.004-.001.274-.11a.75.75 0 0 1 .558 0l.274.11.004.001 6.971 2.789Zm-1.374.527L8 5.962 1.846 3.5 1 3.839v.4l6.5 2.6v7.922l.5.2.5-.2V6.84l6.5-2.6v-.4l-.846-.339Z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <a th:href="@{/gestion/productos/listar}" class="dashboard-link d-block mt-3">
+                                Ver detalles &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total de Categorias -->
+                <div class="col-sm-6 col-lg-4"
+                     th:each="opcion : ${session.menuOpciones}"
+                     th:if="${opcion.ruta == '/gestion/categorias/listar'}">
+                    <div class="card dashboard-card card-categorias shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="stats-container">
+                                    <h5 class="card-title fw-semibold">Total de Categorias</h5>
+                                    <h2 class="main-stat fw-bold" th:text="${totalCategorias}">0</h2>
+                                    <div class="sub-stats">
+                                        <div class="sub-stat">
+                                            <span class="sub-stat-value" th:text="${totalCategoriasActivas}">0</span>
+                                            <span class="sub-stat-label">Activas</span>
+                                        </div>
+                                        <div class="sub-stat">
+                                            <span class="sub-stat-value" th:text="${totalCategoriasInactivas}">0</span>
+                                            <span class="sub-stat-label">Inactivas</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
+                                         class="bi bi-collection-fill" viewBox="0 0 16 16">
+                                        <path d="M0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6v7zM2 3a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 0-1h-11A.5.5 0 0 0 2 3zm2-2a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7A.5.5 0 0 0 4 1z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <a th:href="@{/gestion/categorias/listar}" class="dashboard-link d-block mt-3">
+                                Ver detalles &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reportes -->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="card dashboard-card card-reportes shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h5 class="card-title fw-semibold">Reportes</h5>
+                                    <p class="card-text opacity-75 mb-0">Visualizar y exportar datos.</p>
+                                </div>
+                                <div class="card-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
+                                         class="bi bi-bar-chart-fill" viewBox="0 0 16 16">
+                                        <path
+                                                d="M1 11a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <a href="#" class="dashboard-link d-block mt-3">
+                                Próximamente...
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mt-4 rounded-lg">
+                <div class="card-body">
+                    <h2 class="card-title h4 fw-bold">¡Bienvenido a la aplicación Chocoteja-Shop-Admin!</h2>
+                    <p class="card-text text-muted">Usa el menú de la izquierda o las tarjetas de acceso rápido para navegar por el sistema.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script th:src="@{/js/gestion/gestion-main.js}"></script>
+</body>
+</html>

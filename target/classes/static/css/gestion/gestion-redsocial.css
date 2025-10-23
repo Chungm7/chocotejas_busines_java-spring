@@ -1,0 +1,73 @@
+/*
+ * Estilos específicos para Gestión de Redes Sociales
+ */
+
+.redes-table thead th {
+    background: linear-gradient(135deg, var(--color-milk-chocolate) 0%, var(--color-medium-brown) 100%);
+    color: var(--color-cream);
+    font-weight: 600;
+    border: none;
+    padding: 12px 10px;
+}
+
+.redes-table tbody tr {
+    transition: background-color 0.3s ease;
+}
+
+.redes-table tbody tr:hover {
+    background-color: var(--color-caramel);
+}
+
+.red-social-icon {
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.red-social-icon:hover {
+    transform: scale(1.2);
+}
+
+.red-social-modal .modal-header {
+    background: linear-gradient(135deg, var(--color-milk-chocolate) 0%, var(--color-medium-brown) 100%);
+    color: var(--color-cream);
+    border-bottom: none;
+    padding: 15px;
+}
+
+.icono-preview-container {
+    border: 2px dashed var(--color-caramel);
+    border-radius: 8px;
+    padding: 12px;
+    background-color: #fafafa;
+    transition: all 0.3s ease;
+}
+
+.icono-preview-container:hover {
+    border-color: var(--color-accent);
+    background-color: var(--color-cream);
+}
+
+.red-social-form .form-control,
+.red-social-form .form-select {
+    border-radius: 6px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+}
+
+.red-social-form .form-control:focus,
+.red-social-form .form-select:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 0.2rem rgba(255, 152, 0, 0.25);
+}
+
+.url-link {
+    color: var(--color-milk-chocolate);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.url-link:hover {
+    color: var(--color-accent);
+    text-decoration: underline;
+}

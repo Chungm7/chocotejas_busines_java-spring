@@ -1,0 +1,97 @@
+/*
+ * Estilos específicos para Gestión de Clientes
+ */
+
+.clientes-table thead th {
+    background: linear-gradient(135deg, var(--color-milk-chocolate) 0%, var(--color-medium-brown) 100%);
+    color: var(--color-cream);
+    font-weight: 600;
+    border: none;
+    padding: 12px 10px;
+}
+
+.clientes-table tbody tr {
+    transition: background-color 0.3s ease;
+}
+
+.clientes-table tbody tr:hover {
+    background-color: var(--color-caramel);
+}
+
+.clientes-modal .modal-header {
+    background: linear-gradient(135deg, var(--color-milk-chocolate) 0%, var(--color-medium-brown) 100%);
+    color: var(--color-cream);
+    border-bottom: none;
+    padding: 15px;
+}
+
+.clientes-form .form-control,
+.clientes-form .form-select {
+    border-radius: 6px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+}
+
+.clientes-form .form-control:focus,
+.clientes-form .form-select:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 0.2rem rgba(255, 152, 0, 0.25);
+}
+
+.clientes-info-api {
+    border-left: 4px solid var(--color-accent);
+    background-color: #f8f9fa;
+    padding: 12px;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.clientes-documento-badge {
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.clientes-dni-badge {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+}
+
+.clientes-ruc-badge {
+    background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+    color: white;
+}
+
+.clientes-direccion-text {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: help;
+}
+
+.clientes-direccion-text:hover {
+    overflow: visible;
+    white-space: normal;
+    background-color: var(--color-cream);
+    padding: 4px;
+    border-radius: 4px;
+    position: absolute;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* Estados de la API */
+.clientes-api-success {
+    border-left-color: #28a745;
+}
+
+.clientes-api-warning {
+    border-left-color: #ffc107;
+}
+
+.clientes-api-error {
+    border-left-color: #dc3545;
+}

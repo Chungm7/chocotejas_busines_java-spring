@@ -1,0 +1,168 @@
+/* Variables de colores para las tarjetas - CENTRALIZADAS */
+:root {
+    --card-usuarios-color: linear-gradient(135deg, #6a4e3b 0%, #553521 100%);
+    --card-perfiles-color: linear-gradient(135deg, #cc8b61 0%, #774821 100%);
+    --card-productos-color: linear-gradient(135deg, #6a4e3b 0%, #553521 100%);
+    --card-categorias-color: linear-gradient(135deg, #cc8b61 0%, #774821 100%);
+    --card-reportes-color: linear-gradient(135deg, #6a4e3b 0%, #553521 100%);
+}
+
+/* Estilos mejorados para las tarjetas del Dashboard */
+.dashboard-card {
+    border-radius: 16px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+    position: relative;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+    color: white;
+}
+
+.dashboard-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--color-accent), var(--color-gold));
+    z-index: 1;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Clases específicas para cada tarjeta - USANDO LAS VARIABLES CENTRALIZADAS */
+.card-usuarios {
+    background: var(--card-usuarios-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-perfiles {
+    background: var(--card-perfiles-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-productos {
+    background: var(--card-productos-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-categorias {
+    background: var(--card-categorias-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-reportes {
+    background: var(--card-reportes-color);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efecto hover común para todas las tarjetas */
+.dashboard-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+    transform: rotate(30deg);
+    transition: all 0.5s ease;
+}
+
+.dashboard-card:hover::after {
+    transform: rotate(45deg) scale(1.2);
+}
+
+.card-icon {
+    font-size: 2.8rem;
+    opacity: 0.9;
+    transition: all 0.4s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.dashboard-card:hover .card-icon {
+    transform: scale(1.15) rotate(8deg);
+    opacity: 1;
+}
+
+.display-4 {
+    font-weight: 800;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 0;
+    line-height: 1;
+}
+
+.card-title {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    opacity: 0.9;
+}
+
+.dashboard-link {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    font-weight: 500;
+    position: relative;
+    z-index: 2;
+}
+
+.dashboard-link:hover {
+    color: rgba(255, 255, 255, 0.9);
+    border-bottom-color: rgba(255, 255, 255, 0.5);
+    padding-left: 5px;
+}
+
+.stats-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.main-stat {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.sub-stats {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.75rem;
+}
+
+.sub-stat {
+    display: flex;
+    flex-direction: column;
+}
+
+.sub-stat-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.sub-stat-label {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    margin-top: 0.25rem;
+}
+
+.card-body {
+    position: relative;
+    z-index: 2;
+}

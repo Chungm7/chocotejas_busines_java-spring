@@ -3,6 +3,7 @@ package com.example.sistema_venta_chocotejas.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.client.RestTemplate;
 
 // @Configuration: Anotación que le indica a Spring que esta clase contiene
 // definiciones de beans. Los beans son objetos gestionados por Spring que
@@ -19,5 +20,9 @@ public class SecurityConfig {
         // utilizando el algoritmo BCrypt. Al crearlo como un bean, podemos inyectarlo
         // y usarlo en cualquier parte de la aplicación (como en UsuarioService).
         return new BCryptPasswordEncoder();
+    }
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }

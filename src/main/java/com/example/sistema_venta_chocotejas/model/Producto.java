@@ -23,7 +23,7 @@ public class Producto {
     @NotNull(message = "El precio es obligatorio")
     @PositiveOrZero(message = "El precio debe ser mayor o igual a 0") // Cambiar de @Positive a @PositiveOrZero
     @Column(nullable = false)
-    private Double precio;
+    private Double precio = 0.0;
 
     @PositiveOrZero(message = "El stock debe ser mayor o igual a 0") // Agregar validación
     @Column()
@@ -57,7 +57,7 @@ public class Producto {
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
     public Double getPrecio() { return precio; }
-    public void setPrecio(Double precio) { this.precio = precio; }
+    public void setPrecio(Double precio) { this.precio = precio != null ? precio : 0.0; }
 
     public Integer getStock() { return stock; }
     public void setStock(Integer stock) {

@@ -1,7 +1,7 @@
 package com.example.sistema_venta_chocotejas.controller.gestion;
 
 import com.example.sistema_venta_chocotejas.model.Producto;
-import com.example.sistema_venta_chocotejas.service.Impl.CategoriaIServicempl;
+import com.example.sistema_venta_chocotejas.service.Impl.CategoriaIServiceImpl;
 import com.example.sistema_venta_chocotejas.service.Impl.ProductoServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +17,9 @@ import java.util.Map;
 public class ProductoController {
 
     private final ProductoServiceImpl productoService;
-    private final CategoriaIServicempl categoriaService;
+    private final CategoriaIServiceImpl categoriaService;
 
-    public ProductoController(ProductoServiceImpl productoService, CategoriaIServicempl categoriaService) {
+    public ProductoController(ProductoServiceImpl productoService, CategoriaIServiceImpl categoriaService) {
         this.categoriaService = categoriaService;
         this.productoService = productoService;
     }

@@ -31,3 +31,6 @@ spring:
 
 file:
   upload-dir: ${UPLOAD_DIR:./imagenes/}
+  logo-dir: ${LOGO_DIR:./logos/}
+  slider-dir: ${SLIDER_DIR:./sliders/}
+  momentos-dir: ${MOMENTOS_DIR:./momentos/}

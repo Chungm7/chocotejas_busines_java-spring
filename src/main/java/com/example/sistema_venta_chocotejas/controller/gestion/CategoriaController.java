@@ -1,7 +1,7 @@
 package com.example.sistema_venta_chocotejas.controller.gestion;
 
 import com.example.sistema_venta_chocotejas.model.Categoria;
-import com.example.sistema_venta_chocotejas.service.Impl.CategoriaIServicempl;
+import com.example.sistema_venta_chocotejas.service.Impl.CategoriaIServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,9 +14,9 @@ import java.util.Map;
 @RequestMapping("/gestion/categorias")
 public class CategoriaController {
 
-    private final CategoriaIServicempl categoriaService;
+    private final CategoriaIServiceImpl categoriaService;
 
-    public CategoriaController(CategoriaIServicempl categoriaService) {
+    public CategoriaController(CategoriaIServiceImpl categoriaService) {
         this.categoriaService = categoriaService;
     }
 

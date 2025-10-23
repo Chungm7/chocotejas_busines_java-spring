@@ -1,0 +1,64 @@
+/*
+ * Estilos específicos para Gestión de Perfiles
+ */
+
+.perfiles-table thead th {
+    background: linear-gradient(135deg, var(--color-milk-chocolate) 0%, var(--color-medium-brown) 100%);
+    color: var(--color-cream);
+    font-weight: 600;
+    border: none;
+    padding: 12px 10px;
+}
+
+.perfiles-table tbody tr {
+    transition: background-color 0.3s ease;
+}
+
+.perfiles-table tbody tr:hover {
+    background-color: var(--color-caramel);
+}
+
+.perfiles-modal .modal-header {
+    background: linear-gradient(135deg, var(--color-milk-chocolate) 0%, var(--color-medium-brown) 100%);
+    color: var(--color-cream);
+    border-bottom: none;
+    padding: 15px;
+}
+
+.perfiles-permisos-list .list-group-item {
+    border: 1px solid var(--color-caramel);
+    margin-bottom: 5px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.perfiles-permisos-list .list-group-item:hover {
+    background-color: var(--color-cream);
+    border-color: var(--color-accent);
+}
+
+.perfiles-permisos-list .form-check-input:checked {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+}
+
+.perfiles-action-btn {
+    margin: 0 2px;
+    transition: all 0.3s ease;
+}
+
+.perfiles-action-btn:hover {
+    transform: translateY(-2px);
+}
+
+.perfiles-form .form-control {
+    border-radius: 6px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+}
+
+.perfiles-form .form-control:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 0.2rem rgba(255, 152, 0, 0.25);
+}
