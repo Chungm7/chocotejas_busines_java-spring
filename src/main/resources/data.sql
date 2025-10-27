@@ -12,7 +12,8 @@ INSERT INTO opciones (id, nombre, ruta, icono) VALUES
                                                    (10, 'Gestión de Momentos', '/gestion/momentos/listar', 'bi bi-camera-reels'),
                                                    (11, 'Gestion de Redes Sociales', '/gestion/redes-sociales/listar', 'bi bi-share'),
                                                    (12, 'Gestión de Contacto', '/gestion/contacto/mostrar', 'bi bi-envelope'),
-                                                   (13, 'Gestion de Inicio', '/gestion/inicio/mostrar', 'bi bi-house');
+                                                   (13, 'Gestion de Inicio', '/gestion/inicio/mostrar', 'bi bi-house'),
+                                                   (14, 'Gestion de Inventario' , '/gestion/deudas/listar', 'bi bi-envelope')
 
 
 -- Inserciones de datos iniciales para perfiles
