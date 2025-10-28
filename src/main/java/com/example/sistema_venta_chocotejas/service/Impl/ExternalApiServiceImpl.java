@@ -1,63 +1,67 @@
 package com.example.sistema_venta_chocotejas.service.Impl;
 
+import com.example.sistema_venta_chocotejas.dto.DniApiResponse;
+import com.example.sistema_venta_chocotejas.dto.RucApiResponse;
 import com.example.sistema_venta_chocotejas.service.ExternalApiService;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @Service
 public class ExternalApiServiceImpl implements ExternalApiService {
 
-    private final RestTemplate restTemplate;
-    private final ObjectMapper objectMapper;
+    private static final Logger log = LoggerFactory.getLogger(ExternalApiServiceImpl.class);
+
+    private final WebClient webClient;
 
     @Value("${api.miapicloud.token}")
     private String apiToken;
 
-    public ExternalApiServiceImpl(RestTemplate restTemplate, ObjectMapper objectMapper) {
-        this.restTemplate = restTemplate;
-        this.objectMapper = objectMapper;
+    @Value("${api.miapicloud.url}")
+    private String apiUrl;
+
+    public ExternalApiServiceImpl(WebClient.Builder webClientBuilder) {
+        this.webClient = webClientBuilder.baseUrl(apiUrl).build();
     }
 
     @Override
-    public JsonNode consultarRUC(String ruc) {
-        String url = "https://miapi.cloud/v1/ruc/" + ruc;
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + apiToken);
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        try {
-            ResponseEntity<JsonNode> response = restTemplate.exchange(url, HttpMethod.GET, entity, JsonNode.class);
-            return response.getBody();
-        } catch (HttpClientErrorException e) {
-            ObjectNode errorNode = objectMapper.createObjectNode();
-            errorNode.put("success", false);
-            errorNode.put("message", "Error al consultar RUC: " + e.getStatusCode() + " " + e.getResponseBodyAsString());
-            return errorNode;
-        }
+    public Mono<RucApiResponse> consultarRUC(String ruc) {
+        log.info("Consultando RUC: {}", ruc);
+        return webClient.get()
+                .uri("/ruc/{ruc}", ruc)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + apiToken)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(RucApiResponse.class)
+                .doOnError(error -> log.error("Error al consultar RUC {}: {}", ruc, error.getMessage()))
+                .onErrorResume(error -> {
+                    RucApiResponse errorResponse = new RucApiResponse();
+                    errorResponse.setSuccess(false);
+                    // Aquí podrías agregar un mensaje de error más específico si lo deseas
+                    return Mono.just(errorResponse);
+                });
     }
 
     @Override
-    public JsonNode consultarDNI(String dni) {
-        String url = "https://miapi.cloud/v1/dni/" + dni;
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + apiToken);
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        try {
-            ResponseEntity<JsonNode> response = restTemplate.exchange(url, HttpMethod.GET, entity, JsonNode.class);
-            return response.getBody();
-        } catch (HttpClientErrorException e) {
-            ObjectNode errorNode = objectMapper.createObjectNode();
-            errorNode.put("success", false);
-            errorNode.put("message", "Error al consultar DNI: " + e.getStatusCode() + " " + e.getResponseBodyAsString());
-            return errorNode;
-        }
+    public Mono<DniApiResponse> consultarDNI(String dni) {
+        log.info("Consultando DNI: {}", dni);
+        return webClient.get()
+                .uri("/dni/{dni}", dni)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + apiToken)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(DniApiResponse.class)
+                .doOnError(error -> log.error("Error al consultar DNI {}: {}", dni, error.getMessage()))
+                .onErrorResume(error -> {
+                    DniApiResponse errorResponse = new DniApiResponse();
+                    errorResponse.setSuccess(false);
+                    // Aquí podrías agregar un mensaje de error más específico si lo deseas
+                    return Mono.just(errorResponse);
+                });
     }
 }

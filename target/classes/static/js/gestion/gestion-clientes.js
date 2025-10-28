@@ -2,9 +2,6 @@ let tablaClientes;
 let clienteModal;
 let formCliente;
 
-// Token para las APIs
-const API_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozNjAsImV4cCI6MTc2MDM4Mzk3OX0.s8pdevKFpdbjfpK8gz7bBmgh18GgEvIt8b_VUsjksKw";
-
 $(document).ready(function () {
     clienteModal = new bootstrap.Modal(document.getElementById("clienteModal"));
     formCliente = $("#formCliente");
@@ -120,7 +117,6 @@ $(document).ready(function () {
     });
 
     // Guardar cliente
-    // Guardar cliente
     formCliente.submit(function (e) {
         e.preventDefault();
 
@@ -151,12 +147,6 @@ $(document).ready(function () {
         if (!isEdit && !nombreCompleto) {
             mostrarNotificacion("Debe consultar el documento primero para obtener los datos", "warning");
             return;
-        }
-
-        // Para edición, si no hay nombreCompleto, usar el existente
-        if (isEdit && !nombreCompleto) {
-            // En edición, el nombreCompleto ya está en la base de datos
-            // No es necesario validarlo nuevamente
         }
 
         const url = isEdit ? `/gestion/clientes/api/actualizar/${id}` : "/gestion/clientes/api/guardar";
@@ -267,44 +257,49 @@ function verificarCliente() {
     const tipoDocumento = $("#tipoDocumento").val();
     const numeroDocumento = $("#numeroDocumento").val().trim();
 
-    if (!numeroDocumento) {
-        mostrarNotificacion("Ingrese un número de documento", "danger");
+    if (!tipoDocumento) {
+        mostrarNotificacion("Seleccione un tipo de documento", "warning");
         return;
     }
 
-    $.get(`/gestion/clientes/api/consultar-documento?tipoDocumento=${tipoDocumento}&numeroDocumento=${numeroDocumento}`, function (res) {
-        if (res.success) {
-            const cliente = res.data;
-            $("#nombreCompleto").val(cliente.nombreCompleto);
-            $("#direccion").val(cliente.direccion);
-            $("#infoNombre").text(cliente.nombreCompleto);
-            $("#infoApi").show();
-            mostrarNotificacion("Cliente encontrado y datos rellenados", "success");
-        } else {
-            mostrarNotificacion(res.message, "danger");
-        }
-    }).fail(function () {
-        mostrarNotificacion("Error al verificar el cliente", "danger");
-    });
-}
+    if (!numeroDocumento) {
+        mostrarNotificacion("Ingrese un número de documento", "warning");
+        return;
+    }
 
-function verificarDocumentoExistente(numeroDocumento, idCliente = null) {
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            url: "/gestion/clientes/api/verificar-documento",
-            type: "POST",
-            data: {
-                numeroDocumento: numeroDocumento,
-                idCliente: idCliente
-            },
-            success: function(res) {
-                resolve(res.existe);
-            },
-            error: function() {
-                reject(false);
+    const btn = $("#btnVerificarCliente");
+    btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Verificando...');
+
+    $.get(`/gestion/clientes/api/consultar-documento?tipoDocumento=${tipoDocumento}&numeroDocumento=${numeroDocumento}`)
+        .done(function (res) {
+            if (res.success) {
+                const cliente = res.data;
+                $("#nombreCompleto").val(cliente.nombreCompleto);
+                // No rellenar la dirección
+                // $("#direccion").val(cliente.direccion);
+                $("#infoNombre").text(cliente.nombreCompleto);
+                $("#infoApi").show();
+
+                if (cliente.id) { // Cliente existente
+                    mostrarNotificacion("Cliente encontrado en la base de datos.", "info");
+                } else { // Nuevo cliente desde API
+                    mostrarNotificacion("Datos obtenidos de la API correctamente.", "success");
+                }
+            } else {
+                mostrarNotificacion(res.message, "danger");
             }
+        })
+        .fail(function (xhr) {
+            let errorMsg = "Error al verificar el cliente. Intente de nuevo.";
+            try {
+                const response = JSON.parse(xhr.responseText);
+                errorMsg = response.message || errorMsg;
+            } catch (e) {}
+            mostrarNotificacion(errorMsg, "danger");
+        })
+        .always(function () {
+            btn.prop("disabled", false).html('Verificar');
         });
-    });
 }
 
 // Función de notificación
@@ -318,6 +313,7 @@ function mostrarNotificacion(mensaje, tipo) {
 
     // Auto-cerrar después de 4 segundos
     setTimeout(() => {
-        $(".alert").alert("close");
+        // Usamos una forma más segura de cerrar el alert específico
+        $(alert).alert("close");
     }, 4000);
 }

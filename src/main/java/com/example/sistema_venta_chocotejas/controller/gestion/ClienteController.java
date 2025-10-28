@@ -2,14 +2,14 @@ package com.example.sistema_venta_chocotejas.controller.gestion;
 
 import com.example.sistema_venta_chocotejas.model.Cliente;
 import com.example.sistema_venta_chocotejas.repository.ClienteRepository;
-import com.example.sistema_venta_chocotejas.service.Impl.ClienteServiceImpl;
+import com.example.sistema_venta_chocotejas.service.ClienteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -17,10 +17,10 @@ import java.util.Optional;
 @RequestMapping("/gestion/clientes")
 public class ClienteController {
 
-    private final ClienteServiceImpl clienteService;
+    private final ClienteService clienteService;
     private final ClienteRepository clienteRepository;
 
-    public ClienteController(ClienteServiceImpl clienteService, ClienteRepository clienteRepository) {
+    public ClienteController(ClienteService clienteService, ClienteRepository clienteRepository) {
         this.clienteService = clienteService;
         this.clienteRepository = clienteRepository;
     }
@@ -188,7 +188,7 @@ public class ClienteController {
         response.put("message", message);
         return response;
     }
-    // Y agregar este endpoint en el Controller:
+
     @PostMapping("/api/verificar-documento")
     @ResponseBody
     public ResponseEntity<?> verificarDocumentoExistente(
@@ -210,18 +210,20 @@ public class ClienteController {
 
     @GetMapping("/api/consultar-documento")
     @ResponseBody
-    public ResponseEntity<?> consultarDocumento(
+    public Mono<ResponseEntity<?>> consultarDocumento(
             @RequestParam("tipoDocumento") String tipoDocumento,
             @RequestParam("numeroDocumento") String numeroDocumento) {
-        try {
-            Cliente cliente = clienteService.buscarOCrearCliente(tipoDocumento, numeroDocumento);
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", true);
-            response.put("data", cliente);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(createErrorResponse("Error al consultar documento: " + e.getMessage()));
-        }
+        return clienteService.buscarOCrearCliente(tipoDocumento, numeroDocumento)
+                .<ResponseEntity<?>>map(cliente -> {
+                    Map<String, Object> response = new HashMap<>();
+                    response.put("success", true);
+                    response.put("data", cliente);
+                    return ResponseEntity.ok(response);
+                })
+                .onErrorResume(e -> {
+                    Map<String, Object> errorBody = createErrorResponse("Error al consultar documento: " + e.getMessage());
+                    ResponseEntity<?> errorResponse = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorBody);
+                    return Mono.just(errorResponse);
+                });
     }
 }

@@ -40,7 +40,7 @@ public class PerfilServiceImpl implements PerfilService {
     @Override
     @Transactional(readOnly = true)
     public List<Perfil> listarPerfilesActivos() {
-        return perfilRepository.findByEstadoNot(2);
+        return perfilRepository.findByEstado(1);
     }
 
     @Override

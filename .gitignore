@@ -36,3 +36,8 @@ imagenes/
 logos/
 momentos/
 sliders/
+
+### Custom ###
+app.log
+jules-scratch/
+src/main/resources/application.properties

@@ -4,6 +4,9 @@ com/example/sistema_venta_chocotejas/config/SecurityConfig.class
 com/example/sistema_venta_chocotejas/controller/gestion/VentaController$VentaRequest.class
 com/example/sistema_venta_chocotejas/service/Impl/PagoServiceImpl.class
 com/example/sistema_venta_chocotejas/model/Logo.class
+com/example/sistema_venta_chocotejas/dto/RucApiResponse$RucData.class
+com/example/sistema_venta_chocotejas/dto/DniApiResponse$Domiciliado.class
+com/example/sistema_venta_chocotejas/dto/DniApiResponse.class
 com/example/sistema_venta_chocotejas/controller/gestion/PagoController.class
 com/example/sistema_venta_chocotejas/controller/gestion/VentaController.class
 com/example/sistema_venta_chocotejas/model/DetalleVenta.class
@@ -44,6 +47,7 @@ com/example/sistema_venta_chocotejas/repository/RedSocialRepository.class
 com/example/sistema_venta_chocotejas/SistemaVentaChocotejasApplication.class
 com/example/sistema_venta_chocotejas/model/Inicio.class
 com/example/sistema_venta_chocotejas/config/GlobalExceptionHandler.class
+com/example/sistema_venta_chocotejas/dto/DniApiResponse$DniData.class
 com/example/sistema_venta_chocotejas/service/Impl/ProductoServiceImpl.class
 com/example/sistema_venta_chocotejas/controller/gestion/DashboardController.class
 com/example/sistema_venta_chocotejas/controller/gestion/DeudaController.class
@@ -56,6 +60,7 @@ com/example/sistema_venta_chocotejas/service/ContactoService.class
 com/example/sistema_venta_chocotejas/service/RedSocialService.class
 com/example/sistema_venta_chocotejas/controller/cliente/GaleriaController.class
 com/example/sistema_venta_chocotejas/service/Impl/UsuarioService.class
+com/example/sistema_venta_a_chocotejas/config/WebClientConfig.class
 com/example/sistema_venta_chocotejas/service/Impl/ClienteServiceImpl.class
 com/example/sistema_venta_chocotejas/model/Opcion.class
 com/example/sistema_venta_chocotejas/service/InicioService.class
@@ -71,6 +76,7 @@ com/example/sistema_venta_chocotejas/repository/MomentoRepository.class
 com/example/sistema_venta_chocotejas/service/Impl/ContactoServiceImpl.class
 com/example/sistema_venta_chocotejas/service/Impl/LogoServiceImpl.class
 com/example/sistema_venta_chocotejas/controller/gestion/ProductoController.class
+com/example/sistema_venta_chocotejas/dto/RucApiResponse$Domiciliado.class
 com/example/sistema_venta_chocotejas/controller/gestion/MomentoController.class
 com/example/sistema_venta_chocotejas/controller/gestion/ClienteController.class
 com/example/sistema_venta_chocotejas/repository/DetalleVentaRepository.class
@@ -83,3 +89,4 @@ com/example/sistema_venta_chocotejas/repository/UsuarioRepository.class
 com/example/sistema_venta_chocotejas/repository/ClienteRepository.class
 com/example/sistema_venta_chocotejas/controller/gestion/LoginController.class
 com/example/sistema_venta_chocotejas/service/MomentoService.class
+com/example/sistema_venta_chocotejas/dto/RucApiResponse.class

@@ -3,6 +3,7 @@
 /app/src/main/java/com/example/sistema_venta_chocotejas/config/GlobalExceptionHandler.java
 /app/src/main/java/com/example/sistema_venta_chocotejas/config/SecurityConfig.java
 /app/src/main/java/com/example/sistema_venta_chocotejas/config/SessionInterceptor.java
+/app/src/main/java/com/example/sistema_venta_chocotejas/config/WebClientConfig.java
 /app/src/main/java/com/example/sistema_venta_chocotejas/config/WebConfig.java
 /app/src/main/java/com/example/sistema_venta_chocotejas/controller/cliente/GaleriaController.java
 /app/src/main/java/com/example/sistema_venta_chocotejas/controller/cliente/HomeController.java
@@ -23,6 +24,8 @@
 /app/src/main/java/com/example/sistema_venta_chocotejas/controller/gestion/SliderController.java
 /app/src/main/java/com/example/sistema_venta_chocotejas/controller/gestion/UsuarioController.java
 /app/src/main/java/com/example/sistema_venta_chocotejas/controller/gestion/VentaController.java
+/app/src/main/java/com/example/sistema_venta_chocotejas/dto/DniApiResponse.java
+/app/src/main/java/com/example/sistema_venta_chocotejas/dto/RucApiResponse.java
 /app/src/main/java/com/example/sistema_venta_chocotejas/model/Categoria.java
 /app/src/main/java/com/example/sistema_venta_chocotejas/model/Cliente.java
 /app/src/main/java/com/example/sistema_venta_chocotejas/model/Contacto.java

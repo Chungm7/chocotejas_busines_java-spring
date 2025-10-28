@@ -1,16 +1,18 @@
 package com.example.sistema_venta_chocotejas.service.Impl;
 
+import com.example.sistema_venta_chocotejas.dto.DniApiResponse;
+import com.example.sistema_venta_chocotejas.dto.RucApiResponse;
 import com.example.sistema_venta_chocotejas.model.Cliente;
 import com.example.sistema_venta_chocotejas.repository.ClienteRepository;
 import com.example.sistema_venta_chocotejas.service.ClienteService;
 import com.example.sistema_venta_chocotejas.service.ExternalApiService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.fasterxml.jackson.databind.JsonNode;
 @Service
 public class ClienteServiceImpl implements ClienteService {
 
@@ -145,44 +147,46 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional
-    public Cliente buscarOCrearCliente(String tipoDocumento, String numeroDocumento) {
-        // Buscar cliente existente
-        Optional<Cliente> clienteOpt = buscarPorDocumento(numeroDocumento);
-        if (clienteOpt.isPresent()) {
-            return clienteOpt.get();
-        }
+    public Mono<Cliente> buscarOCrearCliente(String tipoDocumento, String numeroDocumento) {
+        return Mono.justOrEmpty(buscarPorDocumento(numeroDocumento))
+                .switchIfEmpty(Mono.defer(() -> {
+                    if ("DNI".equalsIgnoreCase(tipoDocumento)) {
+                        return externalApiService.consultarDNI(numeroDocumento)
+                                .flatMap(this::crearClienteDesdeDni);
+                    } else if ("RUC".equalsIgnoreCase(tipoDocumento)) {
+                        return externalApiService.consultarRUC(numeroDocumento)
+                                .flatMap(this::crearClienteDesdeRuc);
+                    } else {
+                        return Mono.error(new IllegalArgumentException("Tipo de documento no válido: " + tipoDocumento));
+                    }
+                }));
+    }
 
-        // Si no existe, consultar la API externa
-        JsonNode apiData;
-        if ("DNI".equalsIgnoreCase(tipoDocumento)) {
-            apiData = externalApiService.consultarDNI(numeroDocumento);
-        } else if ("RUC".equalsIgnoreCase(tipoDocumento)) {
-            apiData = externalApiService.consultarRUC(numeroDocumento);
-        } else {
-            throw new IllegalArgumentException("Tipo de documento no válido: " + tipoDocumento);
+    private Mono<Cliente> crearClienteDesdeDni(DniApiResponse apiResponse) {
+        if (!apiResponse.isSuccess() || apiResponse.getDatos() == null) {
+            return Mono.error(new RuntimeException("No se pudo obtener datos del DNI."));
         }
-
-        if (apiData == null || apiData.get("success").asBoolean() == false) {
-            throw new RuntimeException("No se pudo obtener datos del documento: " + numeroDocumento);
-        }
-
-        // Crear y guardar el nuevo cliente
+        DniApiResponse.DniData data = apiResponse.getDatos();
         Cliente nuevoCliente = new Cliente();
-        nuevoCliente.setTipoDocumento(tipoDocumento);
-        nuevoCliente.setNumeroDocumento(numeroDocumento);
-
-        if ("DNI".equalsIgnoreCase(tipoDocumento)) {
-            String nombres = apiData.get("datos").get("nombres").asText();
-            String apePaterno = apiData.get("datos").get("ape_paterno").asText();
-            String apeMaterno = apiData.get("datos").get("ape_materno").asText();
-            nuevoCliente.setNombreCompleto(nombres + " " + apePaterno + " " + apeMaterno);
-            nuevoCliente.setDireccion("");
-        } else { // RUC
-            nuevoCliente.setNombreCompleto(apiData.get("datos").get("razon_social").asText());
-            nuevoCliente.setDireccion("");
-        }
-
+        nuevoCliente.setTipoDocumento("DNI");
+        nuevoCliente.setNumeroDocumento(data.getDni());
+        nuevoCliente.setNombreCompleto(data.getNombres() + " " + data.getApePaterno() + " " + data.getApeMaterno());
+        nuevoCliente.setDireccion(""); // Dirección vacía como se solicitó
         nuevoCliente.setEstado(1); // Activo
-        return guardarCliente(nuevoCliente);
+        return Mono.just(guardarCliente(nuevoCliente));
+    }
+
+    private Mono<Cliente> crearClienteDesdeRuc(RucApiResponse apiResponse) {
+        if (!apiResponse.isSuccess() || apiResponse.getDatos() == null) {
+            return Mono.error(new RuntimeException("No se pudo obtener datos del RUC."));
+        }
+        RucApiResponse.RucData data = apiResponse.getDatos();
+        Cliente nuevoCliente = new Cliente();
+        nuevoCliente.setTipoDocumento("RUC");
+        nuevoCliente.setNumeroDocumento(data.getRuc());
+        nuevoCliente.setNombreCompleto(data.getRazonSocial());
+        nuevoCliente.setDireccion(""); // Dirección vacía como se solicitó
+        nuevoCliente.setEstado(1); // Activo
+        return Mono.just(guardarCliente(nuevoCliente));
     }
 }
