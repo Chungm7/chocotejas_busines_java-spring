@@ -22,6 +22,10 @@ public class Venta {
     @Column(nullable = false)
     private Integer estado = 1; // 1: activo, 0: eliminado
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Cliente cliente_id;
+
     @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DetalleVenta> detalleVentas = new ArrayList<>();
 
@@ -48,6 +52,9 @@ public class Venta {
 
     public Integer getEstado() { return estado; }
     public void setEstado(Integer estado) { this.estado = estado; }
+
+    public Cliente getCliente() { return cliente_id; }
+    public void setCliente(Cliente cliente) { this.cliente_id = cliente; }
 
     public List<DetalleVenta> getDetalleVentas() { return detalleVentas; }
     public void setDetalleVentas(List<DetalleVenta> detalleVentas) { this.detalleVentas = detalleVentas; }

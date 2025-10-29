@@ -120,6 +120,10 @@
     .venta-summary {
         margin-top: 20px;
     }
+
+    .cliente-section .row > div {
+        margin-bottom: 10px;
+    }
 }
 
 /* Efectos de loading */

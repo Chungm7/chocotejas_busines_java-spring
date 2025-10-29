@@ -1,8 +1,7 @@
 package com.example.sistema_venta_chocotejas.controller.gestion;
 
-import com.example.sistema_venta_chocotejas.model.DetalleVenta;
-import com.example.sistema_venta_chocotejas.model.Producto;
-import com.example.sistema_venta_chocotejas.model.Venta;
+import com.example.sistema_venta_chocotejas.model.*;
+import com.example.sistema_venta_chocotejas.service.Impl.ClienteServiceImpl;
 import com.example.sistema_venta_chocotejas.service.Impl.ProductoServiceImpl;
 import com.example.sistema_venta_chocotejas.service.Impl.VentaServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -20,10 +19,12 @@ public class VentaController {
 
     private final VentaServiceImpl ventaService;
     private final ProductoServiceImpl productoService;
+    private final ClienteServiceImpl clienteService;
 
-    public VentaController(VentaServiceImpl ventaService, ProductoServiceImpl productoService) {
+    public VentaController(VentaServiceImpl ventaService, ProductoServiceImpl productoService, ClienteServiceImpl clienteService) {
         this.ventaService = ventaService;
         this.productoService = productoService;
+        this.clienteService = clienteService;
     }
 
     @GetMapping("/listar")
@@ -57,13 +58,21 @@ public class VentaController {
     public ResponseEntity<?> registrarVenta(@RequestBody VentaRequest ventaRequest) {
         try {
             // Validaciones básicas
+            if (ventaRequest.getClienteId() == null) {
+                return ResponseEntity.badRequest().body(createErrorResponse("Debe seleccionar un cliente"));
+            }
             if (ventaRequest.getDetalles() == null || ventaRequest.getDetalles().isEmpty()) {
                 return ResponseEntity.badRequest().body(createErrorResponse("Debe agregar al menos un producto a la venta"));
             }
 
+            // Obtener el cliente
+            Cliente cliente = clienteService.obtenerClientePorId(ventaRequest.getClienteId())
+                    .orElseThrow(() -> new RuntimeException("Cliente no encontrado: " + ventaRequest.getClienteId()));
+
             // Crear la venta
             Venta venta = new Venta();
             venta.setFecha(LocalDateTime.now());
+            venta.setCliente(cliente);
 
             Double total = 0.0;
 
@@ -84,11 +93,10 @@ public class VentaController {
                             ", solicitado: " + detalleReq.getCantidad());
                 }
 
-                // Crear detalle de venta usando el constructor corregido
+                // Crear detalle de venta
                 DetalleVenta detalle = new DetalleVenta();
                 detalle.setProducto(producto);
                 detalle.setCantidad(detalleReq.getCantidad());
-                // El precio unitario se establece automáticamente en el setter de producto
 
                 venta.agregarDetalle(detalle);
                 total += detalle.getSubtotal();
@@ -130,11 +138,37 @@ public class VentaController {
         }
     }
 
+    // Endpoint para buscar cliente por documento
+    @PostMapping("/api/buscar-cliente")
+    @ResponseBody
+    public ResponseEntity<?> buscarClientePorDocumento(@RequestParam String numeroDocumento) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            var clienteOpt = clienteService.buscarPorDocumento(numeroDocumento);
+            if (clienteOpt.isPresent()) {
+                response.put("success", true);
+                response.put("data", clienteOpt.get());
+                response.put("message", "Cliente encontrado");
+            } else {
+                response.put("success", false);
+                response.put("message", "Cliente no encontrado");
+            }
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Error al buscar cliente: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
     // Clases DTO para la request
     public static class VentaRequest {
+        private Long clienteId;
         private java.util.List<DetalleVentaRequest> detalles;
 
         // Getters y setters
+        public Long getClienteId() { return clienteId; }
+        public void setClienteId(Long clienteId) { this.clienteId = clienteId; }
         public java.util.List<DetalleVentaRequest> getDetalles() { return detalles; }
         public void setDetalles(java.util.List<DetalleVentaRequest> detalles) { this.detalles = detalles; }
     }

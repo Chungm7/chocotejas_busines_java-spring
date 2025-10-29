@@ -56,6 +56,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Fecha y Hora</th>
+                            <th>Cliente</th>
                             <th>Total</th>
                             <th>Productos Vendidos</th>
                             <th>Acciones</th>
@@ -79,6 +80,37 @@
             </div>
             <form id="formVenta">
                 <div class="modal-body">
+                    <!-- Sección de Cliente -->
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <h6 class="fw-bold mb-3">Datos del Cliente</h6>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label for="tipoDocumentoCliente" class="form-label">Tipo Documento *</label>
+                                    <select id="tipoDocumentoCliente" name="tipoDocumentoCliente" class="form-select" required>
+                                        <option value="">Seleccione tipo</option>
+                                        <option value="DNI">DNI</option>
+                                        <option value="RUC">RUC</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="numeroDocumentoCliente" class="form-label">Número Documento *</label>
+                                    <input type="text" id="numeroDocumentoCliente" name="numeroDocumentoCliente" class="form-control" required>
+                                </div>
+                                <div class="col-md-3 d-flex align-items-end">
+                                    <button type="button" id="btnBuscarCliente" class="btn btn-primary w-100">Buscar Cliente</button>
+                                </div>
+                                <div class="col-md-2 d-flex align-items-end">
+                                    <button type="button" id="btnNuevoCliente" class="btn btn-outline-secondary w-100">Nuevo</button>
+                                </div>
+                            </div>
+                            <div id="infoCliente" class="alert alert-info mt-3" style="display: none;">
+                                <!-- Información del cliente se mostrará aquí -->
+                            </div>
+                            <input type="hidden" id="idCliente" name="idCliente">
+                        </div>
+                    </div>
+
                     <!-- Productos de la venta -->
                     <div class="mb-4">
                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -143,6 +175,62 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nuevo Cliente -->
+<div class="modal fade" id="clienteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content rounded-3 shadow">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title">Registrar Nuevo Cliente</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="formCliente">
+                <div class="modal-body">
+                    <input type="hidden" id="clienteId" name="id">
+                    <input type="hidden" id="clienteNombreCompleto" name="nombreCompleto">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="clienteTipoDocumento" class="form-label">Tipo Documento *</label>
+                                <select id="clienteTipoDocumento" name="tipoDocumento" class="form-select" required>
+                                    <option value="">Seleccione tipo</option>
+                                    <option value="DNI">DNI</option>
+                                    <option value="RUC">RUC</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="clienteNumeroDocumento" class="form-label">Número Documento *</label>
+                                <input type="text" id="clienteNumeroDocumento" name="numeroDocumento" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="clienteDireccion" class="form-label">Dirección *</label>
+                                <textarea id="clienteDireccion" name="direccion" class="form-control" required placeholder="Dirección de envío"></textarea>
+                            </div>
+
+                            <!-- Información de la API -->
+                            <div id="clienteInfoApi" class="alert alert-info" style="display: none;">
+                                <small>
+                                    <strong>Información obtenida:</strong><br>
+                                    <span id="clienteInfoNombre"></span><br>
+                                    <span id="clienteInfoEstado"></span>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-secondary">Guardar Cliente</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
