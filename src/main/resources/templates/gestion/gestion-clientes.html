@@ -82,7 +82,6 @@
             <form id="formCliente">
                 <div class="modal-body">
                     <input type="hidden" id="idCliente" name="id">
-                    <!-- AGREGAR ESTE CAMPO OCULTO -->
                     <input type="hidden" id="nombreCompleto" name="nombreCompleto">
 
                     <div class="row">
@@ -110,16 +109,12 @@
                                 <label for="direccion" class="form-label">Dirección *</label>
                                 <textarea id="direccion" name="direccion" class="form-control" required placeholder="Dirección de envío"></textarea>
                             </div>
-
-                            <!-- Información de la API -->
-                            <div id="infoApi" class="alert alert-info" style="display: none;">
-                                <small>
-                                    <strong>Información obtenida:</strong><br>
-                                    <span id="infoNombre"></span><br>
-                                    <span id="infoEstado"></span>
-                                </small>
-                            </div>
                         </div>
+                    </div>
+
+                    <!-- Información de la API - MEJORADA -->
+                    <div id="infoApi" class="alert alert-info mt-3" style="display: none;">
+                        <!-- La información se cargará dinámicamente aquí -->
                     </div>
                 </div>
                 <div class="modal-footer">

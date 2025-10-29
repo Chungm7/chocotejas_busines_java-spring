@@ -48,7 +48,6 @@ $(document).ready(function () {
             {
                 data: null,
                 render: function (data) {
-                    // Solo mostrar acciones para clientes no eliminados
                     if (data.estado === 2) {
                         return '<span class="text-muted">Eliminado</span>';
                     }
@@ -101,51 +100,49 @@ $(document).ready(function () {
             helpText.text("DNI: 8 dígitos, RUC: 11 dígitos");
         }
 
-        // Limpiar información de la API
-        $("#infoApi").hide();
-        $("#infoNombre").text("");
-        $("#infoEstado").text("");
+        // LIMPIAR COMPLETAMENTE LA INFORMACIÓN DE LA API
+        $("#infoApi").hide().empty().removeClass("alert-warning alert-info");
         $("#nombreCompleto").val("");
+        $("#formCliente button[type='submit']").prop("disabled", true);
     });
-
     // Consultar API al perder foco del número de documento
     $("#numeroDocumento").blur(function() {
         const tipo = $("#tipoDocumento").val();
         const numero = $(this).val().trim();
         const idCliente = $("#idCliente").val();
 
-        if (tipo && numero &&
-            ((tipo === "DNI" && numero.length === 8) ||
-                (tipo === "RUC" && numero.length === 11))) {
+        // Validar formato básico
+        if (!tipo || !numero) return;
 
-            // Primero verificar si el documento ya existe
-            verificarDocumentoExistente(numero, idCliente || null).then(existe => {
-                if (existe) {
-                    mostrarNotificacion("Ya existe un cliente con este número de documento", "warning");
-                    $("#formCliente button[type='submit']").prop("disabled", true);
-                } else {
-                    $("#formCliente button[type='submit']").prop("disabled", false);
-                    consultarApiDocumento(tipo, numero);
-                }
-            }).catch(() => {
-                consultarApiDocumento(tipo, numero);
-            });
+        const esDNIValido = tipo === "DNI" && numero.length === 8 && /^\d+$/.test(numero);
+        const esRUCValido = tipo === "RUC" && numero.length === 11 && /^\d+$/.test(numero);
+
+        if (!esDNIValido && !esRUCValido) {
+            mostrarNotificacion("Número de documento inválido", "warning");
+            return;
         }
+
+        // SIEMPRE consultar la API, sin importar si es nuevo cliente o edición
+        consultarApiDocumento(tipo, numero);
     });
 
-    // Botón nuevo cliente
+// Botón nuevo cliente
     $("#btnNuevoCliente").click(function () {
         formCliente[0].reset();
         $("#idCliente").val("");
-        $("#nombreCompleto").val(""); // Resetear el campo oculto
+        $("#nombreCompleto").val("");
         $("#clienteModalLabel").text("Nuevo Cliente");
-        $("#infoApi").hide();
+
+        // RESET COMPLETO de la información de la API
+        $("#infoApi").hide().empty().removeClass("alert-warning alert-danger alert-info");
+        $("#formCliente button[type='submit']").prop("disabled", true);
+
         clienteModal.show();
     });
 
     // Guardar cliente
-    // Guardar cliente
-    formCliente.submit(function (e) {
+// Guardar cliente
+    formCliente.submit(async function (e) {  // Agregar async aquí
         e.preventDefault();
 
         const tipoDocumento = $("#tipoDocumento").val();
@@ -166,21 +163,40 @@ $(document).ready(function () {
             return;
         }
 
+        // Validar formato del documento
+        if (tipoDocumento === "DNI" && (!/^\d{8}$/.test(numeroDocumento))) {
+            mostrarNotificacion("El DNI debe tener 8 dígitos numéricos", "danger");
+            return;
+        }
+
+        if (tipoDocumento === "RUC" && (!/^\d{11}$/.test(numeroDocumento))) {
+            mostrarNotificacion("El RUC debe tener 11 dígitos numéricos", "danger");
+            return;
+        }
+
         if (!direccion) {
-            mostrarNotificacion("Ingrese la dirección", "danger");
+            mostrarNotificacion("Ingrese la dirección de entrega", "danger");
             return;
         }
 
-        // Para nuevo cliente, validar que se haya consultado la API
-        if (!isEdit && !nombreCompleto) {
-            mostrarNotificacion("Debe consultar el documento primero para obtener los datos", "warning");
-            return;
-        }
+        // Para nuevo cliente, validar que se haya consultado la API y tenga nombre completo
+        if (!isEdit) {
+            if (!nombreCompleto) {
+                mostrarNotificacion("Debe consultar el documento primero para obtener los datos de la API", "warning");
+                return;
+            }
 
-        // Para edición, si no hay nombreCompleto, usar el existente
-        if (isEdit && !nombreCompleto) {
-            // En edición, el nombreCompleto ya está en la base de datos
-            // No es necesario validarlo nuevamente
+            // Verificar una última vez que el documento no exista (por si acaso)
+            try {
+                const existe = await verificarDocumentoExistente(numeroDocumento, null);
+                if (existe) {
+                    mostrarNotificacion("Ya existe un cliente con este número de documento", "warning");
+                    return;
+                }
+            } catch (error) {
+                console.error("Error verificando documento:", error);
+                // Continuar aunque falle la verificación
+            }
         }
 
         const url = isEdit ? `/gestion/clientes/api/actualizar/${id}` : "/gestion/clientes/api/guardar";
@@ -228,10 +244,12 @@ $(document).ready(function () {
                 $("#tipoDocumento").val(cliente.tipoDocumento);
                 $("#numeroDocumento").val(cliente.numeroDocumento);
                 $("#direccion").val(cliente.direccion);
-                $("#nombreCompleto").val(cliente.nombreCompleto); // Asegurar que se establezca
+                $("#nombreCompleto").val(cliente.nombreCompleto);
 
-                // Ocultar información de API en edición
-                $("#infoApi").hide();
+                // FORZAR la consulta a la API para mostrar datos actualizados
+                setTimeout(() => {
+                    consultarApiDocumento(cliente.tipoDocumento, cliente.numeroDocumento);
+                }, 100);
 
                 $("#clienteModalLabel").text("Editar Cliente");
                 clienteModal.show();
@@ -282,10 +300,12 @@ $(document).ready(function () {
     });
 });
 
-// Función para consultar la API de documentos
 function consultarApiDocumento(tipo, numero) {
     // Mostrar loading
-    $("#infoApi").html('<small><i class="spinner-border spinner-border-sm"></i> Consultando API...</small>').show();
+    $("#infoApi").html('<small><i class="spinner-border spinner-border-sm"></i> Consultando API...</small>')
+        .show()
+        .removeClass("alert-warning alert-danger")
+        .addClass("alert-info");
 
     let url;
     if (tipo === "DNI") {
@@ -302,58 +322,90 @@ function consultarApiDocumento(tipo, numero) {
             "Accept": "application/json"
         },
         success: function (res) {
-            if (res.success) {
+            if (res.success && res.datos) {
                 let nombreCompleto = "";
                 let estadoApi = "";
+                let infoHtml = "";
 
                 if (tipo === "DNI") {
-                    // Construir nombre completo para DNI
                     const datos = res.datos;
                     nombreCompleto = `${datos.nombres} ${datos.ape_paterno} ${datos.ape_materno}`.trim();
-                    estadoApi = "ACTIVO"; // DNI siempre activo
+                    estadoApi = "ACTIVO";
+
+                    infoHtml = `
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <strong class="text-dark">Información del DNI:</strong><br>
+                                <strong>Nombres:</strong> ${datos.nombres}<br>
+                                <strong>Apellido Paterno:</strong> ${datos.ape_paterno}<br>
+                                <strong>Apellido Materno:</strong> ${datos.ape_materno}<br>
+                                <strong>Nombre Completo:</strong> <span class="fw-bold text-success">${nombreCompleto}</span>
+                            </div>
+                            <button type="button" class="btn-close" onclick="$('#infoApi').hide()"></button>
+                        </div>
+                    `;
                 } else {
-                    // Para RUC
                     const datos = res.datos;
                     nombreCompleto = datos.razon_social;
                     estadoApi = datos.estado;
+
+                    infoHtml = `
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <strong class="text-dark">Información del RUC:</strong><br>
+                                <strong>Razón Social:</strong> <span class="fw-bold text-success">${datos.razon_social}</span><br>
+                                <strong>Estado:</strong> ${datos.estado}<br>
+                                <strong>Condición:</strong> ${datos.condicion}
+                            </div>
+                            <button type="button" class="btn-close" onclick="$('#infoApi').hide()"></button>
+                        </div>
+                    `;
                 }
 
                 // Actualizar el campo oculto con el nombre completo
                 $("#nombreCompleto").val(nombreCompleto);
 
-                // Mostrar información en el modal
-                $("#infoNombre").text(nombreCompleto);
+                // Mostrar información PERMANENTE
+                $("#infoApi").html(`<small>${infoHtml}</small>`)
+                    .removeClass("alert-warning alert-danger")
+                    .addClass("alert-info")
+                    .show();
 
                 if (tipo === "RUC") {
-                    $("#infoEstado").text(`Estado: ${estadoApi}`);
                     if (estadoApi !== "ACTIVO") {
                         $("#infoApi").removeClass("alert-info").addClass("alert-warning");
                         mostrarNotificacion("El RUC no está activo. No se puede registrar.", "warning");
+                        $("#formCliente button[type='submit']").prop("disabled", true);
                     } else {
-                        $("#infoApi").removeClass("alert-warning").addClass("alert-info");
+                        $("#formCliente button[type='submit']").prop("disabled", false);
+                        mostrarNotificacion("RUC validado correctamente", "success");
                     }
                 } else {
-                    $("#infoEstado").text("Estado: ACTIVO (DNI)");
-                    $("#infoApi").removeClass("alert-warning").addClass("alert-info");
-                }
-
-                $("#infoApi").show();
-
-                // Si es RUC y no está activo, deshabilitar el botón de guardar
-                if (tipo === "RUC" && estadoApi !== "ACTIVO") {
-                    $("#formCliente button[type='submit']").prop("disabled", true);
-                } else {
                     $("#formCliente button[type='submit']").prop("disabled", false);
+                    mostrarNotificacion("DNI validado correctamente", "success");
                 }
+
             } else {
                 $("#infoApi").hide();
                 mostrarNotificacion("Documento no encontrado en la API", "warning");
+                $("#formCliente button[type='submit']").prop("disabled", true);
             }
         },
         error: function(xhr, status, error) {
             $("#infoApi").hide();
             console.error("Error en la consulta API:", error);
-            mostrarNotificacion("Error al consultar la API: " + (xhr.responseJSON?.message || error), "danger");
+            let errorMsg = "Error al consultar la API";
+
+            if (xhr.status === 404) {
+                errorMsg = "Documento no encontrado en la API";
+            } else if (xhr.status === 401) {
+                errorMsg = "Error de autenticación con la API";
+            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                errorMsg = xhr.responseJSON.message;
+            }
+
+            mostrarNotificacion(errorMsg, "danger");
+            $("#formCliente button[type='submit']").prop("disabled", true);
         }
     });
 }
@@ -376,18 +428,20 @@ function verificarDocumentoExistente(numeroDocumento, idCliente = null) {
         });
     });
 }
-
-// Función de notificación
 function mostrarNotificacion(mensaje, tipo) {
+    // Crear un ID único para esta notificación
+    const notificationId = 'notification-' + Date.now();
+
     const alert = `
-        <div class="alert alert-${tipo} alert-dismissible fade show" role="alert">
+        <div id="${notificationId}" class="alert alert-${tipo} alert-dismissible fade show" role="alert">
             ${mensaje}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>`;
+
     $("#notification-container").append(alert);
 
-    // Auto-cerrar después de 4 segundos
+    // Auto-cerrar después de 4 segundos SOLO para esta notificación específica
     setTimeout(() => {
-        $(".alert").alert("close");
+        $(`#${notificationId}`).alert('close');
     }, 4000);
 }
