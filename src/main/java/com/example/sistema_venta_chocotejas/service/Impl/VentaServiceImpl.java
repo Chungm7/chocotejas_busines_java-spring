@@ -43,35 +43,36 @@ public class VentaServiceImpl implements VentaService {
     @Override
     @Transactional
     public Venta registrarVenta(Venta venta) {
-        // Validar stock y actualizar productos
-        for (DetalleVenta detalle : venta.getDetalleVentas()) {
-            Producto producto = detalle.getProducto();
+        try {
+            // Validar stock y actualizar productos
+            for (DetalleVenta detalle : venta.getDetalleVentas()) {
+                Producto producto = detalle.getProducto();
 
-            // Validaciones de seguridad
-            if (producto == null) {
-                throw new IllegalArgumentException("Producto no puede ser null en el detalle de venta");
+                if (producto == null) {
+                    throw new IllegalArgumentException("Producto no puede ser null en el detalle de venta");
+                }
+
+                // Validar stock disponible
+                if (producto.getStock() < detalle.getCantidad()) {
+                    throw new IllegalArgumentException(
+                            "Stock insuficiente para el producto: " + producto.getNombre() +
+                                    ". Stock disponible: " + producto.getStock() +
+                                    ", solicitado: " + detalle.getCantidad()
+                    );
+                }
+
+                // Actualizar stock del producto
+                int nuevoStock = producto.getStock() - detalle.getCantidad();
+                producto.setStock(nuevoStock);
+                productoRepository.save(producto);
             }
 
-            if (detalle.getPrecioUnitario() == null) {
-                // Si por alguna razón el precio unitario es null, usar el precio del producto
-                detalle.setPrecioUnitario(producto.getPrecio() != null ? producto.getPrecio() : 0.0);
-            }
-
-            // Validar stock disponible
-            if (producto.getStock() < detalle.getCantidad()) {
-                throw new IllegalArgumentException(
-                        "Stock insuficiente para el producto: " + producto.getNombre() +
-                                ". Stock disponible: " + producto.getStock() +
-                                ", solicitado: " + detalle.getCantidad()
-                );
-            }
-
-            // Actualizar stock del producto
-            producto.setStock(producto.getStock() - detalle.getCantidad());
-            productoRepository.save(producto);
+            return ventaRepository.save(venta);
+        } catch (Exception e) {
+            // Log del error
+            System.err.println("Error al registrar venta: " + e.getMessage());
+            throw e; // Re-lanzar la excepción para que el controller la capture
         }
-
-        return ventaRepository.save(venta);
     }
 
     @Override

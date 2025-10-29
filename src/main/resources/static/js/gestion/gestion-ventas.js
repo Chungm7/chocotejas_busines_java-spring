@@ -492,8 +492,14 @@ function registrarVenta() {
             if (res.success) {
                 mostrarNotificacion(res.message, "success");
                 ventaModal.hide();
-                tablaVentas.ajax.reload();
+                // Recargar la tabla y limpiar el formulario
+                tablaVentas.ajax.reload(null, false); // false para mantener la paginación
                 cargarProductosDisponibles();
+                resetFormVenta();
+                // Limpiar datos del cliente
+                $("#idCliente").val("");
+                $("#numeroDocumentoCliente").val("");
+                $("#infoCliente").hide();
             } else {
                 mostrarNotificacion(res.message, "danger");
             }
@@ -503,6 +509,14 @@ function registrarVenta() {
             try {
                 const response = JSON.parse(xhr.responseText);
                 errorMsg = response.message || errorMsg;
+
+                // Si la venta se registró pero hay error de serialización, recargar la tabla
+                if (errorMsg.includes("serialización") || errorMsg.includes("JSON")) {
+                    tablaVentas.ajax.reload();
+                    mostrarNotificacion("Venta registrada exitosamente, pero hubo un error al mostrar los detalles", "warning");
+                    ventaModal.hide();
+                    return;
+                }
             } catch (e) {
                 errorMsg = "Error de conexión al registrar la venta";
             }

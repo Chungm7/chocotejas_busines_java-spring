@@ -7,9 +7,11 @@ import com.example.sistema_venta_chocotejas.service.Impl.VentaServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,6 +57,7 @@ public class VentaController {
 
     @PostMapping("/api/registrar")
     @ResponseBody
+    @Transactional
     public ResponseEntity<?> registrarVenta(@RequestBody VentaRequest ventaRequest) {
         try {
             // Validaciones básicas
@@ -73,6 +76,7 @@ public class VentaController {
             Venta venta = new Venta();
             venta.setFecha(LocalDateTime.now());
             venta.setCliente(cliente);
+            venta.setEstado(1);
 
             Double total = 0.0;
 
@@ -97,6 +101,8 @@ public class VentaController {
                 DetalleVenta detalle = new DetalleVenta();
                 detalle.setProducto(producto);
                 detalle.setCantidad(detalleReq.getCantidad());
+                detalle.setPrecioUnitario(producto.getPrecio());
+                detalle.setSubtotal(producto.getPrecio() * detalleReq.getCantidad());
 
                 venta.agregarDetalle(detalle);
                 total += detalle.getSubtotal();
@@ -104,17 +110,18 @@ public class VentaController {
 
             venta.setTotal(total);
 
-            // Registrar venta (esto actualizará el stock automáticamente)
+            // Registrar venta
             Venta ventaRegistrada = ventaService.registrarVenta(venta);
 
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("message", "Venta registrada con éxito");
-            response.put("data", ventaRegistrada);
+            // En lugar de devolver la entidad completa, devolver solo el ID para evitar problemas de serialización
+            response.put("data", Collections.singletonMap("id", ventaRegistrada.getId()));
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-            e.printStackTrace(); // Para debugging
+            e.printStackTrace();
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);
             errorResponse.put("message", "Error al registrar la venta: " + e.getMessage());
