@@ -1,5 +1,6 @@
 package com.example.sistema_venta_chocotejas.controller.gestion;
 
+import com.example.sistema_venta_chocotejas.dto.VentaDTO;
 import com.example.sistema_venta_chocotejas.model.*;
 import com.example.sistema_venta_chocotejas.service.Impl.ClienteServiceImpl;
 import com.example.sistema_venta_chocotejas.service.Impl.ProductoServiceImpl;
@@ -38,27 +39,44 @@ public class VentaController {
     @ResponseBody
     public ResponseEntity<?> listarVentasActivas() {
         Map<String, Object> response = new HashMap<>();
-        response.put("success", true);
-        response.put("data", ventaService.listarVentasActivas());
-        return ResponseEntity.ok(response);
+        try {
+            response.put("success", true);
+            response.put("data", ventaService.listarVentasActivas());
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Error al listar ventas: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     @GetMapping("/api/{id}")
     @ResponseBody
     public ResponseEntity<?> obtenerVenta(@PathVariable Long id) {
-        return ventaService.obtenerVentaPorId(id)
-                .map(venta -> {
-                    Map<String, Object> response = new HashMap<>();
-                    response.put("success", true);
-                    response.put("data", venta);
-                    return ResponseEntity.ok(response);
-                }).orElse(ResponseEntity.notFound().build());
+        Map<String, Object> response = new HashMap<>();
+        try {
+            var ventaDTO = ventaService.obtenerVentaPorId(id);
+            if (ventaDTO.isPresent()) {
+                response.put("success", true);
+                response.put("data", ventaDTO.get());
+                return ResponseEntity.ok(response);
+            } else {
+                response.put("success", false);
+                response.put("message", "Venta no encontrada");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Error al obtener venta: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     @PostMapping("/api/registrar")
     @ResponseBody
     @Transactional
     public ResponseEntity<?> registrarVenta(@RequestBody VentaRequest ventaRequest) {
+        Map<String, Object> response = new HashMap<>();
         try {
             // Validaciones básicas
             if (ventaRequest.getClienteId() == null) {
@@ -113,19 +131,16 @@ public class VentaController {
             // Registrar venta
             Venta ventaRegistrada = ventaService.registrarVenta(venta);
 
-            Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("message", "Venta registrada con éxito");
-            // En lugar de devolver la entidad completa, devolver solo el ID para evitar problemas de serialización
             response.put("data", Collections.singletonMap("id", ventaRegistrada.getId()));
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             e.printStackTrace();
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("success", false);
-            errorResponse.put("message", "Error al registrar la venta: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            response.put("success", false);
+            response.put("message", "Error al registrar la venta: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
@@ -168,12 +183,11 @@ public class VentaController {
         }
     }
 
-    // Clases DTO para la request
+    // Clases DTO para la request (mantener igual)
     public static class VentaRequest {
         private Long clienteId;
         private java.util.List<DetalleVentaRequest> detalles;
 
-        // Getters y setters
         public Long getClienteId() { return clienteId; }
         public void setClienteId(Long clienteId) { this.clienteId = clienteId; }
         public java.util.List<DetalleVentaRequest> getDetalles() { return detalles; }
@@ -184,7 +198,6 @@ public class VentaController {
         private Long productoId;
         private Integer cantidad;
 
-        // Getters y setters
         public Long getProductoId() { return productoId; }
         public void setProductoId(Long productoId) { this.productoId = productoId; }
         public Integer getCantidad() { return cantidad; }
