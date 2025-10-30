@@ -82,8 +82,8 @@
 
     <!-- Sección de Bienvenida -->
     <section class="container text-center my-5">
-        <h1 class="display-4">El arte del chocolate hecho a mano</h1>
-        <p class="lead">Bienvenido a ChocoSabor, donde cada chocoteja es una obra de arte, creada con los ingredientes más finos y una pasión que se siente en cada mordida. Descubre la tradición y el sabor que nos hacen únicos.</p>
+        <h1 class="display-4" th:text="${inicio.titulo}">...</h1>
+        <p class="lead" th:text="${inicio.getContenido()}">...</p>
     </section>
 
     <!-- Productos Destacados -->
