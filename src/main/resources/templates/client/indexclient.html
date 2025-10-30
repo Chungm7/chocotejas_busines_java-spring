@@ -14,6 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lobster&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <!-- Estilos personalizados -->
     <link rel="stylesheet" th:href="@{/css/client/base.css}">
+    <link rel="stylesheet" th:href="@{/css/client/momentos.css}">
 </head>
 <body>
 
@@ -156,14 +157,27 @@
     </section>
 
     <!-- Galería de Imágenes Representativa -->
-    <section class="container my-5">
+    <section class="container my-5 galeria-momentos">
         <h2 class="text-center mb-4">Momentos ChocoSabor</h2>
-        <div class="row g-3">
-            <div class="col-lg-4 col-md-6"><img src="https://placehold.co/600x400/5D4037/FFF8E1?text=Rellenos" class="img-fluid rounded shadow" alt="Rellenos cremosos"></div>
-            <div class="col-lg-4 col-md-6"><img src="https://placehold.co/600x400/3E2723/FFF8E1?text=Cobertura" class="img-fluid rounded shadow" alt="Cobertura de chocolate"></div>
-            <div class="col-lg-4 col-md-12"><img src="https://placehold.co/600x400/A1887F/FFF8E1?text=Empaques" class="img-fluid rounded shadow" alt="Empaques para regalo"></div>
+        <div class="momentos-grid" id="galeriaMomentos">
+            <div th:each="momento : ${momentos}"
+                 class="momento-item"
+                 th:if="${momento.activo}">
+                <img th:src="@{'/momentos/' + ${momento.ruta}}"
+                     th:alt="${momento.nombre}"
+                     class="momento-img">
+                <div class="momento-overlay">
+                    <h5 class="momento-nombre" th:text="${momento.nombre}"></h5>
+                </div>
+            </div>
+
+            <!-- Mensaje si no hay momentos -->
+            <div th:if="${#lists.isEmpty(momentos)}" class="col-12 text-center">
+                <p class="text-muted">Próximamente tendremos más momentos para compartir.</p>
+            </div>
         </div>
     </section>
+
 </main>
 
 <!-- Modales para productos destacados - Generados dinámicamente -->
@@ -253,5 +267,6 @@
 <script th:src="@{/js/client/client-destacados.js}"></script>
 <!-- Script para funcionalidad WhatsApp (usando el mismo que galería) -->
 <script th:src="@{/js/client/client-galeria.js}"></script>
+<script th:src="@{/js/client/client-momentos.js}"></script>
 </body>
 </html>
