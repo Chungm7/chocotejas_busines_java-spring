@@ -77,7 +77,9 @@ public class InventarioController {
         dto.setId(movimiento.getId());
         dto.setFecha(movimiento.getFecha());
         dto.setTipoMovimiento(movimiento.getTipoMovimiento());
-        dto.setCantidad(movimiento.getCantidad());
+        dto.setStockAnterior(movimiento.getStockAnterior());
+        dto.setNuevoStock(movimiento.getNuevoStock());
+        dto.setDiferencia(movimiento.getDiferencia());
         dto.setComprobante(movimiento.getComprobante());
         dto.setObservaciones(movimiento.getObservaciones());
 

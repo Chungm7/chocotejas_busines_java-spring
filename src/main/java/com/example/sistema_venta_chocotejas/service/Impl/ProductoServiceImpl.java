@@ -144,20 +144,20 @@ public class ProductoServiceImpl implements ProductoService {
     public Producto actualizarStockProducto(Long idProducto, int cantidad) {
         Producto producto = productoRepository.findById(idProducto)
                 .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado con id: " + idProducto));
-        producto.setStock(cantidad);
+
         int stockAnterior = producto.getStock();
         producto.setStock(cantidad);
         Producto productoActualizado = productoRepository.save(producto);
-        // REGISTRAR MOVIMIENTO DE INVENTARIO
-        int diferencia = cantidad - stockAnterior;
-        String observaciones = String.format("Actualización manual: Stock anterior %d, Nuevo stock %d",
-                stockAnterior, cantidad);
 
+        // REGISTRAR MOVIMIENTO DE INVENTARIO CON LOS NUEVOS CAMPOS
         movimientoInventarioService.registrarMovimientoStock(
                 idProducto,
-                diferencia,
-                observaciones
+                stockAnterior,
+                cantidad,
+                String.format("Actualización manual: Stock anterior %d, Nuevo stock %d, Diferencia %+d",
+                        stockAnterior, cantidad, cantidad - stockAnterior)
         );
+
         return productoActualizado;
     }
 

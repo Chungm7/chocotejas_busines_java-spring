@@ -1,3 +1,4 @@
+// MovimientoInventarioServiceImpl.java
 package com.example.sistema_venta_chocotejas.service.Impl;
 
 import com.example.sistema_venta_chocotejas.model.MovimientoInventario;
@@ -43,15 +44,20 @@ public class MovimientoInventarioServiceImpl implements MovimientoInventarioServ
 
     @Override
     @Transactional
-    public void registrarMovimientoVenta(String comprobante, Long productoId, Integer cantidad) {
+    public void registrarMovimientoVenta(String comprobante, Long productoId, Integer cantidadVendida) {
         Optional<Producto> productoOpt = productoRepository.findById(productoId);
         if (productoOpt.isPresent()) {
+            Producto producto = productoOpt.get();
+            Integer stockAnterior = producto.getStock() + cantidadVendida; // Stock antes de la venta
+
             MovimientoInventario movimiento = new MovimientoInventario();
             movimiento.setTipoMovimiento("VENTA");
-            movimiento.setCantidad(-cantidad); // Negativo porque es una salida
+            movimiento.setStockAnterior(stockAnterior);
+            movimiento.setNuevoStock(producto.getStock()); // Stock después de la venta
             movimiento.setComprobante(comprobante);
-            movimiento.setProducto(productoOpt.get());
-            movimiento.setObservaciones("Venta registrada - Comprobante: " + comprobante);
+            movimiento.setProducto(producto);
+            movimiento.setObservaciones("Venta registrada - Comprobante: " + comprobante +
+                    " | Vendido: " + cantidadVendida + " unidades");
 
             movimientoInventarioRepository.save(movimiento);
         }
@@ -59,15 +65,44 @@ public class MovimientoInventarioServiceImpl implements MovimientoInventarioServ
 
     @Override
     @Transactional
-    public void registrarMovimientoStock(Long productoId, Integer cantidad, String observaciones) {
+    public void registrarMovimientoStock(Long productoId, Integer nuevoStock, String observaciones) {
         Optional<Producto> productoOpt = productoRepository.findById(productoId);
         if (productoOpt.isPresent()) {
+            Producto producto = productoOpt.get();
+            Integer stockAnterior = producto.getStock();
+
             MovimientoInventario movimiento = new MovimientoInventario();
             movimiento.setTipoMovimiento("ACTUALIZACION_STOCK");
-            movimiento.setCantidad(cantidad); // Positivo o negativo dependiendo del ajuste
+            movimiento.setStockAnterior(stockAnterior);
+            movimiento.setNuevoStock(nuevoStock);
             movimiento.setComprobante("ACTUALIZACION_STOCK");
-            movimiento.setProducto(productoOpt.get());
-            movimiento.setObservaciones(observaciones != null ? observaciones : "Actualización manual de stock");
+            movimiento.setProducto(producto);
+
+            String observacionesCompletas = observaciones != null ?
+                    observaciones :
+                    String.format("Actualización manual: Stock anterior %d, Nuevo stock %d, Diferencia %+d",
+                            stockAnterior, nuevoStock, nuevoStock - stockAnterior);
+            movimiento.setObservaciones(observacionesCompletas);
+
+            movimientoInventarioRepository.save(movimiento);
+        }
+    }
+
+    // Nuevo método específico para actualizaciones de stock
+    @Override
+    @Transactional
+    public void registrarMovimientoStock(Long productoId, Integer stockAnterior, Integer nuevoStock, String observaciones) {
+        Optional<Producto> productoOpt = productoRepository.findById(productoId);
+        if (productoOpt.isPresent()) {
+            Producto producto = productoOpt.get();
+
+            MovimientoInventario movimiento = new MovimientoInventario();
+            movimiento.setTipoMovimiento("ACTUALIZACION_STOCK");
+            movimiento.setStockAnterior(stockAnterior);
+            movimiento.setNuevoStock(nuevoStock);
+            movimiento.setComprobante("ACTUALIZACION_STOCK");
+            movimiento.setProducto(producto);
+            movimiento.setObservaciones(observaciones);
 
             movimientoInventarioRepository.save(movimiento);
         }

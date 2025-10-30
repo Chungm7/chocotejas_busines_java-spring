@@ -56,6 +56,35 @@
     font-weight: 500;
     color: var(--color-dark-chocolate);
 }
+/* gestion-inventario.css - Agregar estos estilos */
+.stock-change-positive {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.stock-change-negative {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+.stock-change-neutral {
+    color: #6c757d;
+}
+
+.stock-comparison {
+    font-size: 0.85rem;
+}
+
+.stock-comparison .stock-before {
+    color: #6c757d;
+    text-decoration: line-through;
+    margin-right: 5px;
+}
+
+.stock-comparison .stock-after {
+    color: #198754;
+    font-weight: 600;
+}
 
 /* Responsive */
 @media (max-width: 768px) {

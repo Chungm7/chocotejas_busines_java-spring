@@ -14,4 +14,5 @@ public interface MovimientoInventarioService {
     void registrarMovimientoVenta(String comprobante, Long productoId, Integer cantidad);
 
     void registrarMovimientoStock(Long productoId, Integer cantidad, String observaciones);
+    void registrarMovimientoStock(Long productoId, Integer stockAnterior, Integer nuevoStock, String observaciones);
 }

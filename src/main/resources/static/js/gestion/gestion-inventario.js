@@ -30,19 +30,6 @@ function inicializarDataTable() {
             dataSrc: "data"
         },
         columns: [
-            { data: "id" },
-            {
-                data: "fecha",
-                render: function (fecha) {
-                    return new Date(fecha).toLocaleString('es-ES', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-                }
-            },
             {
                 data: "tipoMovimiento",
                 render: function (tipo) {
@@ -57,7 +44,7 @@ function inicializarDataTable() {
                     if (producto) {
                         return `
                             <div class="d-flex align-items-center">
-                                <img src="../../../../../productos/${producto.imagen}" 
+                                <img src="../../../../../imagenes/${producto.imagen}" 
                                      alt="${producto.nombre}" 
                                      class="producto-img-thumbnail me-2"
                                      onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yNSAzMEMyOC44NjYgMzAgMzIgMjYuODY2IDMyIDIzQzMyIDE5LjEzNCAyOC44NjYgMTYgMjUgMTZDMjEuMTM0IDE2IDE4IDE5LjEzNCAxOCAyM0MxOCAyNi44NjYgMjEuMTM0IDMwIDI1IDMwWiIgZmlsbD0iIzlDOEU5RiIvPgo8cGF0aCBkPSJNMTguNzUgMzRDMTcuNTAzIDM0IDE2LjM3NSAzNC42MDMgMTUuNjU2IDM1LjU5M0MxNi4zNzUgMzYuNTgzIDE3LjUwMyAzNy4xODggMTguNzUgMzcuMTg4SDMxLjI1QzMyLjQ5NyAzNy4xODggMzMuNjI1IDM2LjU4MyAzNC4zNDQgMzUuNTkzQzMzLjYyNSAzNC42MDMgMzIuNDk3IDM0IDMxLjI1IDM0SDE4Ljc1WiIgZmlsbD0iIzlDOEU5RiIvPgo8L3N2Zz4K'">
@@ -72,14 +59,31 @@ function inicializarDataTable() {
                 }
             },
             {
-                data: "cantidad",
-                render: function (cantidad) {
-                    let icono = cantidad > 0 ? 'bi-arrow-up-circle-fill text-success' : 'bi-arrow-down-circle-fill text-danger';
-                    let texto = cantidad > 0 ? `+${cantidad}` : cantidad;
+                data: "stockAnterior",
+                render: function (stockAnterior) {
+                    return `<span class="fw-semibold">${stockAnterior}</span>`;
+                }
+            },
+            {
+                data: "nuevoStock",
+                render: function (nuevoStock) {
+                    return `<span class="fw-bold text-dark">${nuevoStock}</span>`;
+                }
+            },
+            {
+                data: "diferencia",
+                render: function (diferencia) {
+                    let icono = diferencia > 0 ? 'bi-arrow-up-circle-fill text-success' :
+                        diferencia < 0 ? 'bi-arrow-down-circle-fill text-danger' :
+                            'bi-dash-circle text-secondary';
+                    let texto = diferencia > 0 ? `+${diferencia}` : diferencia;
+                    let badgeClass = diferencia > 0 ? 'bg-success' :
+                        diferencia < 0 ? 'bg-danger' : 'bg-secondary';
+
                     return `
                         <div class="d-flex align-items-center">
                             <i class="bi ${icono} me-2"></i>
-                            <span class="fw-bold ${cantidad > 0 ? 'text-success' : 'text-danger'}">${texto}</span>
+                            <span class="badge ${badgeClass}">${texto}</span>
                         </div>
                     `;
                 }
@@ -91,9 +95,21 @@ function inicializarDataTable() {
                 }
             },
             {
+                data: "fecha",
+                render: function (fecha) {
+                    return new Date(fecha).toLocaleString('es-ES', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                }
+            },
+            {
                 data: "observaciones",
                 render: function (observaciones) {
-                    return observaciones ? `<small>${observaciones}</small>` : '-';
+                    return observaciones ? `<small class="text-muted">${observaciones}</small>` : '-';
                 }
             }
         ],

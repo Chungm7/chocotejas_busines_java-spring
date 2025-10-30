@@ -1,3 +1,4 @@
+// MovimientoInventarioRepository.java
 package com.example.sistema_venta_chocotejas.repository;
 
 import com.example.sistema_venta_chocotejas.model.MovimientoInventario;

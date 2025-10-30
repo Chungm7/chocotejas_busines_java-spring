@@ -1,3 +1,4 @@
+// MovimientoInventario.java
 package com.example.sistema_venta_chocotejas.model;
 
 import jakarta.persistence.*;
@@ -18,7 +19,13 @@ public class MovimientoInventario {
     private String tipoMovimiento; // "VENTA", "ACTUALIZACION_STOCK"
 
     @Column(nullable = false)
-    private Integer cantidad; // Positivo para incremento, negativo para decremento
+    private Integer stockAnterior; // NUEVO: Stock antes del movimiento
+
+    @Column(nullable = false)
+    private Integer nuevoStock; // NUEVO: Stock después del movimiento
+
+    @Column(nullable = false)
+    private Integer diferencia; // Positivo para incremento, negativo para decremento
 
     @Column(nullable = false, length = 50)
     private String comprobante; // Código de venta o "ACTUALIZACION_STOCK"
@@ -35,10 +42,14 @@ public class MovimientoInventario {
         this.fecha = LocalDateTime.now();
     }
 
-    public MovimientoInventario(String tipoMovimiento, Integer cantidad, String comprobante, Producto producto, String observaciones) {
+    public MovimientoInventario(String tipoMovimiento, Integer stockAnterior,
+                                Integer nuevoStock, String comprobante,
+                                Producto producto, String observaciones) {
         this();
         this.tipoMovimiento = tipoMovimiento;
-        this.cantidad = cantidad;
+        this.stockAnterior = stockAnterior;
+        this.nuevoStock = nuevoStock;
+        this.diferencia = nuevoStock - stockAnterior;
         this.comprobante = comprobante;
         this.producto = producto;
         this.observaciones = observaciones;
@@ -54,8 +65,20 @@ public class MovimientoInventario {
     public String getTipoMovimiento() { return tipoMovimiento; }
     public void setTipoMovimiento(String tipoMovimiento) { this.tipoMovimiento = tipoMovimiento; }
 
-    public Integer getCantidad() { return cantidad; }
-    public void setCantidad(Integer cantidad) { this.cantidad = cantidad; }
+    public Integer getStockAnterior() { return stockAnterior; }
+    public void setStockAnterior(Integer stockAnterior) {
+        this.stockAnterior = stockAnterior;
+        calcularDiferencia();
+    }
+
+    public Integer getNuevoStock() { return nuevoStock; }
+    public void setNuevoStock(Integer nuevoStock) {
+        this.nuevoStock = nuevoStock;
+        calcularDiferencia();
+    }
+
+    public Integer getDiferencia() { return diferencia; }
+    public void setDiferencia(Integer diferencia) { this.diferencia = diferencia; }
 
     public String getComprobante() { return comprobante; }
     public void setComprobante(String comprobante) { this.comprobante = comprobante; }
@@ -65,4 +88,11 @@ public class MovimientoInventario {
 
     public String getObservaciones() { return observaciones; }
     public void setObservaciones(String observaciones) { this.observaciones = observaciones; }
+
+    // Método para calcular diferencia automáticamente
+    private void calcularDiferencia() {
+        if (this.stockAnterior != null && this.nuevoStock != null) {
+            this.diferencia = this.nuevoStock - this.stockAnterior;
+        }
+    }
 }
