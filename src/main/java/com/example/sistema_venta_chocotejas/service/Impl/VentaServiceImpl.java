@@ -7,6 +7,8 @@ import com.example.sistema_venta_chocotejas.service.VentaService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -68,7 +70,7 @@ public class VentaServiceImpl implements VentaService {
             producto.setStock(producto.getStock() - detalle.getCantidad());
             productoRepository.save(producto);
         }
-
+        generarComprobanteYCodigo(venta);
         return ventaRepository.save(venta);
     }
 
@@ -105,6 +107,8 @@ public class VentaServiceImpl implements VentaService {
         dto.setFecha(venta.getFecha());
         dto.setTotal(venta.getTotal());
         dto.setEstado(venta.getEstado());
+        dto.setComprobantePago(venta.getComprobantePago()); // NUEVO
+        dto.setCodigoVenta(venta.getCodigoVenta()); // NUEVO
 
         // Convertir cliente
         if (venta.getCliente() != null) {
@@ -120,6 +124,22 @@ public class VentaServiceImpl implements VentaService {
         }
 
         return dto;
+    }
+    private void generarComprobanteYCodigo(Venta venta) {
+        Cliente cliente = venta.getCliente();
+        LocalDateTime fecha = venta.getFecha();
+
+        // Determinar tipo de comprobante
+        String comprobante = "DNI".equals(cliente.getTipoDocumento()) ? "BOLETA" : "FACTURA";
+        venta.setComprobantePago(comprobante);
+
+        // Generar código único
+        String prefijo = "DNI".equals(cliente.getTipoDocumento()) ? "B" : "F";
+        String documento = cliente.getNumeroDocumento();
+        String fechaFormateada = fecha.format(DateTimeFormatter.ofPattern("dd-MM-yy-HH-mm-ss"));
+
+        String codigoVenta = prefijo + "-" + documento + "-" + fechaFormateada;
+        venta.setCodigoVenta(codigoVenta);
     }
 
     private ClienteDTO convertirAClienteDTO(Cliente cliente) {

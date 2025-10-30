@@ -22,6 +22,13 @@ public class Venta {
     @Column(nullable = false)
     private Integer estado = 1; // 1: activo, 0: eliminado
 
+    // NUEVOS CAMPOS
+    @Column(name = "comprobante_pago", nullable = false, length = 10)
+    private String comprobantePago; // "BOLETA" o "FACTURA"
+
+    @Column(name = "codigo_venta", nullable = false, unique = true, length = 50)
+    private String codigoVenta; // Código único generado automáticamente
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente_id;
@@ -35,10 +42,12 @@ public class Venta {
         this.total = 0.0;
     }
 
-    public Venta(Double total) {
-        this();
-        this.total = total != null ? total : 0.0;
-    }
+    // Getters y setters para los nuevos campos
+    public String getComprobantePago() { return comprobantePago; }
+    public void setComprobantePago(String comprobantePago) { this.comprobantePago = comprobantePago; }
+
+    public String getCodigoVenta() { return codigoVenta; }
+    public void setCodigoVenta(String codigoVenta) { this.codigoVenta = codigoVenta; }
 
     // Getters y setters
     public Long getId() { return id; }

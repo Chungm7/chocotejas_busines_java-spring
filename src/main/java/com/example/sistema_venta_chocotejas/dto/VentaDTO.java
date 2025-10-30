@@ -11,20 +11,33 @@ public class VentaDTO {
     private List<DetalleVentaDTO> detalleVentas;
     private Integer estado;
 
+    // NUEVOS CAMPOS
+    private String comprobantePago;
+    private String codigoVenta;
+
     // Constructores
     public VentaDTO() {}
 
     public VentaDTO(Long id, LocalDateTime fecha, Double total, ClienteDTO cliente,
-                    List<DetalleVentaDTO> detalleVentas, Integer estado) {
+                    List<DetalleVentaDTO> detalleVentas, Integer estado,
+                    String comprobantePago, String codigoVenta) {
         this.id = id;
         this.fecha = fecha;
         this.total = total;
         this.cliente = cliente;
         this.detalleVentas = detalleVentas;
         this.estado = estado;
+        this.comprobantePago = comprobantePago;
+        this.codigoVenta = codigoVenta;
     }
 
     // Getters y Setters
+    public String getComprobantePago() { return comprobantePago; }
+    public void setComprobantePago(String comprobantePago) { this.comprobantePago = comprobantePago; }
+
+    public String getCodigoVenta() { return codigoVenta; }
+    public void setCodigoVenta(String codigoVenta) { this.codigoVenta = codigoVenta; }
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

@@ -25,17 +25,18 @@ $(document).ready(function () {
             dataSrc: "data"
         },
         columns: [
-            { data: "id" },
+            // NUEVAS COLUMNAS
             {
-                data: "fecha",
-                render: function (fecha) {
-                    return new Date(fecha).toLocaleString('es-ES', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
+                data: "comprobantePago",
+                render: function (comprobante) {
+                    let badgeClass = comprobante === 'BOLETA' ? 'bg-primary' : 'bg-success';
+                    return `<span class="badge ${badgeClass}">${comprobante}</span>`;
+                }
+            },
+            {
+                data: "codigoVenta",
+                render: function (codigo) {
+                    return `<code class="text-dark">${codigo}</code>`;
                 }
             },
             {
@@ -47,6 +48,7 @@ $(document).ready(function () {
                     return '-';
                 }
             },
+
             {
                 data: "total",
                 render: function (total) {
@@ -61,6 +63,18 @@ $(document).ready(function () {
                         `${d.producto.nombre} (${d.cantidad} und)`
                     );
                     return productos.join(', ');
+                }
+            },
+            {
+                data: "fecha",
+                render: function (fecha) {
+                    return new Date(fecha).toLocaleString('es-ES', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
                 }
             },
             {
@@ -87,7 +101,7 @@ $(document).ready(function () {
         language: {
             url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
         },
-        order: [[1, 'desc']] // Ordenar por fecha descendente
+        order: [[1, 'asc']] // Ordenar por fecha descendente
     });
 
     // Botón nueva venta
@@ -605,6 +619,18 @@ function cargarDetallesVenta(ventaId) {
                         </div>
                         <div class="col-md-6">
                             <strong>Fecha y Hora:</strong> ${new Date(venta.fecha).toLocaleString()}
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <strong>Comprobante:</strong> 
+                            <span class="badge ${venta.comprobantePago === 'BOLETA' ? 'bg-primary' : 'bg-success'}">
+                                ${venta.comprobantePago}
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Código Venta:</strong> 
+                            <code class="text-dark">${venta.codigoVenta}</code>
                         </div>
                     </div>
                     <div class="row mb-4">
