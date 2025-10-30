@@ -3,6 +3,7 @@ package com.example.sistema_venta_chocotejas.service.Impl;
 import com.example.sistema_venta_chocotejas.model.Producto;
 import com.example.sistema_venta_chocotejas.repository.CategoriaRepository;
 import com.example.sistema_venta_chocotejas.repository.ProductoRepository;
+import com.example.sistema_venta_chocotejas.service.MovimientoInventarioService;
 import com.example.sistema_venta_chocotejas.service.ProductoService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,10 +25,12 @@ public class ProductoServiceImpl implements ProductoService {
     private String uploadDir;
 
     private final ProductoRepository productoRepository;
+    private final MovimientoInventarioService movimientoInventarioService; // Nuevo
 
 
-    public ProductoServiceImpl(ProductoRepository productoRepository) {
+    public ProductoServiceImpl(ProductoRepository productoRepository, MovimientoInventarioService movimientoInventarioService) {
         this.productoRepository = productoRepository;
+        this.movimientoInventarioService = movimientoInventarioService;
     }
 
     @Override
@@ -142,7 +145,20 @@ public class ProductoServiceImpl implements ProductoService {
         Producto producto = productoRepository.findById(idProducto)
                 .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado con id: " + idProducto));
         producto.setStock(cantidad);
-        return productoRepository.save(producto);
+        int stockAnterior = producto.getStock();
+        producto.setStock(cantidad);
+        Producto productoActualizado = productoRepository.save(producto);
+        // REGISTRAR MOVIMIENTO DE INVENTARIO
+        int diferencia = cantidad - stockAnterior;
+        String observaciones = String.format("Actualización manual: Stock anterior %d, Nuevo stock %d",
+                stockAnterior, cantidad);
+
+        movimientoInventarioService.registrarMovimientoStock(
+                idProducto,
+                diferencia,
+                observaciones
+        );
+        return productoActualizado;
     }
 
     // ProductoServiceImpl.java

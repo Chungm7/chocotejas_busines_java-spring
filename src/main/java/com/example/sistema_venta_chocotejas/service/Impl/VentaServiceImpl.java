@@ -3,6 +3,7 @@ package com.example.sistema_venta_chocotejas.service.Impl;
 import com.example.sistema_venta_chocotejas.dto.*;
 import com.example.sistema_venta_chocotejas.model.*;
 import com.example.sistema_venta_chocotejas.repository.*;
+import com.example.sistema_venta_chocotejas.service.MovimientoInventarioService;
 import com.example.sistema_venta_chocotejas.service.VentaService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +20,16 @@ public class VentaServiceImpl implements VentaService {
     private final VentaRepository ventaRepository;
     private final DetalleVentaRepository detalleVentaRepository;
     private final ProductoRepository productoRepository;
+    private final MovimientoInventarioService movimientoInventarioService; // Nuevo
 
     public VentaServiceImpl(VentaRepository ventaRepository,
                             DetalleVentaRepository detalleVentaRepository,
-                            ProductoRepository productoRepository) {
+                            ProductoRepository productoRepository,
+                            MovimientoInventarioService movimientoInventarioService) {
         this.ventaRepository = ventaRepository;
         this.detalleVentaRepository = detalleVentaRepository;
         this.productoRepository = productoRepository;
+        this.movimientoInventarioService = movimientoInventarioService;
     }
 
     @Override
@@ -70,8 +74,17 @@ public class VentaServiceImpl implements VentaService {
             producto.setStock(producto.getStock() - detalle.getCantidad());
             productoRepository.save(producto);
         }
+
         generarComprobanteYCodigo(venta);
-        return ventaRepository.save(venta);
+        Venta ventaGuardada = ventaRepository.save(venta);
+        for (DetalleVenta detalle : venta.getDetalleVentas()) {
+            movimientoInventarioService.registrarMovimientoVenta(
+                    ventaGuardada.getCodigoVenta(),
+                    detalle.getProducto().getId(),
+                    detalle.getCantidad()
+            );
+        }
+        return ventaGuardada;
     }
 
     @Override

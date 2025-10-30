@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Inventario - ChocoSabor</title>
+
+    <!-- Bootstrap + DataTables -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bootstrap-4/bootstrap-4.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Estilos personalizados -->
+    <link th:href="@{/css/gestion/gestion-base.css}" rel="stylesheet">
+    <link th:href="@{/css/gestion/gestion-sidebar.css}" rel="stylesheet">
+    <link th:href="@{/css/gestion/gestion-tablas.css}" rel="stylesheet">
+    <link th:href="@{/css/gestion/gestion-modales.css}" rel="stylesheet">
+    <link th:href="@{/css/gestion/gestion-inventario.css}" rel="stylesheet">
+</head>
+<body>
+
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div th:replace="~{gestion/gestion-sidebar :: sidebar(activeUri='/gestion/inventario/listar')}"></div>
+
+    <!-- Main content -->
+    <main id="main-content" class="main-content w-100">
+        <!-- Top bar -->
+        <header class="p-3 mb-3 border-bottom shadow-sm bg-cream">
+            <div class="d-flex align-items-center">
+                <button id="open-sidebar" class="btn btn-light d-md-none me-3 p-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+                    </svg>
+                </button>
+                <h1 class="h3 mb-0 fw-bold">Gestión de Inventario</h1>
+            </div>
+        </header>
+
+        <!-- Filtros -->
+        <div class="container-fluid p-4">
+            <div class="card shadow-sm rounded-lg mb-4">
+                <div class="card-body">
+                    <h5 class="card-title h6 mb-3 fw-bold">Filtros de Movimientos</h5>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="filtroTipo" class="form-label">Tipo de Movimiento</label>
+                            <select id="filtroTipo" class="form-select">
+                                <option value="">Todos los tipos</option>
+                                <option value="VENTA">Venta</option>
+                                <option value="ACTUALIZACION_STOCK">Actualización de Stock</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="filtroProducto" class="form-label">Producto</label>
+                            <select id="filtroProducto" class="form-select">
+                                <option value="">Todos los productos</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button id="btnAplicarFiltros" class="btn btn-primary me-2">Aplicar Filtros</button>
+                            <button id="btnLimpiarFiltros" class="btn btn-outline-secondary">Limpiar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabla -->
+            <div class="card shadow-sm rounded-lg">
+                <div class="card-body">
+                    <h2 class="card-title h5 mb-4 fw-bold">Historial de Movimientos de Inventario</h2>
+                    <table id="tablaInventario" class="table table-striped table-hover dt-responsive nowrap" style="width:100%">
+                        <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Fecha y Hora</th>
+                            <th>Tipo Movimiento</th>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Comprobante</th>
+                            <th>Observaciones</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Contenedor de notificaciones -->
+<div id="notification-container" class="position-fixed top-0 end-0 p-3" style="z-index: 2000;"></div>
+
+<!-- JS -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.13.6/dataRender/datetime.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script th:src="@{/js/gestion/gestion-inventario.js}"></script>
+<script th:src="@{/js/gestion/gestion-main.js}"></script>
+</body>
+</html>
