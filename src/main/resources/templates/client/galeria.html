@@ -14,6 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lobster&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <!-- Estilos personalizados -->
     <link rel="stylesheet" th:href="@{/css/client/base.css}">
+    <link rel="stylesheet" th:href="@{/css/client/logo.css}">
 </head>
 <body>
 
@@ -21,17 +22,28 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" th:href="@{/tienda/inicio}">ChocoSabor</a>
+            <!-- Logo dinámico -->
+            <a class="navbar-brand-logo" th:href="@{/tienda/inicio}">
+                <th:block th:if="${logoActivo != null and logoActivo.ruta != null}">
+                    <img th:src="@{'/logos/' + ${logoActivo.ruta}}"
+                         th:alt="${logoActivo.nombre}"
+                         class="logo-img">
+                </th:block>
+                <th:block th:unless="${logoActivo != null and logoActivo.ruta != null}">
+                    <span class="navbar-brand-text">ChocoSabor</span>
+                </th:block>
+            </a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/tienda/inicio}">Inicio</a>
+                        <a class="nav-link active" aria-current="page" th:href="@{/tienda/inicio}">Inicio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" th:href="@{/galeria/productos}">Productos</a>
+                        <a class="nav-link" th:href="@{/galeria/productos}">Productos</a>
                     </li>
                 </ul>
             </div>

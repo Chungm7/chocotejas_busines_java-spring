@@ -20,18 +20,21 @@ public class TiendaController {
     private final RedSocialServiceImpl redSocialService;
     private final MomentoServiceImpl momentoService;
     private final SliderServiceImpl sliderService;
+    private final LogoServiceImpl logoService;
     public TiendaController(ProductoService productoService,
                             InicioServiceImpl inicioService,
                             ContactoServiceImpl contactoService,
                             RedSocialServiceImpl redSocialService,
                             MomentoServiceImpl momentoService,
-                            SliderServiceImpl sliderService) {
+                            SliderServiceImpl sliderService,
+                            LogoServiceImpl logoService) {
         this.productoService = productoService;
         this.inicioService = inicioService;
         this.contactoService = contactoService;
         this.redSocialService = redSocialService;
         this.momentoService = momentoService;
         this.sliderService = sliderService;
+        this.logoService = logoService;
     }
 
     @GetMapping("/inicio")
@@ -42,6 +45,7 @@ public class TiendaController {
         List<RedSocial> redSocials= redSocialService.listarRedesSocialesActivas();
         List<Momento> momentosActivos = momentoService.momentoActivo();
         List<Slider> slidersActivos = sliderService.sliderActivo();
+        Logo logoActivo = logoService.logoActivo();
         // Verificar si hay más de 4 productos para mostrar controles de navegación
         boolean mostrarControles = productosDestacados.size() > 4;
 
@@ -52,6 +56,7 @@ public class TiendaController {
         model.addAttribute("redSocials", redSocials);
         model.addAttribute("momentos", momentosActivos);
         model.addAttribute("sliders", slidersActivos);
+        model.addAttribute("logoActivo", logoActivo);
         return "client/indexclient";
     }
 }

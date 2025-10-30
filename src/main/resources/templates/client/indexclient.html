@@ -15,6 +15,7 @@
     <!-- Estilos personalizados -->
     <link rel="stylesheet" th:href="@{/css/client/base.css}">
     <link rel="stylesheet" th:href="@{/css/client/momentos.css}">
+    <link rel="stylesheet" th:href="@{/css/client/logo.css}">
 </head>
 <body>
 
@@ -22,7 +23,18 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" th:href="@{/tienda/inicio}">ChocoSabor</a>
+            <!-- Logo dinámico -->
+            <a class="navbar-brand-logo" th:href="@{/tienda/inicio}">
+                <th:block th:if="${logoActivo != null and logoActivo.ruta != null}">
+                    <img th:src="@{'/logos/' + ${logoActivo.ruta}}"
+                         th:alt="${logoActivo.nombre}"
+                         class="logo-img">
+                </th:block>
+                <th:block th:unless="${logoActivo != null and logoActivo.ruta != null}">
+                    <span class="navbar-brand-text">ChocoSabor</span>
+                </th:block>
+            </a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -268,5 +280,6 @@
 <!-- Script para funcionalidad WhatsApp (usando el mismo que galería) -->
 <script th:src="@{/js/client/client-galeria.js}"></script>
 <script th:src="@{/js/client/client-momentos.js}"></script>
+<script th:src="@{/js/client/client-logo.js}"></script>
 </body>
 </html>

@@ -1,0 +1,52 @@
+/* logo.css - Estilos para el logo en el navbar */
+.navbar-brand-logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand-logo img {
+    max-height: 50px;
+    max-width: 150px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand-logo:hover img {
+    transform: scale(1.05);
+}
+
+.navbar-brand-text {
+    font-family: var(--font-secondary);
+    font-size: 1.8rem;
+    color: var(--color-cream) !important;
+    transition: color 0.3s ease;
+}
+
+.navbar-brand-text:hover {
+    color: var(--color-accent) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .navbar-brand-logo img {
+        max-height: 40px;
+        max-width: 120px;
+    }
+
+    .navbar-brand-text {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-brand-logo img {
+        max-height: 35px;
+        max-width: 100px;
+    }
+
+    .navbar-brand-text {
+        font-size: 1.3rem;
+    }
+}
