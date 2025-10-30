@@ -3,8 +3,10 @@ package com.example.sistema_venta_chocotejas.controller.cliente;
 import com.example.sistema_venta_chocotejas.model.Contacto;
 import com.example.sistema_venta_chocotejas.model.Inicio;
 import com.example.sistema_venta_chocotejas.model.Producto;
+import com.example.sistema_venta_chocotejas.model.RedSocial;
 import com.example.sistema_venta_chocotejas.service.Impl.ContactoServiceImpl;
 import com.example.sistema_venta_chocotejas.service.Impl.InicioServiceImpl;
+import com.example.sistema_venta_chocotejas.service.Impl.RedSocialServiceImpl;
 import com.example.sistema_venta_chocotejas.service.ProductoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,13 +22,15 @@ public class TiendaController {
     private final ProductoService productoService;
     private final InicioServiceImpl inicioService;
     private final ContactoServiceImpl contactoService;
-
+    private final RedSocialServiceImpl redSocialService;
     public TiendaController(ProductoService productoService,
                             InicioServiceImpl inicioService,
-                            ContactoServiceImpl contactoService) {
+                            ContactoServiceImpl contactoService,
+                            RedSocialServiceImpl redSocialService) {
         this.productoService = productoService;
         this.inicioService = inicioService;
         this.contactoService = contactoService;
+        this.redSocialService = redSocialService;
     }
 
     @GetMapping("/inicio")
@@ -34,6 +38,7 @@ public class TiendaController {
         List<Producto> productosDestacados = productoService.listarProductosDestacadosActivos();
         Inicio inicio =  inicioService.obtenerInicio().orElse(null);
         Contacto contacto = contactoService.obtenerContacto().orElse(null);
+        List<RedSocial> redSocials= redSocialService.listarRedesSocialesActivas();
         // Verificar si hay más de 4 productos para mostrar controles de navegación
         boolean mostrarControles = productosDestacados.size() > 4;
 
@@ -41,7 +46,7 @@ public class TiendaController {
         model.addAttribute("productosDestacados", productosDestacados);
         model.addAttribute("mostrarControles", mostrarControles);
         model.addAttribute("contacto", contacto);
-
+        model.addAttribute("redSocials", redSocials);
         return "client/indexclient";
     }
 }
