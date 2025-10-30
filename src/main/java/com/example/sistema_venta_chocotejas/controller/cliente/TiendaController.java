@@ -1,10 +1,7 @@
 package com.example.sistema_venta_chocotejas.controller.cliente;
 
 import com.example.sistema_venta_chocotejas.model.*;
-import com.example.sistema_venta_chocotejas.service.Impl.ContactoServiceImpl;
-import com.example.sistema_venta_chocotejas.service.Impl.InicioServiceImpl;
-import com.example.sistema_venta_chocotejas.service.Impl.MomentoServiceImpl;
-import com.example.sistema_venta_chocotejas.service.Impl.RedSocialServiceImpl;
+import com.example.sistema_venta_chocotejas.service.Impl.*;
 import com.example.sistema_venta_chocotejas.service.ProductoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,16 +19,19 @@ public class TiendaController {
     private final ContactoServiceImpl contactoService;
     private final RedSocialServiceImpl redSocialService;
     private final MomentoServiceImpl momentoService;
+    private final SliderServiceImpl sliderService;
     public TiendaController(ProductoService productoService,
                             InicioServiceImpl inicioService,
                             ContactoServiceImpl contactoService,
                             RedSocialServiceImpl redSocialService,
-                            MomentoServiceImpl momentoService) {
+                            MomentoServiceImpl momentoService,
+                            SliderServiceImpl sliderService) {
         this.productoService = productoService;
         this.inicioService = inicioService;
         this.contactoService = contactoService;
         this.redSocialService = redSocialService;
         this.momentoService = momentoService;
+        this.sliderService = sliderService;
     }
 
     @GetMapping("/inicio")
@@ -41,6 +41,7 @@ public class TiendaController {
         Contacto contacto = contactoService.obtenerContacto().orElse(null);
         List<RedSocial> redSocials= redSocialService.listarRedesSocialesActivas();
         List<Momento> momentosActivos = momentoService.momentoActivo();
+        List<Slider> slidersActivos = sliderService.sliderActivo();
         // Verificar si hay más de 4 productos para mostrar controles de navegación
         boolean mostrarControles = productosDestacados.size() > 4;
 
@@ -50,6 +51,7 @@ public class TiendaController {
         model.addAttribute("contacto", contacto);
         model.addAttribute("redSocials", redSocials);
         model.addAttribute("momentos", momentosActivos);
+        model.addAttribute("sliders", slidersActivos);
         return "client/indexclient";
     }
 }

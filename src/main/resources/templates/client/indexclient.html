@@ -41,32 +41,32 @@
 </header>
 
 <main>
-    <!-- Carrusel de Productos Destacados -->
+    <!-- Carrusel de Sliders Dinámico -->
     <section id="product-carousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-indicators">
-            <button type="button" data-bs-target="#product-carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#product-carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#product-carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button th:each="slider, iterStat : ${sliders}"
+                    type="button"
+                    data-bs-target="#product-carousel"
+                    th:data-bs-slide-to="${iterStat.index}"
+                    th:classappend="${iterStat.first} ? 'active' : ''"
+                    th:aria-label="'Slide ' + ${iterStat.index + 1}"></button>
         </div>
         <div class="carousel-inner">
-            <div class="carousel-item active" style="background-image: url('https://placehold.co/1200x500/5D4037/FFF8E1?text=Chocotejas+Clásicas');">
+            <div th:each="slider, iterStat : ${sliders}"
+                 th:classappend="${iterStat.first} ? 'carousel-item active' : 'carousel-item'"
+                 th:style="'background-image: url(/sliders/' + ${slider.ruta} + ');'">
+                <div class="carousel-caption d-none d-md-block">
+                    <h2 th:text="${slider.nombre}">Título del slider</h2>
+                    <p th:text="${slider.descripcion}">Descripción del slider</p>
+                    <a th:href="@{/galeria/productos}" class="btn btn-primary">Ver Productos</a>
+                </div>
+            </div>
+
+            <!-- Slider por defecto si no hay sliders activos -->
+            <div th:if="${#lists.isEmpty(sliders)}" class="carousel-item active" style="background-image: url('https://placehold.co/1200x500/5D4037/FFF8E1?text=Chocotejas+Clásicas');">
                 <div class="carousel-caption d-none d-md-block">
                     <h2>Chocotejas Clásicas</h2>
                     <p>Nuestras chocotejas tradicionales con rellenos de manjar blanco, nueces y pasas.</p>
-                    <a th:href="@{/galeria/productos}" class="btn btn-primary">Ver Productos</a>
-                </div>
-            </div>
-            <div class="carousel-item" style="background-image: url('https://placehold.co/1200x500/8D6E63/FFF8E1?text=Chocotejas+Especiales');">
-                <div class="carousel-caption d-none d-md-block">
-                    <h2>Chocotejas Especiales</h2>
-                    <p>Sabores únicos como maracuyá, piña colada y fresa con crema.</p>
-                    <a th:href="@{/galeria/productos}" class="btn btn-primary">Ver Productos</a>
-                </div>
-            </div>
-            <div class="carousel-item" style="background-image: url('https://placehold.co/1200x500/6D4C41/FFF8E1?text=Ofertas+Especiales');">
-                <div class="carousel-caption d-none d-md-block">
-                    <h2>Ofertas Especiales</h2>
-                    <p>Combos y promociones para ocasiones especiales.</p>
                     <a th:href="@{/galeria/productos}" class="btn btn-primary">Ver Productos</a>
                 </div>
             </div>
