@@ -46,7 +46,7 @@ app.use(cors());
 
 const SERVICE_NAME = process.env.SERVICE_NAME || 'Estadísticas de Ventas';
 const PORT = process.env.PORT || 3001;
-
 const app = express();
+
 const cors = require('cors');
 
