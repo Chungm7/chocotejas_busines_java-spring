@@ -77,6 +77,12 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- WebClient para consumir servicios externos -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
         <!-- Dependencias extras que daban error anteriormente
         <dependency>
             <groupId>org.springframework.boot</groupId>

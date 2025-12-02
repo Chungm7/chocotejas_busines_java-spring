@@ -34,3 +34,12 @@ file:
   logo-dir: ${LOGO_DIR:./logos/}
   slider-dir: ${SLIDER_DIR:./sliders/}
   momentos-dir: ${MOMENTOS_DIR:./momentos/}
+
+# Configuración de servicios Node externos
+node:
+  service1:
+    url: ${NODE_SERVICE1_URL:http://node-service-1:3001}
+  service2:
+    url: ${NODE_SERVICE2_URL:http://node-service-2:3002}
+  service3:
+    url: ${NODE_SERVICE3_URL:http://node-service-3:3003}

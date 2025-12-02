@@ -47,5 +47,50 @@ services:
       - db_mysql_chocotejas
       - sistema-chocotejas
 
+  # Servicio Node 1 - Estadísticas de Ventas
+  node-service-1:
+    container_name: node-service-1
+    build:
+      context: ./node-services/service-1
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      SERVICE_NAME: "Estadísticas de Ventas"
+    volumes:
+      - ./node-services/service-1:/app
+      - /app/node_modules
+
+  # Servicio Node 2 - Análisis de Productos
+  node-service-2:
+    container_name: node-service-2
+    build:
+      context: ./node-services/service-2
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    environment:
+      PORT: 3002
+      SERVICE_NAME: "Análisis de Productos"
+    volumes:
+      - ./node-services/service-2:/app
+      - /app/node_modules
+
+  # Servicio Node 3 - Reportes de Clientes
+  node-service-3:
+    container_name: node-service-3
+    build:
+      context: ./node-services/service-3
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3003"
+    environment:
+      PORT: 3003
+      SERVICE_NAME: "Reportes de Clientes"
+    volumes:
+      - ./node-services/service-3:/app
+      - /app/node_modules
+
 volumes:
   mysql_data_chocotejas:
