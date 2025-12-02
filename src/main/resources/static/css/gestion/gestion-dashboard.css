@@ -166,3 +166,65 @@
     position: relative;
     z-index: 2;
 }
+
+/* Estilos para tarjetas de reportes Node.js */
+.card-ventas {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.card-clientes {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+/* Animación de carga para los valores */
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+    border-width: 0.15rem;
+}
+
+/* Texto con degradado para valores importantes */
+.text-gradient-success {
+    background: linear-gradient(90deg, #10b981, #059669);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.text-gradient-danger {
+    background: linear-gradient(90deg, #ef4444, #dc2626);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Animación de entrada para las tarjetas */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dashboard-card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Efecto de pulso para valores actualizados */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.main-stat.updating {
+    animation: pulse 0.5s ease-in-out;
+}
+

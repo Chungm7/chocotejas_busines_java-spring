@@ -184,26 +184,113 @@
                     </div>
                 </div>
 
-                <!-- Reportes -->
+                <!-- Reporte 1: Estadísticas de Ventas -->
                 <div class="col-sm-6 col-lg-4">
-                    <div class="card dashboard-card card-reportes shadow-sm h-100">
+                    <div class="card dashboard-card card-ventas shadow-sm h-100">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <h5 class="card-title fw-semibold">Reportes</h5>
-                                    <p class="card-text opacity-75 mb-0">Visualizar y exportar datos.</p>
+                                <div class="stats-container">
+                                    <h5 class="card-title fw-semibold">Estadísticas de Ventas</h5>
+                                    <h2 class="main-stat fw-bold" id="reporte-total-ventas">
+                                        <span class="spinner-border spinner-border-sm" role="status"></span>
+                                    </h2>
+                                    <div class="sub-stats">
+                                        <div class="sub-stat">
+                                            <span class="sub-stat-value" id="reporte-ventas-hoy">-</span>
+                                            <span class="sub-stat-label">Hoy</span>
+                                        </div>
+                                        <div class="sub-stat">
+                                            <span class="sub-stat-value" id="reporte-ventas-mes">-</span>
+                                            <span class="sub-stat-label">Este Mes</span>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="card-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
-                                         class="bi bi-bar-chart-fill" viewBox="0 0 16 16">
-                                        <path
-                                                d="M1 11a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1z"/>
+                                         class="bi bi-graph-up-arrow" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M0 0h1v15h15v1H0zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5"/>
                                     </svg>
                                 </div>
                             </div>
-                            <a href="#" class="dashboard-link d-block mt-3">
-                                Próximamente...
-                            </a>
+                            <div class="mt-3">
+                                <small class="text-muted" id="reporte-tendencia">
+                                    <i class="bi bi-arrow-up-circle-fill text-success"></i> Cargando...
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reporte 2: Análisis de Productos -->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="card dashboard-card card-productos shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="stats-container">
+                                    <h5 class="card-title fw-semibold">Análisis de Productos</h5>
+                                    <h2 class="main-stat fw-bold" id="reporte-total-productos-node">
+                                        <span class="spinner-border spinner-border-sm" role="status"></span>
+                                    </h2>
+                                    <div class="sub-stats">
+                                        <div class="sub-stat">
+                                            <span class="sub-stat-value" id="reporte-productos-activos">-</span>
+                                            <span class="sub-stat-label">Activos</span>
+                                        </div>
+                                        <div class="sub-stat">
+                                            <span class="sub-stat-value text-danger" id="reporte-bajo-stock">-</span>
+                                            <span class="sub-stat-label">Bajo Stock</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
+                                         class="bi bi-boxes" viewBox="0 0 16 16">
+                                        <path d="M7.752.066a.5.5 0 0 1 .496 0l3.75 2.143a.5.5 0 0 1 .252.434v3.995l3.498 2A.5.5 0 0 1 16 9.07v4.286a.5.5 0 0 1-.252.434l-3.75 2.143a.5.5 0 0 1-.496 0l-3.502-2-3.502 2.001a.5.5 0 0 1-.496 0l-3.75-2.143A.5.5 0 0 1 0 13.357V9.071a.5.5 0 0 1 .252-.434L3.75 6.638V2.643a.5.5 0 0 1 .252-.434L7.752.066ZM4.25 7.504 1.508 9.071l2.742 1.567 2.742-1.567L4.25 7.504ZM7.5 9.933l-2.75 1.571v3.134l2.75-1.571V9.933Zm1 3.134 2.75 1.571v-3.134L8.5 9.933v3.134Zm.508-3.996 2.742 1.567 2.742-1.567-2.742-1.567-2.742 1.567Zm2.242-2.433V3.504L8.5 5.076V8.21l2.75-1.572ZM7.5 8.21V5.076L4.75 3.504v3.134L7.5 8.21ZM5.258 2.643 8 4.21l2.742-1.567L8 1.076 5.258 2.643ZM15 9.933l-2.75 1.571v3.134L15 13.067V9.933ZM3.75 14.638v-3.134L1 9.933v3.134l2.75 1.571Z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <small class="text-muted" id="reporte-mas-vendido">
+                                    <i class="bi bi-star-fill text-warning"></i> Cargando...
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reporte 3: Reportes de Clientes -->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="card dashboard-card card-clientes shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="stats-container">
+                                    <h5 class="card-title fw-semibold">Reportes de Clientes</h5>
+                                    <h2 class="main-stat fw-bold" id="reporte-total-clientes">
+                                        <span class="spinner-border spinner-border-sm" role="status"></span>
+                                    </h2>
+                                    <div class="sub-stats">
+                                        <div class="sub-stat">
+                                            <span class="sub-stat-value" id="reporte-clientes-activos">-</span>
+                                            <span class="sub-stat-label">Activos</span>
+                                        </div>
+                                        <div class="sub-stat">
+                                            <span class="sub-stat-value text-success" id="reporte-nuevos-mes">-</span>
+                                            <span class="sub-stat-label">Nuevos</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
+                                         class="bi bi-people-fill" viewBox="0 0 16 16">
+                                        <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <small class="text-muted" id="reporte-tasa-retencion">
+                                    <i class="bi bi-graph-up text-info"></i> Cargando...
+                                </small>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -222,5 +309,98 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script th:src="@{/js/gestion/gestion-main.js}"></script>
+
+<!-- Script para consumir servicios Node.js -->
+<script>
+    // Función para cargar estadísticas de ventas (Service 1)
+    async function cargarEstadisticasVentas() {
+        try {
+            const response = await fetch('http://localhost:3001/api/data');
+            if (!response.ok) throw new Error('Error al cargar ventas');
+
+            const datos = await response.json();
+            const ventas = datos.data;
+
+            // Actualizar valores en el DOM
+            document.getElementById('reporte-total-ventas').textContent =
+                'S/. ' + ventas.totalVentas.toLocaleString('es-PE', {minimumFractionDigits: 2});
+            document.getElementById('reporte-ventas-hoy').textContent = ventas.ventasHoy;
+            document.getElementById('reporte-ventas-mes').textContent = ventas.ventasMes;
+            document.getElementById('reporte-tendencia').innerHTML =
+                `<i class="bi bi-arrow-up-circle-fill text-success"></i> Tendencia: ${ventas.tendencia}`;
+
+        } catch (error) {
+            console.error('Error al cargar estadísticas de ventas:', error);
+            document.getElementById('reporte-total-ventas').textContent = 'Error';
+            document.getElementById('reporte-tendencia').innerHTML =
+                '<i class="bi bi-exclamation-triangle-fill text-danger"></i> No disponible';
+        }
+    }
+
+    // Función para cargar análisis de productos (Service 2)
+    async function cargarAnalisisProductos() {
+        try {
+            const response = await fetch('http://localhost:3002/api/data');
+            if (!response.ok) throw new Error('Error al cargar productos');
+
+            const datos = await response.json();
+            const productos = datos.data;
+
+            // Actualizar valores en el DOM
+            document.getElementById('reporte-total-productos-node').textContent = productos.totalProductos;
+            document.getElementById('reporte-productos-activos').textContent = productos.productosActivos;
+            document.getElementById('reporte-bajo-stock').textContent = productos.productosBajoStock;
+            document.getElementById('reporte-mas-vendido').innerHTML =
+                `<i class="bi bi-star-fill text-warning"></i> Más vendido: ${productos.masVendido}`;
+
+        } catch (error) {
+            console.error('Error al cargar análisis de productos:', error);
+            document.getElementById('reporte-total-productos-node').textContent = 'Error';
+            document.getElementById('reporte-mas-vendido').innerHTML =
+                '<i class="bi bi-exclamation-triangle-fill text-danger"></i> No disponible';
+        }
+    }
+
+    // Función para cargar reportes de clientes (Service 3)
+    async function cargarReportesClientes() {
+        try {
+            const response = await fetch('http://localhost:3003/api/data');
+            if (!response.ok) throw new Error('Error al cargar clientes');
+
+            const datos = await response.json();
+            const clientes = datos.data;
+
+            // Actualizar valores en el DOM
+            document.getElementById('reporte-total-clientes').textContent = clientes.totalClientes;
+            document.getElementById('reporte-clientes-activos').textContent = clientes.clientesActivos;
+            document.getElementById('reporte-nuevos-mes').textContent = clientes.nuevosEsteMes;
+            document.getElementById('reporte-tasa-retencion').innerHTML =
+                `<i class="bi bi-graph-up text-info"></i> Retención: ${clientes.tasaRetencion}`;
+
+        } catch (error) {
+            console.error('Error al cargar reportes de clientes:', error);
+            document.getElementById('reporte-total-clientes').textContent = 'Error';
+            document.getElementById('reporte-tasa-retencion').innerHTML =
+                '<i class="bi bi-exclamation-triangle-fill text-danger"></i> No disponible';
+        }
+    }
+
+    // Función para cargar todos los reportes
+    async function cargarTodosLosReportes() {
+        await Promise.all([
+            cargarEstadisticasVentas(),
+            cargarAnalisisProductos(),
+            cargarReportesClientes()
+        ]);
+    }
+
+    // Cargar reportes cuando el DOM esté listo
+    document.addEventListener('DOMContentLoaded', function() {
+        cargarTodosLosReportes();
+
+        // Actualizar automáticamente cada 30 segundos
+        setInterval(cargarTodosLosReportes, 30000);
+    });
+</script>
 </body>
 </html>
